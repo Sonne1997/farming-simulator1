@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend/.env
-BASE_URL = "https://81a0ea00-219b-4a93-9355-d1dc30ef8201.preview.emergentagent.com/api"
+BASE_URL = "https://0ebdc884-2da2-431a-aa2c-3e86d0888713.preview.emergentagent.com/api"
 
 class VirtualFarmingTester:
     def __init__(self):
