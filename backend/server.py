@@ -629,8 +629,8 @@ async def create_machine(machine_data: MachineCreate):
 # Get expected yields based on soil points
 @api_router.get("/expected-yields/{soil_points}")
 async def get_expected_yields_by_soil(soil_points: int):
-    if soil_points < 25 or soil_points > 45:
-        raise HTTPException(status_code=400, detail="Bodenpunkte müssen zwischen 25 und 45 liegen")
+    if soil_points < 25 or soil_points > 56:
+        raise HTTPException(status_code=400, detail="Bodenpunkte müssen zwischen 25 und 56 liegen")
     
     # Calculate yields based on soil points
     yields = {}
