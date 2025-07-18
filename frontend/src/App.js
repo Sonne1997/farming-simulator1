@@ -172,13 +172,21 @@ const App = () => {
     let cost = 0;
 
     if (specs.category === 'organic') {
-      amount = 1.0; // 1m³ per 250m²
-      cost = specs.price_per_m3;
+      if (fertilizerType === 'rindermist') {
+        // Rindermist: 3 kg N needed, 5 kg N per ton, price per ton
+        amount = 3.0 / 5.0; // 0.6 tons needed
+        cost = amount * specs.price_per_ton;
+      } else {
+        // Other organic: 1m³ per 250m²
+        amount = 1.0;
+        cost = specs.price_per_m3;
+      }
     } else if (specs.category === 'mineral') {
       // Calculate based on nitrogen requirement (3kg N per 250m²)
       const nRequired = 3.0; // kg N per 250m²
-      amount = (nRequired / specs.n_content) * 100; // kg
-      cost = (amount / 1000) * specs.price_per_ton;
+      const nContentDecimal = specs.n_content / 100; // Convert % to decimal
+      amount = nRequired / nContentDecimal; // kg needed
+      cost = (amount / 1000) * specs.price_per_ton; // Convert to tons for cost
     }
 
     setFarmingDecision(prev => ({
