@@ -11,6 +11,7 @@ const App = () => {
   const [machines, setMachines] = useState([]);
   const [marketPrices, setMarketPrices] = useState({});
   const [expectedYields, setExpectedYields] = useState({});
+  const [marketValues, setMarketValues] = useState({});
   const [selectedPlot, setSelectedPlot] = useState(null);
   const [farmingDecision, setFarmingDecision] = useState({
     cultivation_method: '',
