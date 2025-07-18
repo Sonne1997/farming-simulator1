@@ -36,6 +36,7 @@ const App = () => {
     fetchMachines();
     fetchMarketPrices();
     fetchExpectedYields();
+    fetchMarketValues();
     fetchOrders();
   }, []);
 
