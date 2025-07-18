@@ -294,7 +294,7 @@ const App = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">Wählen Sie Ihre 250m² Parzelle</h2>
-        <p className="text-lg text-gray-600">Alle Parzellen sind 18m × 13,8m = 250m² groß</p>
+        <p className="text-lg text-gray-600">Alle Parzellen befinden sich in 39291 Grabow</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
