@@ -413,7 +413,7 @@ const App = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <span className="text-blue-600">Ertrag:</span>
-                <span className="font-bold ml-2">{expectedYields[farmingDecision.crop_type]}kg</span>
+                <span className="font-bold ml-2">{expectedYields[farmingDecision.crop_type] || 0}kg</span>
               </div>
               <div>
                 <span className="text-blue-600">Marktwert:</span>
