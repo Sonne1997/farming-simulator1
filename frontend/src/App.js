@@ -157,12 +157,12 @@ const App = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="mb-6 md:mb-0">
-            <h1 className="text-4xl font-bold mb-2">🌱 Virtual Farming Platform</h1>
-            <p className="text-xl text-green-100">Lease real plots, make farming decisions, get real harvests!</p>
+            <h1 className="text-4xl font-bold mb-2">🌱 Virtuelle Landwirtschaft</h1>
+            <p className="text-xl text-green-100">Parzellen pachten, Landwirtschaft planen, echte Ernte erhalten!</p>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold">{orders.length}</div>
-            <div className="text-green-100">Active Farms</div>
+            <div className="text-green-100">Aktive Höfe</div>
           </div>
         </div>
       </div>
