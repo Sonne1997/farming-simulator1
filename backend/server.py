@@ -41,6 +41,7 @@ class CropType(str, Enum):
     LUZERNE = "luzerne"
     GRAS = "gras"
     BLUEHMISCHUNG = "bluehmischung"
+    ERBSEN = "erbsen"
 
 class CultivationMethod(str, Enum):
     KONVENTIONELL = "konventionell"
