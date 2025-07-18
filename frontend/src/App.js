@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState('plots');
   const [plots, setPlots] = useState([]);
   const [machines, setMachines] = useState([]);
+  const [machinesByStep, setMachinesByStep] = useState({});
+  const [fertilizerSpecs, setFertilizerSpecs] = useState({});
   const [marketPrices, setMarketPrices] = useState({});
   const [expectedYields, setExpectedYields] = useState({});
   const [marketValues, setMarketValues] = useState({});
@@ -16,9 +20,20 @@ const App = () => {
   const [farmingDecision, setFarmingDecision] = useState({
     cultivation_method: '',
     crop_type: '',
-    cultivation_machines: [],
-    protection_machines: [],
-    care_machines: [],
+    expected_yield_kg: 0,
+    fertilizer_choice: {
+      fertilizer_type: '',
+      amount: 0,
+      cost: 0
+    },
+    machines: {
+      bodenbearbeitung: [],
+      aussaat: [],
+      pflanzenschutz: [],
+      duengung: [],
+      pflege: [],
+      ernte: []
+    },
     harvest_option: 'ship_home',
     shipping_address: ''
   });
@@ -29,11 +44,14 @@ const App = () => {
   });
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [orderToPayFor, setOrderToPayFor] = useState(null);
 
   useEffect(() => {
     initializeData();
     fetchPlots();
     fetchMachines();
+    fetchFertilizerSpecs();
     fetchMarketPrices();
     fetchExpectedYields();
     fetchMarketValues();
@@ -61,14 +79,34 @@ const App = () => {
     try {
       const response = await axios.get(`${API}/machines`);
       setMachines(response.data);
+      
+      // Group machines by working step
+      const machinesByStep = {
+        bodenbearbeitung: response.data.filter(m => m.working_step === 'bodenbearbeitung'),
+        aussaat: response.data.filter(m => m.working_step === 'aussaat'),
+        pflanzenschutz: response.data.filter(m => m.working_step === 'pflanzenschutz'),
+        duengung: response.data.filter(m => m.working_step === 'duengung'),
+        pflege: response.data.filter(m => m.working_step === 'pflege'),
+        ernte: response.data.filter(m => m.working_step === 'ernte')
+      };
+      setMachinesByStep(machinesByStep);
     } catch (error) {
       console.error('Error fetching machines:', error);
     }
   };
 
+  const fetchFertilizerSpecs = async () => {
+    try {
+      const response = await axios.get(`${API}/fertilizer-specs`);
+      setFertilizerSpecs(response.data);
+    } catch (error) {
+      console.error('Error fetching fertilizer specs:', error);
+    }
+  };
+
   const fetchMarketPrices = async () => {
     try {
-      const response = await axios.get(`${API}/market-prices`);
+      const response = await axios.get(`${API}/market-values`);
       setMarketPrices(response.data);
     } catch (error) {
       console.error('Error fetching market prices:', error);
@@ -114,12 +152,42 @@ const App = () => {
     }));
   };
 
-  const handleMachineSelection = (machineType, machineId) => {
+  const handleMachineSelection = (workingStep, machineId) => {
     setFarmingDecision(prev => ({
       ...prev,
-      [machineType]: prev[machineType].includes(machineId)
-        ? prev[machineType].filter(id => id !== machineId)
-        : [...prev[machineType], machineId]
+      machines: {
+        ...prev.machines,
+        [workingStep]: prev.machines[workingStep].includes(machineId)
+          ? prev.machines[workingStep].filter(id => id !== machineId)
+          : [...prev.machines[workingStep], machineId]
+      }
+    }));
+  };
+
+  const handleFertilizerSelection = (fertilizerType) => {
+    const specs = fertilizerSpecs[fertilizerType];
+    if (!specs) return;
+
+    let amount = 0;
+    let cost = 0;
+
+    if (specs.category === 'organic') {
+      amount = 1.0; // 1m³ per 250m²
+      cost = specs.price_per_m3;
+    } else if (specs.category === 'mineral') {
+      // Calculate based on nitrogen requirement (3kg N per 250m²)
+      const nRequired = 3.0; // kg N per 250m²
+      amount = (nRequired / specs.n_content) * 100; // kg
+      cost = (amount / 1000) * specs.price_per_ton;
+    }
+
+    setFarmingDecision(prev => ({
+      ...prev,
+      fertilizer_choice: {
+        fertilizer_type: fertilizerType,
+        amount: amount,
+        cost: cost
+      }
     }));
   };
 
@@ -129,9 +197,12 @@ const App = () => {
     const plotCost = selectedPlot.price_per_plot;
     
     const allMachineIds = [
-      ...farmingDecision.cultivation_machines,
-      ...farmingDecision.protection_machines,
-      ...farmingDecision.care_machines
+      ...farmingDecision.machines.bodenbearbeitung,
+      ...farmingDecision.machines.aussaat,
+      ...farmingDecision.machines.pflanzenschutz,
+      ...farmingDecision.machines.duengung,
+      ...farmingDecision.machines.pflege,
+      ...farmingDecision.machines.ernte
     ];
     
     const machineCost = allMachineIds.reduce((total, machineId) => {
@@ -139,9 +210,10 @@ const App = () => {
       return total + (machine ? machine.price_per_use : 0);
     }, 0);
     
+    const fertilizerCost = farmingDecision.fertilizer_choice.cost || 0;
     const shippingCost = farmingDecision.harvest_option === 'ship_home' ? 25.0 : 0;
     
-    return plotCost + machineCost + shippingCost;
+    return plotCost + machineCost + fertilizerCost + shippingCost;
   };
 
   const getExpectedMarketValue = () => {
@@ -168,30 +240,17 @@ const App = () => {
         user_email: userInfo.email,
         user_phone: userInfo.phone,
         plot_id: selectedPlot.id,
-        farming_decision: farmingDecision,
+        farming_decision: {
+          ...farmingDecision,
+          expected_yield_kg: expectedYields[farmingDecision.crop_type] || 0
+        },
         notes: `Lust auf Landwirtschaft - ${selectedPlot.name}`
       };
       
-      await axios.post(`${API}/orders`, orderData);
-      alert('Bestellung erfolgreich abgeschickt! Sie erhalten Updates zum Fortschritt Ihrer Parzelle.');
+      const response = await axios.post(`${API}/orders`, orderData);
+      setOrderToPayFor(response.data);
+      setShowPayment(true);
       
-      // Reset form
-      setCurrentStep('plots');
-      setSelectedPlot(null);
-      setFarmingDecision({
-        cultivation_method: '',
-        crop_type: '',
-        cultivation_machines: [],
-        protection_machines: [],
-        care_machines: [],
-        harvest_option: 'ship_home',
-        shipping_address: ''
-      });
-      setUserInfo({ name: '', email: '', phone: '' });
-      
-      // Refresh data
-      fetchPlots();
-      fetchOrders();
     } catch (error) {
       console.error('Error submitting order:', error);
       alert('Fehler beim Absenden der Bestellung. Bitte versuchen Sie es erneut.');
@@ -200,8 +259,39 @@ const App = () => {
     }
   };
 
-  const getMachinesByType = (type) => {
-    return machines.filter(machine => machine.type === type);
+  const handlePaymentSuccess = async () => {
+    alert('Zahlung erfolgreich! Sie erhalten Updates zum Fortschritt Ihrer Parzelle.');
+    
+    // Reset form
+    setCurrentStep('plots');
+    setSelectedPlot(null);
+    setFarmingDecision({
+      cultivation_method: '',
+      crop_type: '',
+      expected_yield_kg: 0,
+      fertilizer_choice: {
+        fertilizer_type: '',
+        amount: 0,
+        cost: 0
+      },
+      machines: {
+        bodenbearbeitung: [],
+        aussaat: [],
+        pflanzenschutz: [],
+        duengung: [],
+        pflege: [],
+        ernte: []
+      },
+      harvest_option: 'ship_home',
+      shipping_address: ''
+    });
+    setUserInfo({ name: '', email: '', phone: '' });
+    setShowPayment(false);
+    setOrderToPayFor(null);
+    
+    // Refresh data
+    fetchPlots();
+    fetchOrders();
   };
 
   const getGermanSoilType = (soilType) => {
@@ -247,6 +337,18 @@ const App = () => {
       'completed': 'Abgeschlossen'
     };
     return translations[status] || status;
+  };
+
+  const getGermanWorkingStep = (step) => {
+    const translations = {
+      'bodenbearbeitung': 'Bodenbearbeitung',
+      'aussaat': 'Aussaat',
+      'pflanzenschutz': 'Pflanzenschutz',
+      'duengung': 'Düngung',
+      'pflege': 'Pflege',
+      'ernte': 'Ernte'
+    };
+    return translations[step] || step;
   };
 
   const renderHeader = () => (
@@ -387,7 +489,7 @@ const App = () => {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌾 Kulturauswahl</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {['roggen', 'weizen', 'gerste', 'triticale', 'silomais', 'zuckerrueben', 'luzerne', 'gras', 'bluehmischung', 'erbsen'].map(crop => (
+            {Object.keys(expectedYields).map(crop => (
               <label key={crop} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                 <input
                   type="radio"
@@ -399,9 +501,7 @@ const App = () => {
                 />
                 <div className="flex-1">
                   <div className="font-medium">{getGermanCropType(crop)}</div>
-                  {marketPrices[crop] && (
-                    <div className="text-sm text-gray-500">{marketPrices[crop]}€/t</div>
-                  )}
+                  <div className="text-sm text-gray-500">{expectedYields[crop]}kg erwartet</div>
                 </div>
               </label>
             ))}
@@ -424,6 +524,102 @@ const App = () => {
             </div>
           </div>
         )}
+
+        {/* Fertilizer Selection */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">🌿 Düngung</h3>
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Mineralische Düngung</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(fertilizerSpecs).filter(([_, spec]) => spec.category === 'mineral').map(([type, spec]) => (
+                  <label key={type} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="fertilizer"
+                      value={type}
+                      checked={farmingDecision.fertilizer_choice.fertilizer_type === type}
+                      onChange={() => handleFertilizerSelection(type)}
+                      className="text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{spec.name}</div>
+                      <div className="text-sm text-gray-500">{spec.price_per_ton}€/t</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Organische Düngung</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(fertilizerSpecs).filter(([_, spec]) => spec.category === 'organic').map(([type, spec]) => (
+                  <label key={type} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="fertilizer"
+                      value={type}
+                      checked={farmingDecision.fertilizer_choice.fertilizer_type === type}
+                      onChange={() => handleFertilizerSelection(type)}
+                      className="text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{spec.name}</div>
+                      <div className="text-sm text-gray-500">{spec.price_per_m3}€/m³</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="fertilizer"
+                  value="keine_duengung"
+                  checked={farmingDecision.fertilizer_choice.fertilizer_type === 'keine_duengung'}
+                  onChange={() => handleFertilizerSelection('keine_duengung')}
+                  className="text-green-600"
+                />
+                <div className="flex-1">
+                  <div className="font-medium">Ohne Düngung</div>
+                  <div className="text-sm text-gray-500">0€</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Machine Selection */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Maschinenauswahl</h3>
+          
+          <div className="space-y-6">
+            {Object.entries(machinesByStep).map(([step, machines]) => (
+              <div key={step}>
+                <h4 className="text-lg font-semibold text-gray-700 mb-3">{getGermanWorkingStep(step)}</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {machines.map(machine => (
+                    <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input
+                        type="checkbox"
+                        checked={farmingDecision.machines[step].includes(machine.id)}
+                        onChange={() => handleMachineSelection(step, machine.id)}
+                        className="text-green-600"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium">{machine.name}</div>
+                        <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Harvest Option */}
         <div className="bg-white rounded-lg shadow-lg p-6">
@@ -471,174 +667,6 @@ const App = () => {
               />
             </div>
           )}
-        </div>
-
-        {/* Machine Selection */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Maschinenauswahl</h3>
-          
-          <div className="space-y-6">
-            {/* Bodenbearbeitung */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Bodenbearbeitung</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {getMachinesByType('traktor').concat(getMachinesByType('scheibenegge'), getMachinesByType('grubber')).map(machine => (
-                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={farmingDecision.cultivation_machines.includes(machine.id)}
-                      onChange={() => handleMachineSelection('cultivation_machines', machine.id)}
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Aussaat */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Aussaat</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {getMachinesByType('saemaschine').map(machine => (
-                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={farmingDecision.care_machines.includes(machine.id)}
-                      onChange={() => handleMachineSelection('care_machines', machine.id)}
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Pflanzenschutz */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Pflanzenschutz</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(farmingDecision.cultivation_method === 'biologisch' 
-                  ? getMachinesByType('hacke').concat(getMachinesByType('striegel'))
-                  : getMachinesByType('feldspritze')
-                ).map(machine => (
-                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={farmingDecision.protection_machines.includes(machine.id)}
-                      onChange={() => handleMachineSelection('protection_machines', machine.id)}
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Düngung */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Düngung</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { name: 'Schweinegülle', price: 8.50, unit: 'm³' },
-                  { name: 'Rindergülle', price: 7.80, unit: 'm³' },
-                  { name: 'Gärreste', price: 9.20, unit: 'm³' },
-                  { name: 'Rindermist', price: 12.00, unit: 't' },
-                  { name: 'Ohne Düngung', price: 0.00, unit: '' }
-                ].map((fertilizer, index) => (
-                  <label key={index} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="radio"
-                      name="fertilizer"
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{fertilizer.name}</div>
-                      <div className="text-sm text-gray-500">{fertilizer.price}€{fertilizer.unit && `/${fertilizer.unit}`}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Pflege */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Pflege</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {getMachinesByType('cambridge_walze').map(machine => (
-                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={farmingDecision.care_machines.includes(machine.id)}
-                      onChange={() => handleMachineSelection('care_machines', machine.id)}
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
-                    </div>
-                  </label>
-                ))}
-                <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                  <input
-                    type="checkbox"
-                    className="text-green-600"
-                  />
-                  <div className="flex-1">
-                    <div className="font-medium">Steinesammeln</div>
-                    <div className="text-sm text-gray-500">1.50€</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            {/* Ernte */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Ernte</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(farmingDecision.crop_type === 'silomais' 
-                  ? getMachinesByType('mais_haecksler')
-                  : farmingDecision.crop_type === 'gras'
-                  ? getMachinesByType('gras_haecksler')
-                  : getMachinesByType('maehdrescher')
-                ).map(machine => (
-                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={farmingDecision.care_machines.includes(machine.id)}
-                      onChange={() => handleMachineSelection('care_machines', machine.id)}
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
-                    </div>
-                  </label>
-                ))}
-                {farmingDecision.crop_type === 'roggen' && (
-                  <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      className="text-green-600"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">Häcksler (Ganzpflanzensilage)</div>
-                      <div className="text-sm text-gray-500">4.00€</div>
-                    </div>
-                  </label>
-                )}
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="flex justify-between">
@@ -722,6 +750,10 @@ const App = () => {
               <span>{getGermanCropType(farmingDecision.crop_type)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
+              <span className="font-medium">Düngung:</span>
+              <span>{fertilizerSpecs[farmingDecision.fertilizer_choice.fertilizer_type]?.name || 'Keine'}</span>
+            </div>
+            <div className="flex justify-between py-2 border-b">
               <span className="font-medium">Erntegut:</span>
               <span>{farmingDecision.harvest_option === 'ship_home' ? 'Versand nach Hause' : 'Verkauf an Landwirt'}</span>
             </div>
@@ -740,15 +772,6 @@ const App = () => {
           </div>
         </div>
 
-        {/* Advisory Info */}
-        <div className="bg-yellow-50 rounded-lg p-6">
-          <h3 className="text-lg font-bold text-yellow-800 mb-2">📧 Beratungsservice inklusive</h3>
-          <p className="text-yellow-700">
-            Sie erhalten regelmäßige Updates und Empfehlungen zu Ihrer Parzelle, 
-            einschließlich Hinweise zu Krankheitsdruck und Behandlungsempfehlungen.
-          </p>
-        </div>
-
         <div className="flex justify-between">
           <button
             onClick={() => setCurrentStep('farming')}
@@ -761,9 +784,54 @@ const App = () => {
             disabled={loading || !userInfo.name || !userInfo.email}
             className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400"
           >
-            {loading ? 'Wird übermittelt...' : 'Parzelle pachten'}
+            {loading ? 'Wird übermittelt...' : 'Jetzt bestellen und bezahlen'}
           </button>
         </div>
+      </div>
+    </div>
+  );
+
+  const renderPaymentSection = () => (
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">Zahlung</h2>
+        <p className="text-lg text-gray-600">
+          Bestellung: {orderToPayFor?.id} - Gesamtbetrag: {orderToPayFor?.total_cost.toFixed(2)}€
+        </p>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID, currency: "EUR" }}>
+          <PayPalButtons
+            createOrder={async () => {
+              try {
+                const response = await axios.post(`${API}/payments/create-paypal-order`, {
+                  order_id: orderToPayFor.id,
+                  amount: orderToPayFor.total_cost
+                });
+                return response.data.paypal_order_id;
+              } catch (error) {
+                console.error('Error creating PayPal order:', error);
+                throw error;
+              }
+            }}
+            onApprove={async (data) => {
+              try {
+                await axios.post(`${API}/payments/capture-paypal-order`, {
+                  paypal_order_id: data.orderID
+                });
+                handlePaymentSuccess();
+              } catch (error) {
+                console.error('Error capturing PayPal order:', error);
+                alert('Fehler bei der Zahlung. Bitte versuchen Sie es erneut.');
+              }
+            }}
+            onError={(error) => {
+              console.error('PayPal error:', error);
+              alert('Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+            }}
+          />
+        </PayPalScriptProvider>
       </div>
     </div>
   );
@@ -778,6 +846,7 @@ const App = () => {
               <h3 className="text-lg font-bold text-gray-800">{order.user_name}</h3>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                 order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                order.status === 'confirmed' ? 'bg-green-100 text-green-800' :
                 order.status === 'implementing' ? 'bg-blue-100 text-blue-800' :
                 order.status === 'growing' ? 'bg-green-100 text-green-800' :
                 'bg-gray-100 text-gray-800'
@@ -790,6 +859,7 @@ const App = () => {
               <div><strong>Methode:</strong> {getGermanCultivationMethod(order.farming_decision.cultivation_method)}</div>
               <div><strong>Ertrag erwartet:</strong> {order.expected_yield_kg}kg</div>
               <div><strong>Marktwert:</strong> {order.expected_market_value.toFixed(2)}€</div>
+              <div><strong>Kosten:</strong> {order.total_cost.toFixed(2)}€</div>
               <div><strong>Erstellt:</strong> {new Date(order.created_at).toLocaleDateString('de-DE')}</div>
             </div>
           </div>
@@ -801,13 +871,14 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {renderHeader()}
-      {currentStep !== 'plots' && renderStepIndicator()}
+      {!showPayment && currentStep !== 'plots' && renderStepIndicator()}
       
-      {currentStep === 'plots' && renderPlotSelection()}
-      {currentStep === 'farming' && renderFarmingDecisions()}
-      {currentStep === 'review' && renderReviewOrder()}
+      {showPayment && renderPaymentSection()}
+      {!showPayment && currentStep === 'plots' && renderPlotSelection()}
+      {!showPayment && currentStep === 'farming' && renderFarmingDecisions()}
+      {!showPayment && currentStep === 'review' && renderReviewOrder()}
       
-      {orders.length > 0 && currentStep === 'plots' && renderActiveOrders()}
+      {!showPayment && orders.length > 0 && currentStep === 'plots' && renderActiveOrders()}
     </div>
   );
 };
