@@ -48,6 +48,7 @@ class SoilType(str, Enum):
     SAND = "sand"
     LOAMY_SAND = "loamy_sand"
     CLAYEY_SAND = "clayey_sand"
+    SANDY_LOAM = "sandy_loam"
 
 class CropType(str, Enum):
     ROGGEN = "roggen"
