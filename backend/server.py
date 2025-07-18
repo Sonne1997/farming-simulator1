@@ -906,14 +906,22 @@ async def get_order_advisories(order_id: str):
     return order.get("advisories", [])
 
 # Initialize sample data
+@api_router.post("/reset-database")
+async def reset_database():
+    """Completely reset the database - remove all data"""
+    await db.plots.delete_many({})
+    await db.machines.delete_many({})
+    await db.orders.delete_many({})
+    return {"message": "Database completely reset"}
+
 @api_router.post("/initialize-data")
 async def initialize_sample_data():
-    # Clear existing data completely - including all collections
+    # First, completely reset the database
     await db.plots.delete_many({})
     await db.machines.delete_many({})
     await db.orders.delete_many({})
     
-    # Create sample plots including premium plots
+    # Create sample plots
     sample_plots = [
         PlotCreate(
             name="A1 - Ritterfeld",
@@ -966,34 +974,53 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create machines from structured data with absolute uniqueness
+    # Create exactly 16 unique machines
+    machines_to_create = [
+        # Bodenbearbeitung (3 machines)
+        {"id": "traktor_john_deere_8r370", "name": "John Deere 8R370", "type": MachineType.TRAKTOR, "description": "Großtraktor (400 PS, 5 Min. Arbeitszeit)", "price_per_use": 6.50, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN]},
+        {"id": "scheibenegge_01", "name": "Scheibenegge", "type": MachineType.SCHEIBENEGGE, "description": "Scheibenegge für Bodenbearbeitung", "price_per_use": 1.00, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN]},
+        {"id": "grubber_01", "name": "Grubber", "type": MachineType.GRUBBER, "description": "Bodenbearbeitungsgerät", "price_per_use": 1.20, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN]},
+        
+        # Aussaat (2 machines)
+        {"id": "horsch_pronto_6dc", "name": "Horsch Pronto 6 DC", "type": MachineType.SAEMASCHINE, "description": "Drillmaschine (6m Arbeitsbreite)", "price_per_use": 0.80, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
+        {"id": "traktor_john_deere_7820", "name": "John Deere 7820", "type": MachineType.TRAKTOR_AUSSAAT, "description": "Traktor für Aussaat", "price_per_use": 5.50, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS]},
+        
+        # Pflanzenschutz (5 machines)
+        {"id": "feldspritze_01", "name": "Feldspritze", "type": MachineType.FELDSPRITZE, "description": "Pflanzenschutzspritze", "price_per_use": 0.65, "working_step": WorkingStep.PFLANZENSCHUTZ, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        {"id": "traktor_john_deere_6r145", "name": "John Deere 6R145", "type": MachineType.TRAKTOR_PFLANZENSCHUTZ, "description": "Traktor für Pflanzenschutz", "price_per_use": 4.80, "working_step": WorkingStep.PFLANZENSCHUTZ, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        {"id": "hacke_01", "name": "Hacke", "type": MachineType.HACKE, "description": "Hackgerät für biologischen Anbau", "price_per_use": 1.15, "working_step": WorkingStep.PFLANZENSCHUTZ, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        {"id": "striegel_01", "name": "Striegel", "type": MachineType.STRIEGEL, "description": "Striegelgerät für biologischen Anbau", "price_per_use": 0.85, "working_step": WorkingStep.PFLANZENSCHUTZ, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        
+        # Düngung (2 machines)
+        {"id": "traktor_john_deere_6r195", "name": "John Deere 6R195", "type": MachineType.TRAKTOR_DUENGUNG, "description": "Traktor für Düngung", "price_per_use": 5.20, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        {"id": "guellefass_18m", "name": "Güllefass 18m", "type": MachineType.GUELLEFASS, "description": "Güllefass (18m Arbeitsbreite)", "price_per_use": 2.10, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        
+        # Pflege (1 machine)
+        {"id": "cambridge_walze_01", "name": "Cambridge Walze", "type": MachineType.CAMBRIDGE_WALZE, "description": "Walze zur Bestockungsförderung", "price_per_use": 0.95, "working_step": WorkingStep.PFLEGE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
+        
+        # Ernte (4 machines)
+        {"id": "john_deere_t660i", "name": "John Deere T660i Mähdrescher", "type": MachineType.MAEHDRESCHER, "description": "Getreidemähdrescher", "price_per_use": 4.10, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
+        {"id": "mais_claas_jaguar_940", "name": "Mais-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Spezialhäcksler für Silomais", "price_per_use": 4.20, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.SILOMAIS]},
+        {"id": "gras_claas_jaguar_940", "name": "Gras-Claas Jaguar 940", "type": MachineType.GRAS_HAECKSLER, "description": "Häcksler für Gras", "price_per_use": 3.80, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.GRAS]},
+        {"id": "ganzpflanzensilage_claas_jaguar_940", "name": "Ganzpflanzensilage-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Häcksler für Roggen-Ganzpflanzensilage", "price_per_use": 4.00, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.ROGGEN]}
+    ]
+    
     machine_count = 0
-    created_machine_ids = set()
+    for machine_data in machines_to_create:
+        machine = Machine(
+            id=machine_data["id"],
+            name=machine_data["name"],
+            type=machine_data["type"],
+            description=machine_data["description"],
+            price_per_use=machine_data["price_per_use"],
+            suitable_for=machine_data["suitable_for"],
+            working_step=machine_data["working_step"],
+            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        )
+        await db.machines.insert_one(machine.dict())
+        machine_count += 1
     
-    for working_step, machines in MACHINE_DATA.items():
-        for machine_data in machines:
-            machine_id = machine_data["id"]
-            
-            # Skip if already created (prevent duplicates)
-            if machine_id in created_machine_ids:
-                continue
-                
-            machine = Machine(
-                id=machine_id,
-                name=machine_data["name"],
-                type=machine_data["type"],
-                description=machine_data["description"],
-                price_per_use=machine_data["price_per_use"],
-                suitable_for=machine_data["suitable_for"],
-                working_step=working_step,
-                image_url=machine_data.get("image_url")
-            )
-            
-            await db.machines.insert_one(machine.dict())
-            created_machine_ids.add(machine_id)
-            machine_count += 1
-    
-    return {"message": f"Beispieldaten erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
+    return {"message": f"Datenbank erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
 
 # Include the router in the main app
 app.include_router(api_router)
