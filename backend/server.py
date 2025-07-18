@@ -265,14 +265,28 @@ async def create_machine(machine_data: MachineCreate):
     await db.machines.insert_one(machine.dict())
     return machine
 
-# Market prices
-@api_router.get("/market-prices")
-async def get_market_prices():
-    return MARKET_PRICES
+# Get expected yields based on soil points
+@api_router.get("/expected-yields/{soil_points}")
+async def get_expected_yields_by_soil(soil_points: int):
+    if soil_points < 25 or soil_points > 45:
+        raise HTTPException(status_code=400, detail="Bodenpunkte müssen zwischen 25 und 45 liegen")
+    
+    # Calculate yield multiplier (25 points = 0.8, 45 points = 1.2)
+    yield_multiplier = 0.8 + (soil_points - 25) * 0.02
+    
+    adjusted_yields = {}
+    for crop, base_yield in YIELD_BASE.items():
+        adjusted_yields[crop] = base_yield * yield_multiplier
+    
+    return adjusted_yields
 
-@api_router.get("/expected-yields")
-async def get_expected_yields():
-    return EXPECTED_YIELDS
+@api_router.get("/seed-costs")
+async def get_seed_costs():
+    return SEED_COSTS
+
+@api_router.get("/machine-costs")
+async def get_machine_costs():
+    return MACHINE_COSTS
 
 # Order management
 @api_router.post("/orders", response_model=Order)
