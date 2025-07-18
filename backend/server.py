@@ -10,7 +10,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 from enum import Enum
-from paypalcheckoutsdk.core import SandboxEnvironment, LiveEnvironment
+from paypalcheckoutsdk.core import SandboxEnvironment, LiveEnvironment, PayPalHttpClient
 from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersCaptureRequest
 from paypalhttp import HttpError
 import asyncio
