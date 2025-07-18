@@ -320,6 +320,10 @@ const App = () => {
                   <span className="font-medium">{getGermanSoilType(plot.soil_type)}</span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="text-gray-500">Bodenpunkte:</span>
+                  <span className="font-medium font-bold text-green-600">{plot.soil_points}</span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-gray-500">Standort:</span>
                   <span className="font-medium">{plot.location}</span>
                 </div>
