@@ -344,10 +344,6 @@ async def get_expected_yields_by_soil(soil_points: int):
 async def get_seed_costs():
     return SEED_COSTS
 
-@api_router.get("/machine-costs")
-async def get_machine_costs():
-    return MACHINE_COSTS
-
 @api_router.get("/fertilizer-specs")
 async def get_fertilizer_specs():
     return FERTILIZER_SPECS
