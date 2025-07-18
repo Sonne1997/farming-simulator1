@@ -323,7 +323,7 @@ MARKET_VALUES_250M2 = {
 # Expected yield per 250m² (in kg) - varies by soil points
 # Base yields at 35 soil points, adjusted by soil quality
 def calculate_yield_by_soil_points(crop_type: CropType, soil_points: int):
-    """Calculate expected yield based on soil points (25-45 range)"""
+    """Calculate expected yield based on soil points (25-56 range)"""
     base_yields = {
         CropType.WEIZEN: 125.0,      # 5 t/ha × 0.025 = 125 kg at 35 soil points
         CropType.ROGGEN: 75.0,       # 3 t/ha × 0.025 = 75 kg at 35 soil points
@@ -341,8 +341,13 @@ def calculate_yield_by_soil_points(crop_type: CropType, soil_points: int):
     if base_yield == 0:
         return 0
     
-    # Soil quality factor: 25 points = 0.8x, 35 points = 1.0x, 45 points = 1.2x
-    soil_factor = 0.8 + (soil_points - 25) * 0.02  # Linear scale from 0.8 to 1.2
+    # Soil quality factor: 25 points = 0.8x, 35 points = 1.0x, 45 points = 1.2x, 56 points = 1.5x
+    # Extended range for premium soils
+    if soil_points <= 45:
+        soil_factor = 0.8 + (soil_points - 25) * 0.02  # Linear scale from 0.8 to 1.2
+    else:
+        # Premium soils: 45-56 points = 1.2x to 1.5x
+        soil_factor = 1.2 + (soil_points - 45) * 0.027  # Linear scale from 1.2 to 1.5
     
     return round(base_yield * soil_factor, 1)
 
