@@ -350,6 +350,64 @@ async def get_fertilizer_specs():
 async def get_nitrogen_requirements():
     return N_REQUIREMENTS
 
+# Calculate nitrogen requirement for specific crop and yield
+@api_router.get("/calculate-nitrogen-need/{crop_type}/{expected_yield_kg}")
+async def calculate_nitrogen_need(crop_type: CropType, expected_yield_kg: float):
+    if crop_type not in N_REQUIREMENTS:
+        raise HTTPException(status_code=404, detail="Kultur nicht gefunden")
+    
+    # Convert kg to tons for calculation
+    expected_yield_tons = expected_yield_kg / 1000
+    
+    # Calculate nitrogen requirement
+    n_req_per_ton = N_REQUIREMENTS[crop_type]
+    total_n_requirement = expected_yield_tons * n_req_per_ton
+    
+    return {
+        "crop_type": crop_type,
+        "expected_yield_kg": expected_yield_kg,
+        "expected_yield_tons": expected_yield_tons,
+        "n_requirement_per_ton": n_req_per_ton,
+        "total_n_requirement_kg": total_n_requirement,
+        "fertilizer_options": calculate_fertilizer_options(total_n_requirement)
+    }
+
+def calculate_fertilizer_options(n_requirement_kg: float):
+    """Calculate fertilizer amounts and costs for different fertilizer types"""
+    options = []
+    
+    for fert_type, specs in FERTILIZER_SPECS.items():
+        if specs["organic"]:
+            # Organic fertilizers (m³)
+            n_content_per_m3 = specs["n_content"] * 10  # Convert % to kg/m³
+            required_volume = n_requirement_kg / n_content_per_m3 if n_content_per_m3 > 0 else 0
+            cost = required_volume * specs["price_per_m3"]
+            
+            options.append({
+                "fertilizer_type": fert_type,
+                "name": specs["name"],
+                "required_amount": round(required_volume, 2),
+                "unit": "m³",
+                "cost": round(cost, 2),
+                "organic": True
+            })
+        else:
+            # Mineral fertilizers (kg)
+            n_content_percent = specs["n_content"]
+            required_amount = (n_requirement_kg / n_content_percent) * 100 if n_content_percent > 0 else 0
+            cost = required_amount * specs["price_per_kg"]
+            
+            options.append({
+                "fertilizer_type": fert_type,
+                "name": specs["name"],
+                "required_amount": round(required_amount, 2),
+                "unit": "kg",
+                "cost": round(cost, 2),
+                "organic": False
+            })
+    
+    return options
+
 # Order management
 @api_router.post("/orders", response_model=Order)
 async def create_order(order_data: OrderCreate):
