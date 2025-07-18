@@ -478,10 +478,11 @@ const App = () => {
           <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Maschinenauswahl</h3>
           
           <div className="space-y-6">
+            {/* Bodenbearbeitung */}
             <div>
               <h4 className="text-lg font-semibold text-gray-700 mb-3">Bodenbearbeitung</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {getMachinesByType('traktor').concat(getMachinesByType('grubber'), getMachinesByType('pflug')).map(machine => (
+                {getMachinesByType('traktor').concat(getMachinesByType('scheibenegge'), getMachinesByType('grubber')).map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                     <input
                       type="checkbox"
@@ -498,10 +499,35 @@ const App = () => {
               </div>
             </div>
 
+            {/* Aussaat */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Aussaat</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {getMachinesByType('saemaschine').map(machine => (
+                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="checkbox"
+                      checked={farmingDecision.care_machines.includes(machine.id)}
+                      onChange={() => handleMachineSelection('care_machines', machine.id)}
+                      className="text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{machine.name}</div>
+                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Pflanzenschutz */}
             <div>
               <h4 className="text-lg font-semibold text-gray-700 mb-3">Pflanzenschutz</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {getMachinesByType('feldspritze').map(machine => (
+                {farmingDecision.cultivation_method === 'biologisch' 
+                  ? getMachinesByType('hacke').concat(getMachinesByType('striegel'))
+                  : getMachinesByType('feldspritze')
+                }.map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                     <input
                       type="checkbox"
@@ -518,10 +544,37 @@ const App = () => {
               </div>
             </div>
 
+            {/* Düngung */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Aussaat & Ernte</h4>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Düngung</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {getMachinesByType('saemaschine').concat(getMachinesByType('maehdrescher')).map(machine => (
+                {[
+                  { name: 'Schweinegülle', price: 8.50, unit: 'm³' },
+                  { name: 'Rindergülle', price: 7.80, unit: 'm³' },
+                  { name: 'Gärreste', price: 9.20, unit: 'm³' },
+                  { name: 'Rindermist', price: 12.00, unit: 't' },
+                  { name: 'Ohne Düngung', price: 0.00, unit: '' }
+                ].map((fertilizer, index) => (
+                  <label key={index} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="fertilizer"
+                      className="text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{fertilizer.name}</div>
+                      <div className="text-sm text-gray-500">{fertilizer.price}€{fertilizer.unit && `/${fertilizer.unit}`}</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Pflege */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Pflege</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {getMachinesByType('cambridge_walze').map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                     <input
                       type="checkbox"
@@ -535,6 +588,54 @@ const App = () => {
                     </div>
                   </label>
                 ))}
+                <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                  <input
+                    type="checkbox"
+                    className="text-green-600"
+                  />
+                  <div className="flex-1">
+                    <div className="font-medium">Steinesammeln</div>
+                    <div className="text-sm text-gray-500">1.50€</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Ernte */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Ernte</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {farmingDecision.crop_type === 'silomais' 
+                  ? getMachinesByType('mais_haecksler')
+                  : farmingDecision.crop_type === 'gras'
+                  ? getMachinesByType('gras_haecksler')
+                  : getMachinesByType('maehdrescher')
+                }.map(machine => (
+                  <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="checkbox"
+                      checked={farmingDecision.care_machines.includes(machine.id)}
+                      onChange={() => handleMachineSelection('care_machines', machine.id)}
+                      className="text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{machine.name}</div>
+                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
+                    </div>
+                  </label>
+                ))}
+                {farmingDecision.crop_type === 'roggen' && (
+                  <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="checkbox"
+                      className="text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">Häcksler (Ganzpflanzensilage)</div>
+                      <div className="text-sm text-gray-500">4.00€</div>
+                    </div>
+                  </label>
+                )}
               </div>
             </div>
           </div>
