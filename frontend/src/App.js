@@ -215,7 +215,8 @@ const App = () => {
       'zuckerrueben': 'Zuckerrüben',
       'luzerne': 'Luzerne',
       'gras': 'Gras',
-      'bluehmischung': 'Blühmischung'
+      'bluehmischung': 'Blühmischung',
+      'erbsen': 'Erbsen'
     };
     return translations[cropType] || cropType;
   };
