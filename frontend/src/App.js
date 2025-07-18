@@ -51,29 +51,7 @@ const App = () => {
     initializeData();
   }, []);
 
-  useEffect(() => {
-    if (plots.length === 0) {
-      fetchPlots();
-    }
-    if (machines.length === 0) {
-      fetchMachines();
-    }
-    if (Object.keys(fertilizerSpecs).length === 0) {
-      fetchFertilizerSpecs();
-    }
-    if (Object.keys(marketPrices).length === 0) {
-      fetchMarketPrices();
-    }
-    if (Object.keys(expectedYields).length === 0) {
-      fetchExpectedYields();
-    }
-    if (Object.keys(marketValues).length === 0) {
-      fetchMarketValues();
-    }
-    if (orders.length === 0) {
-      fetchOrders();
-    }
-  }, [plots, machines, fertilizerSpecs, marketPrices, expectedYields, marketValues, orders]);
+  // Remove the problematic useEffect with dependencies - this was causing infinite loops!
 
   const initializeData = async () => {
     try {
