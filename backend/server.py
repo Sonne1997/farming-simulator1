@@ -662,7 +662,7 @@ async def create_paypal_order(order_data: PayPalOrderCreate):
 async def capture_paypal_order(capture_data: PayPalOrderCapture):
     try:
         request = OrdersCaptureRequest(capture_data.paypal_order_id)
-        response = paypal_env.client().execute(request)
+        response = paypal_client.execute(request)
         
         # Find order by PayPal order ID
         order = await db.orders.find_one({"payment_data.paypal_order_id": capture_data.paypal_order_id})
