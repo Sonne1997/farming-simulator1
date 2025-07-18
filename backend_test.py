@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Virtual Farming Platform
-Tests all backend endpoints and functionality
+Enhanced Backend API Testing for Virtual Farming Platform
+Tests all backend endpoints including new PayPal integration, enhanced machine management,
+fertilizer specs, and updated order system
 """
 
 import requests
@@ -10,7 +11,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend/.env
-BASE_URL = "https://0ebdc884-2da2-431a-aa2c-3e86d0888713.preview.emergentagent.com/api"
+BASE_URL = "http://localhost:8001/api"
 
 class VirtualFarmingTester:
     def __init__(self):
