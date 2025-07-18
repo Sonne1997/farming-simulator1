@@ -57,10 +57,23 @@ class CultivationMethod(str, Enum):
 class MachineType(str, Enum):
     TRAKTOR = "traktor"
     PFLUG = "pflug"
+    GRUBBER = "grubber"
     SAEMASCHINE = "saemaschine"
     MAEHDRESCHER = "maehdrescher"
     FELDSPRITZE = "feldspritze"
-    GRUBBER = "grubber"
+    HACKE = "hacke"
+    STRIEGEL = "striegel"
+    CAMBRIDGE_WALZE = "cambridge_walze"
+    MAIS_HAECKSLER = "mais_haecksler"
+    GRAS_HAECKSLER = "gras_haecksler"
+
+class WorkingStep(str, Enum):
+    BODENBEARBEITUNG = "bodenbearbeitung"
+    AUSSAAT = "aussaat"
+    PFLANZENSCHUTZ = "pflanzenschutz"
+    DUENGUNG = "duengung"
+    PFLEGE = "pflege"
+    ERNTE = "ernte"
 
 class OrderStatus(str, Enum):
     PENDING = "pending"
