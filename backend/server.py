@@ -818,9 +818,14 @@ async def create_order(order_data: OrderCreate):
         if machine:
             machine_cost += machine["price_per_use"]
     
-    # Calculate expected yield and market value
+    # Calculate expected yield and market value based on soil points
+    plot = await db.plots.find_one({"id": order_data.plot_id})
+    if not plot:
+        raise HTTPException(status_code=404, detail="Parzelle nicht gefunden")
+    
     crop_type = order_data.farming_decision.crop_type
-    expected_yield = EXPECTED_YIELDS.get(crop_type, 0)
+    soil_points = plot["soil_points"]
+    expected_yield = calculate_yield_by_soil_points(crop_type, soil_points)
     market_price_per_ton = MARKET_PRICES.get(crop_type, 0)
     expected_market_value = (expected_yield / 1000) * market_price_per_ton  # Convert kg to tons
     
