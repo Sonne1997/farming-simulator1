@@ -43,6 +43,13 @@ class CropType(str, Enum):
     BLUEHMISCHUNG = "bluehmischung"
     ERBSEN = "erbsen"
 
+class FertilizerType(str, Enum):
+    SSA = "ssa"  # Schwefelsaurer Ammoniak
+    KAS = "kas"  # Kalkammonsalpeter
+    SCHWEINEGULLE = "schweinegulle"
+    RINDERGUELLE = "rinderguelle"
+    GAERREST = "gaerrest"
+
 class CultivationMethod(str, Enum):
     KONVENTIONELL = "konventionell"
     BIOLOGISCH = "biologisch"
