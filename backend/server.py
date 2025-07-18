@@ -178,58 +178,80 @@ SEED_COSTS = {
     CropType.ERBSEN: 6.25
 }
 
-# Fertilizer specifications
+# Fertilizer specifications (updated with realistic mineral fertilizer calculations)
 FERTILIZER_SPECS = {
+    # Mineralische Düngung
     FertilizerType.SSA: {
         "name": "Schwefelsaurer Ammoniak (SSA)",
-        "n_content": 21,  # % Stickstoff
+        "n_content": 21,  # kg N in 100 kg SSA
         "s_content": 24,  # % Schwefel
-        "price_per_kg": 0.42,  # EUR/kg
-        "organic": False
+        "price_per_ton": 350.0,  # EUR/t
+        "organic": False,
+        "category": "mineral"
     },
     FertilizerType.KAS: {
         "name": "Kalkammonsalpeter (KAS)",
-        "n_content": 27,  # % Stickstoff
+        "n_content": 27,  # kg N in 100 kg KAS
         "s_content": 0,
-        "price_per_kg": 0.45,  # EUR/kg
-        "organic": False
+        "price_per_ton": 300.0,  # EUR/t
+        "organic": False,
+        "category": "mineral"
     },
+    # Organische Düngung
     FertilizerType.SCHWEINEGULLE: {
         "name": "Schweinegülle",
         "n_content": 0.4,  # % Stickstoff (4 kg N/m³)
         "s_content": 0,
         "price_per_m3": 8.50,  # EUR/m³
-        "organic": True
+        "organic": True,
+        "category": "organic"
     },
     FertilizerType.RINDERGUELLE: {
         "name": "Rindergülle",
         "n_content": 0.35,  # % Stickstoff (3.5 kg N/m³)
         "s_content": 0,
         "price_per_m3": 7.80,  # EUR/m³
-        "organic": True
+        "organic": True,
+        "category": "organic"
     },
     FertilizerType.GAERREST: {
         "name": "Gärrest (Biogasanlage)",
         "n_content": 0.45,  # % Stickstoff (4.5 kg N/m³)
         "s_content": 0,
         "price_per_m3": 9.20,  # EUR/m³
-        "organic": True
+        "organic": True,
+        "category": "organic"
     },
     FertilizerType.RINDERMIST: {
         "name": "Rindermist",
         "n_content": 0.5,  # % Stickstoff (5 kg N/t)
         "s_content": 0,
         "price_per_ton": 12.00,  # EUR/t
-        "organic": True
+        "organic": True,
+        "category": "organic"
     },
     FertilizerType.KEINE_DUENGUNG: {
         "name": "Ohne Düngung",
         "n_content": 0,
         "s_content": 0,
         "price_per_unit": 0.00,  # EUR
-        "organic": False
+        "organic": False,
+        "category": "none"
     }
 }
+
+# Plant protection costs (35€/ha = 0.875€ per 250m²)
+PLANT_PROTECTION_COST_PER_250M2 = 0.88  # EUR per treatment
+
+# Fertilizer calculations for 250m² (120 kg N/ha = 3 kg N per 250m²)
+N_REQUIREMENT_PER_250M2 = 3.0  # kg N
+SSA_AMOUNT_PER_250M2 = N_REQUIREMENT_PER_250M2 / 0.21  # 14.29 kg SSA
+KAS_AMOUNT_PER_250M2 = N_REQUIREMENT_PER_250M2 / 0.27  # 11.11 kg KAS
+SSA_COST_PER_250M2 = (SSA_AMOUNT_PER_250M2 / 1000) * 350  # 5.00€
+KAS_COST_PER_250M2 = (KAS_AMOUNT_PER_250M2 / 1000) * 300  # 3.33€
+
+# Organic fertilizer volume per 250m² (40m³/ha = 1m³ per 250m²)
+ORGANIC_FERTILIZER_VOLUME_PER_250M2 = 1.0  # m³
 
 # Nitrogen requirements per crop (kg N per ton of expected yield)
 N_REQUIREMENTS = {
