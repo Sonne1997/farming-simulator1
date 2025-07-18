@@ -460,7 +460,7 @@ class Plot(BaseModel):
     length_m: float = 18.0
     width_m: float = 13.8
     soil_type: SoilType
-    soil_points: int = Field(ge=25, le=45)  # Soil quality points 25-45
+    soil_points: int = Field(ge=25, le=56)  # Soil quality points 25-56
     location: str
     description: str
     price_per_plot: float
@@ -471,7 +471,7 @@ class Plot(BaseModel):
 class PlotCreate(BaseModel):
     name: str
     soil_type: SoilType
-    soil_points: int = Field(ge=25, le=45)
+    soil_points: int = Field(ge=25, le=56)
     location: str
     description: str
     price_per_plot: float
