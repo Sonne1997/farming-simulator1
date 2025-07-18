@@ -306,7 +306,8 @@ const App = () => {
     const translations = {
       'sand': 'Sandboden',
       'loamy_sand': 'Lehmiger Sandboden',
-      'clayey_sand': 'Anlehmiger Sandboden'
+      'clayey_sand': 'Anlehmiger Sandboden',
+      'sandy_loam': 'Sandiger Lehm'
     };
     return translations[soilType] || soilType;
   };
