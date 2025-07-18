@@ -108,7 +108,7 @@ const App = () => {
 
   const handleSubmitOrder = async () => {
     if (!selectedPlot || !userInfo.name || !userInfo.email) {
-      alert('Please fill in all required information');
+      alert('Bitte füllen Sie alle erforderlichen Informationen aus');
       return;
     }
     
@@ -119,11 +119,11 @@ const App = () => {
         user_email: userInfo.email,
         plot_id: selectedPlot.id,
         farming_decision: farmingDecision,
-        notes: `Virtual farming experience on ${selectedPlot.name}`
+        notes: `Virtuelle Landwirtschaft auf ${selectedPlot.name}`
       };
       
       await axios.post(`${API}/orders`, orderData);
-      alert('Order submitted successfully! The farmer will implement your decisions.');
+      alert('Bestellung erfolgreich abgeschickt! Der Landwirt wird Ihre Entscheidungen umsetzen.');
       
       // Reset form
       setCurrentStep('plots');
@@ -142,7 +142,7 @@ const App = () => {
       fetchOrders();
     } catch (error) {
       console.error('Error submitting order:', error);
-      alert('Error submitting order. Please try again.');
+      alert('Fehler beim Absenden der Bestellung. Bitte versuchen Sie es erneut.');
     } finally {
       setLoading(false);
     }
@@ -152,6 +152,52 @@ const App = () => {
     return machines.filter(machine => machine.type === type);
   };
 
+  const getGermanSoilType = (soilType) => {
+    const translations = {
+      'clay': 'Lehmboden',
+      'sandy': 'Sandboden',
+      'loamy': 'Lößboden',
+      'silt': 'Schluffboden'
+    };
+    return translations[soilType] || soilType;
+  };
+
+  const getGermanCropType = (cropType) => {
+    const translations = {
+      'wheat': 'Weizen',
+      'corn': 'Mais',
+      'soybeans': 'Sojabohnen',
+      'potatoes': 'Kartoffeln',
+      'carrots': 'Karotten',
+      'lettuce': 'Kopfsalat',
+      'tomatoes': 'Tomaten',
+      'onions': 'Zwiebeln'
+    };
+    return translations[cropType] || cropType;
+  };
+
+  const getGermanCultivationMethod = (method) => {
+    const translations = {
+      'conventional': 'Konventionell',
+      'no_till': 'Direktsaat',
+      'organic': 'Biologisch',
+      'precision': 'Präzisionsanbau'
+    };
+    return translations[method] || method;
+  };
+
+  const getGermanStatus = (status) => {
+    const translations = {
+      'pending': 'Ausstehend',
+      'confirmed': 'Bestätigt',
+      'implementing': 'Umsetzung',
+      'growing': 'Wachstum',
+      'harvest_ready': 'Erntereif',
+      'completed': 'Abgeschlossen'
+    };
+    return translations[status] || status;
+  };
+
   const renderHeader = () => (
     <div className="bg-gradient-to-r from-green-800 to-green-600 text-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -159,7 +205,7 @@ const App = () => {
           <div className="flex items-center space-x-6 mb-6 md:mb-0">
             <div className="bg-white rounded-lg p-3">
               <img 
-                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xMDcuNSA4NS41QzEwNy41IDg1LjUgMTIwIDc1IDEzNSA3NUMxNTAgNzUgMTYyLjUgODUuNSAxNjIuNSA4NS41QzE2Mi41IDg1LjUgMTcwIDk1IDE3MCAzMDBDMTcwIDMwMCAxNDAgMzAwIDEzNSAzMDBDMTMwIDMwMCAxMDAgMzAwIDEwMCAzMDBDMTAwIDk1IDEwNy41IDg1LjUgMTA3LjUgODUuNVoiIGZpbGw9IiNBNUE1QTUiLz4KPGVsbGlwc2UgY3g9IjEyNCIgY3k9IjcwIiByeD0iMTUiIHJ5PSIxMiIgZmlsbD0iI0E1QTVBNSIvPgo8ZWxsaXBzZSBjeD0iMTQ2IiBjeT0iNzAiIHJ4PSIxNSIgcnk9IjEyIiBmaWxsPSIjQTVBNUE1Ii8+CjxwYXRoIGQ9Ik0xMDUgODBIMTY1VjEwNUMxNjUgMTEwIDE2MCAxMTUgMTU1IDExNUgxMTVDMTEwIDExNSAxMDUgMTEwIDEwNSAxMDVWODBaIiBmaWxsPSIjQTVBNUE1Ii8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijg1IiByPSIzIiBmaWxsPSIjRkZGRkZGIi8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9Ijg1IiByPSIzIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMjAgMTAwQzEyMCAxMDAgMTMwIDEwNSAxNDAgMTAwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMTMwQzEzMCAxMzAgMTIwIDEzNSAxNDAgMTM1QzE2MCAxMzUgMTYwIDEzMCAxNjAgMTMwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMTQ1QzEzMCAxNDUgMTIwIDE1MiAxNDAgMTUyQzE2MCAxNTIgMTYwIDE0NSAxNjAgMTQ1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMTYwQzEzMCAxNjAgMTIwIDE2NSAxNDAgMTY1QzE2MCAxNjUgMTYwIDE2MCAxNjAgMTYwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMTc1QzEzMCAxNzUgMTIwIDE4MiAxNDAgMTgyQzE2MCAxODIgMTYwIDE3NSAxNjAgMTc1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMTkwQzEzMCAxOTAgMTIwIDE5NSAxNDAgMTk1QzE2MCAxOTUgMTYwIDE5MCAxNjAgMTkwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjA1QzEzMCAxOTAgMTIwIDIwNSAxNDAgMjA1QzE2MCAyMDUgMTYwIDE5MCAxNjAgMjA1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjIwQzEzMCAyMjAgMTIwIDIyNSAxNDAgMjI1QzE2MCAyMjUgMTYwIDIyMCAxNjAgMjIwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjM1QzEzMCAyMzUgMTIwIDI0MCAxNDAgMjQwQzE2MCAyNDAgMTYwIDIzNSAxNjAgMjM1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjUwQzEzMCAyNTAgMTIwIDI1NSAxNDAgMjU1QzE2MCAyNTUgMTYwIDI1MCAxNjAgMjUwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjY1QzEzMCAyNjUgMTIwIDI3MCAxNDAgMjcwQzE2MCAyNzAgMTYwIDI2NSAxNjAgMjY1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjgwQzEzMCAyODAgMTIwIDI4NSAxNDAgMjg1QzE2MCAyODUgMTYwIDI4MCAxNjAgMjgwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMjk1QzEzMCAyOTUgMTIwIDMwMCAxNDAgMzAwQzE2MCAzMDAgMTYwIDI5NSAxNjAgMjk1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMzEwQzEzMCAzMTAgMTIwIDMxNSAxNDAgMzE1QzE2MCAzMTUgMTYwIDMxMCAxNjAgMzEwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMzI1QzEzMCAzMjUgMTIwIDMzMCAxNDAgMzMwQzE2MCAzMzAgMTYwIDMyNSAxNjAgMzI1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMzQwQzEzMCAzNDAgMTIwIDM0NSAxNDAgMzQ1QzE2MCAzNDUgMTYwIDM0MCAxNjAgMzQwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMzU1QzEzMCAzNTUgMTIwIDM2MCAxNDAgMzYwQzE2MCAzNjAgMTYwIDM1NSAxNjAgMzU1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMzcwQzEzMCAzNzAgMTIwIDM3NSAxNDAgMzc1QzE2MCAzNzUgMTYwIDM3MCAxNjAgMzcwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMzg1QzEzMCAzODUgMTIwIDM5MCAxNDAgMzkwQzE2MCAzOTAgMTYwIDM4NSAxNjAgMzg1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDAwQzEzMCA0MDAgMTIwIDQwNSAxNDAgNDA1QzE2MCA0MDUgMTYwIDQwMCAxNjAgNDAwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDE1QzEzMCA0MTUgMTIwIDQyMCAxNDAgNDIwQzE2MCA0MjAgMTYwIDQxNSAxNjAgNDE1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDMwQzEzMCA0MzAgMTIwIDQzNSAxNDAgNDM1QzE2MCA0MzUgMTYwIDQzMCAxNjAgNDMwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDQ1QzEzMCA0NDUgMTIwIDQ1MCAxNDAgNDUwQzE2MCA0NTAgMTYwIDQ0NSAxNjAgNDQ1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDYwQzEzMCA0NjAgMTIwIDQ2NSAxNDAgNDY1QzE2MCA0NjUgMTYwIDQ2MCAxNjAgNDYwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDc1QzEzMCA0NzUgMTIwIDQ4MCAxNDAgNDgwQzE2MCA0ODAgMTYwIDQ3NSAxNjAgNDc1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNDkwQzEzMCA0OTAgMTIwIDQ5NSAxNDAgNDk1QzE2MCA0OTUgMTYwIDQ5MCAxNjAgNDkwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTA1QzEzMCA1MDUgMTIwIDUxMCAxNDAgNTEwQzE2MCA1MTAgMTYwIDUwNSAxNjAgNTA1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTIwQzEzMCA1MjAgMTIwIDUyNSAxNDAgNTI1QzE2MCA1MjUgMTYwIDUyMCAxNjAgNTIwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTM1QzEzMCA1MzUgMTIwIDU0MCAxNDAgNTQwQzE2MCA1NDAgMTYwIDUzNSAxNjAgNTM1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTUwQzEzMCA1NTAgMTIwIDU1NSAxNDAgNTU1QzE2MCA1NTUgMTYwIDU1MCAxNjAgNTUwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTY1QzEzMCA1NjUgMTIwIDU3MCAxNDAgNTcwQzE2MCA1NzAgMTYwIDU2NSAxNjAgNTY1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTgwQzEzMCA1ODAgMTIwIDU4NSAxNDAgNTg1QzE2MCA1ODUgMTYwIDU4MCAxNjAgNTgwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNTk1QzEzMCA1OTUgMTIwIDYwMCAxNDAgNjAwQzE2MCA2MDAgMTYwIDU5NSAxNjAgNTk1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNjEwQzEzMCA2MTAgMTIwIDYxNSAxNDAgNjE1QzE2MCA2MTUgMTYwIDYxMCAxNjAgNjEwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNjI1QzEzMCA2MjUgMTIwIDYzMCAxNDAgNjMwQzE2MCA2MzAgMTYwIDYyNSAxNjAgNjI1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNjQwQzEzMCA2NDAgMTIwIDY0NSAxNDAgNjQ1QzE2MCA2NDUgMTYwIDY0MCAxNjAgNjQwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNjU1QzEzMCA2NTUgMTIwIDY2MCAxNDAgNjYwQzE2MCA2NjAgMTYwIDY1NSAxNjAgNjU1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNjcwQzEzMCA2NzAgMTIwIDY3NSAxNDAgNjc1QzE2MCA2NzUgMTYwIDY3MCAxNjAgNjcwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNjg1QzEzMCA2ODUgMTIwIDY5MCAxNDAgNjkwQzE2MCA2OTAgMTYwIDY4NSAxNjAgNjg1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzAwQzEzMCA3MDAgMTIwIDcwNSAxNDAgNzA1QzE2MCA3MDUgMTYwIDcwMCAxNjAgNzAwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzE1QzEzMCA3MTUgMTIwIDcyMCAxNDAgNzIwQzE2MCA3MjAgMTYwIDcxNSAxNjAgNzE1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzMwQzEzMCA3MzAgMTIwIDczNSAxNDAgNzM1QzE2MCA3MzUgMTYwIDczMCAxNjAgNzMwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzQ1QzEzMCA3NDUgMTIwIDc1MCAxNDAgNzUwQzE2MCA3NTAgMTYwIDc0NSAxNjAgNzQ1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzYwQzEzMCA3NjAgMTIwIDc2NSAxNDAgNzY1QzE2MCA3NjUgMTYwIDc2MCAxNjAgNzYwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzc1QzEzMCA3NzUgMTIwIDc4MCAxNDAgNzgwQzE2MCA3ODAgMTYwIDc3NSAxNjAgNzc1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgNzkwQzEzMCA3OTAgMTIwIDc5NSAxNDAgNzk1QzE2MCA3OTUgMTYwIDc5MCAxNjAgNzkwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODA1QzEzMCA4MDUgMTIwIDgxMCAxNDAgODEwQzE2MCA4MTAgMTYwIDgwNSAxNjAgODA1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODIwQzEzMCA4MjAgMTIwIDgyNSAxNDAgODI1QzE2MCA4MjUgMTYwIDgyMCAxNjAgODIwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODM1QzEzMCA4MzUgMTIwIDg0MCAxNDAgODQwQzE2MCA4NDAgMTYwIDgzNSAxNjAgODM1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODUwQzEzMCA4NTAgMTIwIDg1NSAxNDAgODU1QzE2MCA4NTUgMTYwIDg1MCAxNjAgODUwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODY1QzEzMCA4NjUgMTIwIDg3MCAxNDAgODcwQzE2MCA4NzAgMTYwIDg2NSAxNjAgODY1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODgwQzEzMCA4ODAgMTIwIDg4NSAxNDAgODg1QzE2MCA4ODUgMTYwIDg4MCAxNjAgODgwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgODk1QzEzMCA4OTUgMTIwIDkwMCAxNDAgOTAwQzE2MCA5MDAgMTYwIDg5NSAxNjAgODk1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgOTEwQzEzMCA5MTAgMTIwIDkxNSAxNDAgOTE1QzE2MCA5MTUgMTYwIDkxMCAxNjAgOTEwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgOTI1QzEzMCA5MjUgMTIwIDkzMCAxNDAgOTMwQzE2MCA5MzAgMTYwIDkyNSAxNjAgOTI1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgOTQwQzEzMCA5NDAgMTIwIDk0NSAxNDAgOTQ1QzE2MCA5NDUgMTYwIDk0MCAxNjAgOTQwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgOTU1QzEzMCA5NTUgMTIwIDk2MCAxNDAgOTYwQzE2MCA5NjAgMTYwIDk1NSAxNjAgOTU1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgOTcwQzEzMCA5NzAgMTIwIDk3NSAxNDAgOTc1QzE2MCA5NzUgMTYwIDk3MCAxNjAgOTcwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgOTg1QzEzMCA5ODUgMTIwIDk5MCAxNDAgOTkwQzE2MCA5OTAgMTYwIDk4NSAxNjAgOTg1IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMzAgMTAwMEM5OTAgODg1IDE0MCAzODMgOTkwIDk5MCAxNDAgOTkwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik02MCA5MEM2MCA5MCA3NSA3NyA5MCA3N0MxMDUgNzcgMTIwIDkwIDEyMCA5MEMxMjAgOTAgMTMwIDEwMCAxMzAgMTIwQzEzMCAxMjAgMTAwIDEyMCA5NSAxMjBDOTAgMTIwIDYwIDEyMCA2MCAxMjBDNjAgMTAwIDYwIDkwIDYwIDkwWiIgZmlsbD0iIzIyQzU1RSIvPgo8cmVjdCB4PSI5NSIgeT0iMTIwIiB3aWR0aD0iMzUiIGhlaWdodD0iMjUiIHJ4PSI1IiBmaWxsPSIjMjJDNTVFIi8+CjxyZWN0IHg9IjY1IiB5PSIxMDAiIHdpZHRoPSI2NSIgaGVpZ2h0PSIyMCIgcng9IjUiIGZpbGw9IiMyMkM1NUUiLz4KPGNpcmNsZSBjeD0iNzAiIGN5PSIxMzAiIHI9IjEwIiBmaWxsPSIjMTU0MDNDIi8+CjxjaXJjbGUgY3g9IjcwIiBjeT0iMTMwIiByPSI0IiBmaWxsPSIjMDAwMDAwIi8+CjxjaXJjbGUgY3g9IjEyNSIgY3k9IjEzMCIgcj0iMTIiIGZpbGw9IiMxNTQwM0MiLz4KPGNpcmNsZSBjeD0iMTI1IiBjeT0iMTMwIiByPSI1IiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik0zMCA5MEM0MCA5MCA0NSA4NSA2MCA3M0M2MCA3MyA2NCA3MCA3MCA3MEM3NiA3MCA4NiA3MyA4NiA3M0M4NiA3MyA4NiA3NSA4NiA3NkM4NiA3NyA4NiA3OCA4NiA3OUw4NiA5NUMxMDAgMTAwIDEwMCAxMDAgMTAwIDEwMEw5MCA5NUw5MCA5NUw5MCA5NUw5MCA5NUw3NSA5NUw3NSA5NUw3NSA5NUw3NSA5NUw2MCA5NUw2MCA5NUw2MCA5NUw2MCA5NUw0NSA5NUw0NSA5NUw0NSA5NUw0NSA5NUwzMCA5NUwzMCA5NUwzMCA5NUwzMCA5NUwzMCA5MFoiIGZpbGw9IiNGRkE1MDAiLz4KPHBhdGggZD0iTTMwIDk1VjExMEgxMDBWOTVMMzAgOTVaIiBmaWxsPSIjRkZEQjAwIi8+CjxwYXRoIGQ9Ik0zMCAxMTBWMTI1SDEwMFYxMTBMMzAgMTEwWiIgZmlsbD0iI0ZGREIwMCIvPgo8cGF0aCBkPSJNMzAgMTI1VjE0MEgxMDBWMTI1TDMwIDEyNVoiIGZpbGw9IiNGRkRCMDAiLz4KPHBhdGggZD0iTTMwIDE0MFYxNTVIMTAwVjE0MEwzMCAxNDBaIiBmaWxsPSIjRkZEQjAwIi8+CjxwYXRoIGQ9Ik0zMCAxNTVWMTcwSDEwMFYxNTVMMzAgMTU1WiIgZmlsbD0iI0ZGREIwMCIvPgo8cGF0aCBkPSJNMzAgMTcwVjE4NEgxMDBWMTcwTDMwIDE3MFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NCIgZmlsbD0iI0ZGREIwMCIvPgo8cGF0aCBkPSJNMzAgMTg0VjE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NCIgZmlsbD0iI0ZGREIwMCIvPgo8cGF0aCBkPSJNMzAgMTg0VjE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPHBhdGggZD0iTTMwIDE4NEgxMDBWMTg0TDMwIDE4NFoiIGZpbGw9IiNGRkQ4MDAiLz4KPGVsbGlwc2UgY3g9IjQ1IiBjeT0iODQiIHJ4PSI0IiByeT0iNiIgZmlsbD0iIzIyQzU1RSIvPgo8ZWxsaXBzZSBjeD0iNTQiIGN5PSI4NCIgcng9IjMiIHJ5PSI2IiBmaWxsPSIjMjJDNTVFIi8+CjxlbGxpcHNlIGN4PSI2MiIgY3k9Ijg0IiByeD0iMyIgcnk9IjYiIGZpbGw9IiMyMkM1NUUiLz4KPGVsbGlwc2UgY3g9IjcwIiBjeT0iODQiIHJ4PSI0IiByeT0iNiIgZmlsbD0iIzIyQzU1RSIvPgo8ZWxsaXBzZSBjeD0iNzgiIGN5PSI4NCIgcng9IjMiIHJ5PSI2IiBmaWxsPSIjMjJDNTVFIi8+CjxlbGxpcHNlIGN4PSI4NiIgY3k9Ijg0IiByeD0iMyIgcnk9IjYiIGZpbGw9IiMyMkM1NUUiLz4KPGVsbGlwc2UgY3g9Ijk0IiBjeT0iODQiIHJ4PSI0IiByeT0iNiIgZmlsbD0iIzIyQzU1RSIvPgo8dGV4dCB4PSI2NSIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMDAzMzMzIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TFVTVCBBVUY8L3RleHQ+Cjx0ZXh0IHg9IjY1IiB5PSIyMTYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwMDMzMzMiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MQU5EV0lSVFNDSEFGVDwvdGV4dD4KPC9zdmc+Cgo="
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGNUY1RjUiLz48ZWxsaXBzZSBjeD0iMTMwIiBjeT0iNzAiIHJ4PSIyNSIgcnk9IjIwIiBmaWxsPSIjQTVBNUE1Ii8+PGVsbGlwc2UgY3g9IjE0NSIgY3k9IjcwIiByeD0iMTIiIHJ5PSIxMCIgZmlsbD0iI0E1QTVBNSIvPjxwYXRoIGQ9Ik0xMDUgODBDMTA1IDgwIDEyMCA3MCAzNSA3MEM1MCA3MCA2NSA4MCA2NSA4MEM2NSA4MCA3MCA5MCA3MCA5NUMxNzAgOTUgMTM1IDEwNSAxMzUgMTA1SDE1QzExMCAxMDUgMTA1IDEwMCAxMDUgOTVWODBaIiBmaWxsPSIjQTVBNUE1Ii8+PGNpcmNsZSBjeD0iMTIwIiBjeT0iODUiIHI9IjMiIGZpbGw9IiNGRkZGRkYiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSI4NSIgcj0iMyIgZmlsbD0iI0ZGRkZGRiIvPjxwYXRoIGQ9Ik0xMjAgMTAwQzEyMCAxMDAgMTMwIDEwNSAxNDAgMTAwIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSIxMzAiIHI9IjE1IiBmaWxsPSIjMjJDNTVFIi8+PGNpcmNsZSBjeD0iMTI1IiBjeT0iMTMwIiByPSIyMCIgZmlsbD0iIzIyQzU1RSIvPjxjaXJjbGUgY3g9IjcwIiBjeT0iMTMwIiByPSI2IiBmaWxsPSIjMDAwMDAwIi8+PGNpcmNsZSBjeD0iMTI1IiBjeT0iMTMwIiByPSI4IiBmaWxsPSIjMDAwMDAwIi8+PHJlY3QgeD0iNjAiIHk9IjEwNSIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiByeD0iNSIgZmlsbD0iIzIyQzU1RSIvPjxwYXRoIGQ9Ik0zMCAxNTBDMzAgMTUwIDQwIDEzNSA2MCA0MEM2MCA0MCA2NSAxMzUgNzAgMTM1Qzc1IDEzNSA4NSAxNDAgODUgMTQwQzg1IDE0MCA4NSAxNDUgODUgMTQ1TDQwIDE2MFoiIGZpbGw9IiNGRkE1MDAiLz48cGF0aCBkPSJNMzAgMTUwVjE2NUgxMDBWMTUwSDMwWiIgZmlsbD0iI0ZGREIwMCIvPjxwYXRoIGQ9Ik0zMCAxNjVWMTgwSDEwMFYxNjVIMzBaIiBmaWxsPSIjRkZEQjAwIi8+PHBhdGggZD0iTTMwIDE4MFYxOTVIMTAwVjE4MEgzMFoiIGZpbGw9IiNGRkRCMDAiLz48ZWxsaXBzZSBjeD0iNDIiIGN5PSIxNDAiIHJ4PSI0IiByeT0iOCIgZmlsbD0iIzIyQzU1RSIvPjxlbGxpcHNlIGN4PSI1MCIgY3k9IjE0MCIgcng9IjMiIHJ5PSI4IiBmaWxsPSIjMjJDNTVFIi8+PGVsbGlwc2UgY3g9IjU4IiBjeT0iMTQwIiByeD0iMyIgcnk9IjgiIGZpbGw9IiMyMkM1NUUiLz48ZWxsaXBzZSBjeD0iNjYiIGN5PSIxNDAiIHJ4PSI0IiByeT0iOCIgZmlsbD0iIzIyQzU1RSIvPjx0ZXh0IHg9IjEwMCIgeT0iMjEwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMDAzMzMzIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TFVTVCBBVUY8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIyMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwMDMzMzMiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MQU5EV0lSVFNDSEFGVDwvdGV4dD48L3N2Zz4="
                 alt="Lust auf Landwirtschaft" 
                 className="w-16 h-16 object-contain"
               />
@@ -204,8 +250,8 @@ const App = () => {
   const renderPlotSelection = () => (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">Choose Your Virtual Plot</h2>
-        <p className="text-lg text-gray-600">Select a real plot of land where your farming decisions will be implemented</p>
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">Wählen Sie Ihre Parzelle</h2>
+        <p className="text-lg text-gray-600">Wählen Sie eine echte Parzelle aus, auf der Ihre landwirtschaftlichen Entscheidungen umgesetzt werden</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -223,27 +269,27 @@ const App = () => {
               <p className="text-gray-600 mb-4">{plot.description}</p>
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Size:</span>
-                  <span className="font-medium">{plot.size_acres} acres</span>
+                  <span className="text-gray-500">Größe:</span>
+                  <span className="font-medium">{plot.size_acres} Hektar</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Soil Type:</span>
-                  <span className="font-medium capitalize">{plot.soil_type}</span>
+                  <span className="text-gray-500">Bodentyp:</span>
+                  <span className="font-medium">{getGermanSoilType(plot.soil_type)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Location:</span>
+                  <span className="text-gray-500">Standort:</span>
                   <span className="font-medium">{plot.location}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Price:</span>
-                  <span className="font-bold text-green-600">${plot.price_per_acre}/acre</span>
+                  <span className="text-gray-500">Preis:</span>
+                  <span className="font-bold text-green-600">{plot.price_per_acre}€/Hektar</span>
                 </div>
               </div>
               <button
                 onClick={() => handlePlotSelection(plot)}
                 className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Select This Plot
+                Diese Parzelle auswählen
               </button>
             </div>
           </div>
@@ -255,14 +301,14 @@ const App = () => {
   const renderFarmingDecisions = () => (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">Plan Your Farming Strategy</h2>
-        <p className="text-lg text-gray-600">Make decisions that will be implemented on your selected plot: <strong>{selectedPlot?.name}</strong></p>
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">Planen Sie Ihre Landwirtschaft</h2>
+        <p className="text-lg text-gray-600">Treffen Sie Entscheidungen, die auf Ihrer ausgewählten Parzelle umgesetzt werden: <strong>{selectedPlot?.name}</strong></p>
       </div>
 
       <div className="space-y-8">
         {/* Cultivation Method */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Cultivation Method</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Anbaumethode</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {['conventional', 'no_till', 'organic', 'precision'].map(method => (
               <label key={method} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
@@ -274,7 +320,7 @@ const App = () => {
                   onChange={(e) => handleFarmingDecisionChange('cultivation_method', e.target.value)}
                   className="text-green-600"
                 />
-                <span className="capitalize font-medium">{method.replace('_', ' ')}</span>
+                <span className="font-medium">{getGermanCultivationMethod(method)}</span>
               </label>
             ))}
           </div>
@@ -282,7 +328,7 @@ const App = () => {
 
         {/* Crop Selection */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">🌾 Crop Selection</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">🌾 Fruchtauswahl</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {['wheat', 'corn', 'soybeans', 'potatoes', 'carrots', 'lettuce', 'tomatoes', 'onions'].map(crop => (
               <label key={crop} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
@@ -294,7 +340,7 @@ const App = () => {
                   onChange={(e) => handleFarmingDecisionChange('crop_type', e.target.value)}
                   className="text-green-600"
                 />
-                <span className="capitalize font-medium">{crop}</span>
+                <span className="font-medium">{getGermanCropType(crop)}</span>
               </label>
             ))}
           </div>
@@ -302,12 +348,12 @@ const App = () => {
 
         {/* Machine Selection */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Machine Selection</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Maschinenauswahl</h3>
           
           <div className="space-y-6">
             {/* Cultivation Machines */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Cultivation Machines</h4>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Bodenbearbeitungsmaschinen</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {getMachinesByType('tractor').concat(getMachinesByType('cultivator'), getMachinesByType('plow')).map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
@@ -319,7 +365,7 @@ const App = () => {
                     />
                     <div className="flex-1">
                       <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">${machine.price_per_use}</div>
+                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
                     </div>
                   </label>
                 ))}
@@ -328,7 +374,7 @@ const App = () => {
 
             {/* Protection Machines */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Protection Machines</h4>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Pflanzenschutzmaschinen</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {getMachinesByType('sprayer').map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
@@ -340,7 +386,7 @@ const App = () => {
                     />
                     <div className="flex-1">
                       <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">${machine.price_per_use}</div>
+                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
                     </div>
                   </label>
                 ))}
@@ -349,7 +395,7 @@ const App = () => {
 
             {/* Care Machines */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-3">Care & Harvest Machines</h4>
+              <h4 className="text-lg font-semibold text-gray-700 mb-3">Pflege- und Erntemaschinen</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {getMachinesByType('seeder').concat(getMachinesByType('harvester')).map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
@@ -361,7 +407,7 @@ const App = () => {
                     />
                     <div className="flex-1">
                       <div className="font-medium">{machine.name}</div>
-                      <div className="text-sm text-gray-500">${machine.price_per_use}</div>
+                      <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
                     </div>
                   </label>
                 ))}
@@ -375,14 +421,14 @@ const App = () => {
             onClick={() => setCurrentStep('plots')}
             className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition-colors"
           >
-            Back to Plots
+            Zurück zu Parzellen
           </button>
           <button
             onClick={() => setCurrentStep('review')}
             disabled={!farmingDecision.cultivation_method || !farmingDecision.crop_type}
             className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400"
           >
-            Review Order
+            Bestellung überprüfen
           </button>
         </div>
       </div>
@@ -392,33 +438,33 @@ const App = () => {
   const renderReviewOrder = () => (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">Review Your Virtual Farm Order</h2>
-        <p className="text-lg text-gray-600">Your farming decisions will be implemented on real land!</p>
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">Überprüfen Sie Ihre Bestellung</h2>
+        <p className="text-lg text-gray-600">Ihre landwirtschaftlichen Entscheidungen werden auf echtem Land umgesetzt!</p>
       </div>
 
       <div className="space-y-6">
         {/* User Information */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Your Information</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">Ihre Angaben</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Vollständiger Name</label>
               <input
                 type="text"
                 value={userInfo.name}
                 onChange={(e) => setUserInfo(prev => ({ ...prev, name: e.target.value }))}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                placeholder="Enter your name"
+                placeholder="Ihren Namen eingeben"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">E-Mail-Adresse</label>
               <input
                 type="email"
                 value={userInfo.email}
                 onChange={(e) => setUserInfo(prev => ({ ...prev, email: e.target.value }))}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                placeholder="Enter your email"
+                placeholder="Ihre E-Mail eingeben"
               />
             </div>
           </div>
@@ -426,23 +472,23 @@ const App = () => {
 
         {/* Order Summary */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">Bestellübersicht</h3>
           <div className="space-y-4">
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Plot:</span>
-              <span>{selectedPlot?.name} ({selectedPlot?.size_acres} acres)</span>
+              <span className="font-medium">Parzelle:</span>
+              <span>{selectedPlot?.name} ({selectedPlot?.size_acres} Hektar)</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Cultivation Method:</span>
-              <span className="capitalize">{farmingDecision.cultivation_method?.replace('_', ' ')}</span>
+              <span className="font-medium">Anbaumethode:</span>
+              <span>{getGermanCultivationMethod(farmingDecision.cultivation_method)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Crop Type:</span>
-              <span className="capitalize">{farmingDecision.crop_type}</span>
+              <span className="font-medium">Fruchtart:</span>
+              <span>{getGermanCropType(farmingDecision.crop_type)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Total Cost:</span>
-              <span className="text-xl font-bold text-green-600">${calculateTotalCost().toFixed(2)}</span>
+              <span className="font-medium">Gesamtkosten:</span>
+              <span className="text-xl font-bold text-green-600">{calculateTotalCost().toFixed(2)}€</span>
             </div>
           </div>
         </div>
@@ -452,14 +498,14 @@ const App = () => {
             onClick={() => setCurrentStep('farming')}
             className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition-colors"
           >
-            Back to Farming
+            Zurück zur Planung
           </button>
           <button
             onClick={handleSubmitOrder}
             disabled={loading || !userInfo.name || !userInfo.email}
             className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400"
           >
-            {loading ? 'Submitting...' : 'Submit Order'}
+            {loading ? 'Wird übermittelt...' : 'Bestellung abschicken'}
           </button>
         </div>
       </div>
@@ -468,7 +514,7 @@ const App = () => {
 
   const renderActiveOrders = () => (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Active Virtual Farms</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Aktive Höfe</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.map(order => (
           <div key={order.id} className="bg-white rounded-lg shadow-lg p-6">
@@ -480,14 +526,14 @@ const App = () => {
                 order.status === 'growing' ? 'bg-green-100 text-green-800' :
                 'bg-gray-100 text-gray-800'
               }`}>
-                {order.status.replace('_', ' ')}
+                {getGermanStatus(order.status)}
               </span>
             </div>
             <div className="space-y-2 text-sm">
-              <div><strong>Crop:</strong> {order.farming_decision.crop_type}</div>
-              <div><strong>Method:</strong> {order.farming_decision.cultivation_method?.replace('_', ' ')}</div>
-              <div><strong>Total Cost:</strong> ${order.total_cost.toFixed(2)}</div>
-              <div><strong>Created:</strong> {new Date(order.created_at).toLocaleDateString()}</div>
+              <div><strong>Frucht:</strong> {getGermanCropType(order.farming_decision.crop_type)}</div>
+              <div><strong>Methode:</strong> {getGermanCultivationMethod(order.farming_decision.cultivation_method)}</div>
+              <div><strong>Gesamtkosten:</strong> {order.total_cost.toFixed(2)}€</div>
+              <div><strong>Erstellt:</strong> {new Date(order.created_at).toLocaleDateString('de-DE')}</div>
             </div>
           </div>
         ))}
