@@ -210,6 +210,20 @@ FERTILIZER_SPECS = {
         "s_content": 0,
         "price_per_m3": 9.20,  # EUR/m³
         "organic": True
+    },
+    FertilizerType.RINDERMIST: {
+        "name": "Rindermist",
+        "n_content": 0.5,  # % Stickstoff (5 kg N/t)
+        "s_content": 0,
+        "price_per_ton": 12.00,  # EUR/t
+        "organic": True
+    },
+    FertilizerType.KEINE_DUENGUNG: {
+        "name": "Ohne Düngung",
+        "n_content": 0,
+        "s_content": 0,
+        "price_per_unit": 0.00,  # EUR
+        "organic": False
     }
 }
 
