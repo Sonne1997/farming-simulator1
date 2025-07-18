@@ -636,7 +636,7 @@ async def create_paypal_order(order_data: PayPalOrderCreate):
             }]
         }
         
-        response = paypal_env.client().execute(request)
+        response = paypal_client.execute(request)
         
         # Update order with payment data
         await db.orders.update_one(
