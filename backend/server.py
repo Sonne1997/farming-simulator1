@@ -908,7 +908,7 @@ async def get_order_advisories(order_id: str):
 # Initialize sample data
 @api_router.post("/initialize-data")
 async def initialize_sample_data():
-    # Clear existing data completely
+    # Clear existing data completely - including all collections
     await db.plots.delete_many({})
     await db.machines.delete_many({})
     await db.orders.delete_many({})
@@ -966,13 +966,20 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create machines from structured data - ensure no duplicates
+    # Create machines from structured data with absolute uniqueness
     machine_count = 0
+    created_machine_ids = set()
+    
     for working_step, machines in MACHINE_DATA.items():
         for machine_data in machines:
-            # Create machine with guaranteed unique ID
+            machine_id = machine_data["id"]
+            
+            # Skip if already created (prevent duplicates)
+            if machine_id in created_machine_ids:
+                continue
+                
             machine = Machine(
-                id=machine_data["id"],
+                id=machine_id,
                 name=machine_data["name"],
                 type=machine_data["type"],
                 description=machine_data["description"],
@@ -981,7 +988,9 @@ async def initialize_sample_data():
                 working_step=working_step,
                 image_url=machine_data.get("image_url")
             )
+            
             await db.machines.insert_one(machine.dict())
+            created_machine_ids.add(machine_id)
             machine_count += 1
     
     return {"message": f"Beispieldaten erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
