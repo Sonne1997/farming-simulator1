@@ -154,24 +154,98 @@ class VirtualFarmingTester:
             self.log_test("Get All Machines", False, f"Error: {str(e)}")
             return []
     
-    def test_get_machines_by_type(self, machine_type):
-        """Test fetching machines by type"""
+    def test_get_machines_by_working_step(self, working_step):
+        """Test fetching machines by working step (NEW FEATURE)"""
         try:
-            response = self.session.get(f"{self.base_url}/machines/{machine_type}")
+            response = self.session.get(f"{self.base_url}/machines/step/{working_step}")
             if response.status_code == 200:
                 machines = response.json()
                 if isinstance(machines, list):
-                    self.log_test(f"Get Machines by Type ({machine_type})", True, f"Retrieved {len(machines)} {machine_type} machines")
+                    self.log_test(f"Get Machines by Working Step ({working_step})", True, f"Retrieved {len(machines)} machines for {working_step}")
                     return machines
                 else:
-                    self.log_test(f"Get Machines by Type ({machine_type})", False, "Invalid response format")
+                    self.log_test(f"Get Machines by Working Step ({working_step})", False, "Invalid response format")
                     return []
             else:
-                self.log_test(f"Get Machines by Type ({machine_type})", False, f"HTTP {response.status_code}: {response.text}")
+                self.log_test(f"Get Machines by Working Step ({working_step})", False, f"HTTP {response.status_code}: {response.text}")
                 return []
         except Exception as e:
-            self.log_test(f"Get Machines by Type ({machine_type})", False, f"Error: {str(e)}")
+            self.log_test(f"Get Machines by Working Step ({working_step})", False, f"Error: {str(e)}")
             return []
+    
+    def test_fertilizer_specs_api(self):
+        """Test the new fertilizer specs API endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/fertilizer-specs")
+            if response.status_code == 200:
+                fertilizer_specs = response.json()
+                if isinstance(fertilizer_specs, dict):
+                    # Check for expected fertilizer types
+                    expected_types = ["ssa", "kas", "schweinegulle", "rinderguelle", "gaerrest", "rindermist"]
+                    found_types = [ftype for ftype in expected_types if ftype in fertilizer_specs]
+                    
+                    if len(found_types) >= 4:  # At least 4 fertilizer types should be present
+                        self.log_test("Fertilizer Specs API", True, f"Retrieved {len(fertilizer_specs)} fertilizer specifications including: {', '.join(found_types)}")
+                        return fertilizer_specs
+                    else:
+                        self.log_test("Fertilizer Specs API", False, f"Missing expected fertilizer types. Found: {found_types}")
+                        return {}
+                else:
+                    self.log_test("Fertilizer Specs API", False, "Invalid response format - expected dictionary")
+                    return {}
+            else:
+                self.log_test("Fertilizer Specs API", False, f"HTTP {response.status_code}: {response.text}")
+                return {}
+        except Exception as e:
+            self.log_test("Fertilizer Specs API", False, f"Error: {str(e)}")
+            return {}
+    
+    def test_paypal_create_order(self, order_id, amount):
+        """Test PayPal order creation (NEW FEATURE)"""
+        paypal_data = {
+            "order_id": order_id,
+            "amount": amount
+        }
+        
+        try:
+            response = self.session.post(f"{self.base_url}/payments/create-paypal-order", json=paypal_data)
+            if response.status_code == 200:
+                result = response.json()
+                if "paypal_order_id" in result:
+                    self.log_test("PayPal Create Order", True, f"Created PayPal order: {result['paypal_order_id']}")
+                    return result["paypal_order_id"]
+                else:
+                    self.log_test("PayPal Create Order", False, "Missing paypal_order_id in response")
+                    return None
+            else:
+                self.log_test("PayPal Create Order", False, f"HTTP {response.status_code}: {response.text}")
+                return None
+        except Exception as e:
+            self.log_test("PayPal Create Order", False, f"Error: {str(e)}")
+            return None
+    
+    def test_paypal_capture_order(self, paypal_order_id):
+        """Test PayPal order capture (NEW FEATURE)"""
+        capture_data = {
+            "paypal_order_id": paypal_order_id
+        }
+        
+        try:
+            response = self.session.post(f"{self.base_url}/payments/capture-paypal-order", json=capture_data)
+            if response.status_code == 200:
+                result = response.json()
+                if "status" in result and result["status"] == "success":
+                    self.log_test("PayPal Capture Order", True, f"Captured PayPal order successfully")
+                    return True
+                else:
+                    self.log_test("PayPal Capture Order", False, "PayPal capture failed or invalid response")
+                    return False
+            else:
+                self.log_test("PayPal Capture Order", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("PayPal Capture Order", False, f"Error: {str(e)}")
+            return False
     
     def test_create_machine(self):
         """Test creating a new machine"""
