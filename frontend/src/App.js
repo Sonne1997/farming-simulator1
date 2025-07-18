@@ -605,12 +605,12 @@ const App = () => {
             <div>
               <h4 className="text-lg font-semibold text-gray-700 mb-3">Ernte</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {farmingDecision.crop_type === 'silomais' 
+                {(farmingDecision.crop_type === 'silomais' 
                   ? getMachinesByType('mais_haecksler')
                   : farmingDecision.crop_type === 'gras'
                   ? getMachinesByType('gras_haecksler')
                   : getMachinesByType('maehdrescher')
-                }.map(machine => (
+                ).map(machine => (
                   <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                     <input
                       type="checkbox"
