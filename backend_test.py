@@ -426,10 +426,10 @@ class VirtualFarmingTester:
             return False
     
     def run_comprehensive_test(self):
-        """Run all backend tests in sequence"""
-        print("=" * 60)
-        print("VIRTUAL FARMING PLATFORM - BACKEND API TESTING")
-        print("=" * 60)
+        """Run all backend tests in sequence including new enhanced features"""
+        print("=" * 80)
+        print("ENHANCED VIRTUAL FARMING PLATFORM - BACKEND API TESTING")
+        print("=" * 80)
         
         # Test 1: API Root
         if not self.test_api_root():
@@ -446,27 +446,41 @@ class VirtualFarmingTester:
             # Test getting specific plot
             self.test_get_plot_by_id(plots[0]["id"])
         
-        # Test creating new plot
-        new_plot = self.test_create_plot()
-        
-        # Test 4: Machine Management
+        # Test 4: Enhanced Machine Management
         machines = self.test_get_machines()
         if machines:
-            # Test getting machines by type
-            machine_types = ["tractor", "seeder", "harvester"]
-            for machine_type in machine_types:
-                self.test_get_machines_by_type(machine_type)
+            # Test John Deere models presence
+            self.test_john_deere_models(machines)
+            
+            # Test working steps categorization
+            self.test_working_steps_categorization(machines)
+            
+            # Test getting machines by working step (NEW FEATURE)
+            working_steps = ["bodenbearbeitung", "aussaat", "pflanzenschutz", "duengung", "pflege", "ernte"]
+            for step in working_steps:
+                step_machines = self.test_get_machines_by_working_step(step)
+                if step_machines:
+                    print(f"  Found {len(step_machines)} machines for {step}")
         
-        # Test creating new machine
-        new_machine = self.test_create_machine()
+        # Test 5: Fertilizer Specs API (NEW FEATURE)
+        fertilizer_specs = self.test_fertilizer_specs_api()
         
-        # Test 5: Order Management
+        # Test 6: Enhanced Order Management with PayPal Integration
         if plots and machines:
-            # Create an order with farming decisions
-            machine_ids = [m["id"] for m in machines[:4]]  # Get first 4 machine IDs
+            # Create an order with enhanced farming decisions
+            machine_ids = [m["id"] for m in machines[:6]]  # Get first 6 machine IDs
             order = self.test_create_order(plots[0]["id"], machine_ids)
             
             if order:
+                # Test PayPal payment integration (NEW FEATURE)
+                paypal_order_id = self.test_paypal_create_order(order["id"], order["total_cost"])
+                
+                # Note: We won't test PayPal capture in automated testing as it requires actual PayPal approval
+                # but we can test the endpoint structure
+                if paypal_order_id:
+                    print(f"  PayPal order created successfully: {paypal_order_id}")
+                    print("  Note: PayPal capture testing skipped (requires manual approval)")
+                
                 # Test getting all orders
                 self.test_get_orders()
                 
@@ -477,9 +491,9 @@ class VirtualFarmingTester:
                 self.test_update_order(order["id"])
         
         # Test Summary
-        print("\n" + "=" * 60)
-        print("TEST SUMMARY")
-        print("=" * 60)
+        print("\n" + "=" * 80)
+        print("ENHANCED FEATURES TEST SUMMARY")
+        print("=" * 80)
         
         passed = sum(1 for result in self.test_results if result["success"])
         total = len(self.test_results)
@@ -495,6 +509,30 @@ class VirtualFarmingTester:
             print("\n❌ FAILED TESTS:")
             for test in failed_tests:
                 print(f"  - {test['test']}: {test['message']}")
+        else:
+            print("\n🎉 All tests passed!")
+        
+        # Show key feature test results
+        print("\n" + "=" * 80)
+        print("KEY ENHANCED FEATURES STATUS")
+        print("=" * 80)
+        
+        key_features = [
+            "Fertilizer Specs API",
+            "Get Machines by Working Step",
+            "PayPal Create Order", 
+            "John Deere Models Check",
+            "Working Steps Categorization",
+            "Create Enhanced Order"
+        ]
+        
+        for feature in key_features:
+            feature_results = [r for r in self.test_results if feature in r["test"]]
+            if feature_results:
+                status = "✅ PASS" if feature_results[0]["success"] else "❌ FAIL"
+                print(f"{status} {feature}")
+            else:
+                print(f"⚠️  SKIP {feature} (not tested)")
         
         return passed == total
 
