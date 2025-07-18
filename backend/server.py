@@ -625,7 +625,7 @@ async def create_paypal_order(order_data: PayPalOrderCreate):
     try:
         request = OrdersCreateRequest()
         request.prefer('return=representation')
-        request.request_body = {
+        request.request_body({
             "intent": "CAPTURE",
             "purchase_units": [{
                 "reference_id": order_data.order_id,
@@ -634,7 +634,7 @@ async def create_paypal_order(order_data: PayPalOrderCreate):
                     "value": f"{order_data.amount:.2f}"
                 }
             }]
-        }
+        })
         
         response = paypal_client.execute(request)
         
