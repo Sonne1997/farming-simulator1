@@ -49,6 +49,8 @@ class FertilizerType(str, Enum):
     SCHWEINEGULLE = "schweinegulle"
     RINDERGUELLE = "rinderguelle"
     GAERREST = "gaerrest"
+    RINDERMIST = "rindermist"
+    KEINE_DUENGUNG = "keine_duengung"
 
 class CultivationMethod(str, Enum):
     KONVENTIONELL = "konventionell"
