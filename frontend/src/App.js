@@ -254,12 +254,14 @@ const App = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="flex items-center space-x-6 mb-6 md:mb-0">
-            <div className="bg-white rounded-lg p-2">
-              <img 
-                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGNUY1RjUiLz4KICA8IS0tIEt1aCAtLT4KICA8cGF0aCBkPSJNMTA1IDQ1QzEwNSA0NSAxMjAgMzUgMTQwIDM1QzE2MCAzNSAxNzUgNDUgMTc1IDQ1QzE3NSA0NSAxODAgNTUgMTgwIDg1QzE4MCA4NSAxNjAgODUgMTQwIDg1QzEyMCA4NSAxMDAgODUgMTAwIDg1QzEwMCA1NSAxMDUgNDUgMTA1IDQ1WiIgZmlsbD0iI0E1QTVBNSIvPgogIDwhLS0gS3VoLUtvcGYgLS0+CiAgPGVsbGlwc2UgY3g9IjEyNSIgY3k9IjM4IiByeD0iMTIiIHJ5PSI4IiBmaWxsPSIjQTVBNUE1Ii8+CiAgPGVsbGlwc2UgY3g9IjE0NSIgY3k9IjM4IiByeD0iMTAiIHJ5PSI2IiBmaWxsPSIjQTVBNUE1Ii8+CiAgPCEtLSBLdWgtQXVnZW4gLS0+CiAgPGNpcmNsZSBjeD0iMTIwIiBjeT0iNDgiIHI9IjIiIGZpbGw9IiNGRkZGRkYiLz4KICA8Y2lyY2xlIGN4PSIxNTAiIGN5PSI0OCIgcj0iMiIgZmlsbD0iI0ZGRkZGRiIvPgogIDxwYXRoIGQ9Ik0xMjAgNTVDMTIwIDU1IDEzMCA2MCAxNDAgNTUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gUGZsYW56ZSAtLT4KICA8ZWxsaXBzZSBjeD0iNDUiIGN5PSI1MCIgcng9IjQiIHJ5PSI4IiBmaWxsPSIjMjJDNTVFIi8+CiAgPGVsbGlwc2UgY3g9IjUyIiBjeT0iNDgiIHJ4PSIzIiByeT0iNyIgZmlsbD0iIzIyQzU1RSIvPgogIDxlbGxpcHNlIGN4PSI1OSIgY3k9IjUwIiByeD0iMyIgcnk9IjciIGZpbGw9IiMyMkM1NUUiLz4KICA8IS0tIFRyYWt0b3IgLS0+CiAgPHJlY3QgeD0iMTEwIiB5PSI2NSIgd2lkdGg9IjU1IiBoZWlnaHQ9IjI1IiByeD0iNSIgZmlsbD0iIzIyQzU1RSIvPgogIDxyZWN0IHg9IjEyMCIgeT0iNTUiIHdpZHRoPSIzNSIgaGVpZ2h0PSIxNSIgcng9IjMiIGZpbGw9IiMyMkM1NUUiLz4KICA8IS0tIFRyYWt0b3ItUmFkZXIgLS0+CiAgPGNpcmNsZSBjeD0iMTIwIiBjeT0iOTUiIHI9IjEyIiBmaWxsPSIjMjJDNTVFIi8+CiAgPGNpcmNsZSBjeD0iMTIwIiBjeT0iOTUiIHI9IjQiIGZpbGw9IiMwMDAwMDAiLz4KICA8Y2lyY2xlIGN4PSIxNTUiIGN5PSI5NSIgcj0iMTUiIGZpbGw9IiMyMkM1NUUiLz4KICA8Y2lyY2xlIGN4PSIxNTUiIGN5PSI5NSIgcj0iNiIgZmlsbD0iIzAwMDAwMCIvPgogIDwhLS0gRmVsZCAtLT4KICA8cGF0aCBkPSJNMjAgMTIwVjE0MEgxMDBWMTIwSDIwWiIgZmlsbD0iI0ZGREY4QiIvPgogIDxwYXRoIGQ9Ik0yMCAxNDBWMTYwSDEwMFYxNDBIMjBaIiBmaWxsPSIjRkZEQjAwIi8+CiAgPHBhdGggZD0iTTIwIDE2MFYxODBIMTAwVjE2MEgyMFoiIGZpbGw9IiNGRkE1MDAiLz4KICA8IS0tIFRleHQgLS0+CiAgPHRleHQgeD0iMTAwIiB5PSIxOTQiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwMDMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxVU1QgQVVGPC90ZXh0PgogIDx0ZXh0IHg9IjEwMCIgeT0iMjEwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMDAzMzMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MQU5EV0lSVFNDSEFGVDwvdGV4dD4KPC9zdmc+" 
-                alt="Lust auf Landwirtschaft" 
-                className="w-20 h-20 object-contain"
-              />
+            <div className="bg-white rounded-lg p-2 shadow-sm">
+              <div className="w-20 h-20 bg-green-100 rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-green-800">🌾</div>
+                  <div className="text-xs font-bold text-green-700">LUST AUF</div>
+                  <div className="text-xs font-bold text-green-700">LANDWIRTSCHAFT</div>
+                </div>
+              </div>
             </div>
             <div>
               <h1 className="text-4xl font-bold mb-2">Lust auf Landwirtschaft</h1>
