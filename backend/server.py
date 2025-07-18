@@ -540,28 +540,28 @@ async def initialize_sample_data():
             name="Parzelle A1 - Sandfeld",
             soil_type=SoilType.SAND,
             soil_points=28,
-            location="Nordfeld, Bayern",
+            location="39291 Grabow",
             description="Sandiger Boden, 28 Bodenpunkte",
             price_per_plot=7.50,
-            image_url="https://images.unsplash.com/photo-1529313780224-1a12b68bed16?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwxfHxmYXJtaW5nfGVufDB8fHxncmVlbnwxNzUyODI5NTkzfDA&ixlib=rb-4.1.0&q=85"
+            image_url="https://images.unsplash.com/photo-1613036582025-ba1d4ccb3226?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwyfHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
         ),
         PlotCreate(
             name="Parzelle B2 - Lehmiges Sandfeld",
             soil_type=SoilType.LOAMY_SAND,
             soil_points=38,
-            location="Südtal, Bayern",
+            location="39291 Grabow",
             description="Lehmiger Sandboden, 38 Bodenpunkte",
             price_per_plot=9.00,
-            image_url="https://images.unsplash.com/photo-1523539693385-e5e891eb4465?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwzfHxmYXJtaW5nfGVufDB8fHxncmVlbnwxNzUyODI5NTkzfDA&ixlib=rb-4.1.0&q=85"
+            image_url="https://images.unsplash.com/photo-1519462568576-0c687427fb2e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwzfHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
         ),
         PlotCreate(
             name="Parzelle C3 - Premium Boden",
             soil_type=SoilType.CLAYEY_SAND,
             soil_points=42,
-            location="Osthang, Bayern",
+            location="39291 Grabow",
             description="Anlehmiger Sandboden, 42 Bodenpunkte",
             price_per_plot=10.00,
-            image_url="https://images.unsplash.com/photo-1492496913980-501348b61469?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxmYXJtaW5nfGVufDB8fHxncmVlbnwxNzUyODI5NTkzfDA&ixlib=rb-4.1.0&q=85"
+            image_url="https://images.pexels.com/photos/1000057/pexels-photo-1000057.jpeg"
         )
     ]
     
