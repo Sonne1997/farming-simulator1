@@ -83,6 +83,15 @@ const App = () => {
     }
   };
 
+  const fetchMarketValues = async () => {
+    try {
+      const response = await axios.get(`${API}/market-values`);
+      setMarketValues(response.data);
+    } catch (error) {
+      console.error('Error fetching market values:', error);
+    }
+  };
+
   const fetchOrders = async () => {
     try {
       const response = await axios.get(`${API}/orders`);
