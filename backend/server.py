@@ -383,14 +383,12 @@ async def get_expected_yields_by_soil(soil_points: int):
     if soil_points < 25 or soil_points > 45:
         raise HTTPException(status_code=400, detail="Bodenpunkte müssen zwischen 25 und 45 liegen")
     
-    # Calculate yield multiplier (25 points = 0.8, 45 points = 1.2)
-    yield_multiplier = 0.8 + (soil_points - 25) * 0.02
-    
-    adjusted_yields = {}
-    for crop, base_yield in YIELD_BASE.items():
-        adjusted_yields[crop] = base_yield * yield_multiplier
-    
-    return adjusted_yields
+    # Use real yields regardless of soil points for now - can be adjusted later
+    return REAL_YIELDS_250M2
+
+@api_router.get("/market-values")
+async def get_market_values():
+    return MARKET_VALUES_250M2
 
 @api_router.get("/seed-costs")
 async def get_seed_costs():
