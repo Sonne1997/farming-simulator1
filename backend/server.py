@@ -130,15 +130,6 @@ SEED_COSTS = {
     CropType.ERBSEN: 6.25
 }
 
-# Machine costs (based on actual costs)
-MACHINE_COSTS = {
-    "traktor_5min": 2.73,  # John Deere 7820 for 5 minutes
-    "drill_250m2": 0.80,   # Horsch Pronto 6 DC for 250m²
-    "sprayer_250m2": 0.65,
-    "harvester_250m2": 3.50,
-    "cultivator_250m2": 1.20
-}
-
 # Fertilizer specifications
 FERTILIZER_SPECS = {
     FertilizerType.SSA: {
