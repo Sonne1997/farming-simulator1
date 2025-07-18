@@ -147,10 +147,7 @@ const App = () => {
   const getExpectedMarketValue = () => {
     if (!farmingDecision.crop_type) return 0;
     
-    const yield_kg = expectedYields[farmingDecision.crop_type] || 0;
-    const price_per_ton = marketPrices[farmingDecision.crop_type] || 0;
-    
-    return (yield_kg / 1000) * price_per_ton;
+    return marketValues[farmingDecision.crop_type] || 0;
   };
 
   const handleSubmitOrder = async () => {
