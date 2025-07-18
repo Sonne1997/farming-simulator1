@@ -738,24 +738,33 @@ def calculate_fertilizer_options(n_requirement_kg: float):
     
     for fert_type, specs in FERTILIZER_SPECS.items():
         if specs["category"] == "organic":
-            # Organic fertilizers (m³)
-            n_content_per_m3 = specs["n_content"] * 10  # Convert % to kg/m³
-            required_volume = n_requirement_kg / n_content_per_m3 if n_content_per_m3 > 0 else 0
-            cost = required_volume * specs["price_per_m3"]
+            # Organic fertilizers (m³ or t)
+            if fert_type == FertilizerType.RINDERMIST:
+                # Rindermist: price per ton, N content as % (5 kg N/t)
+                n_content_per_ton = specs["n_content"] * 10  # Convert % to kg/t
+                required_amount = n_requirement_kg / n_content_per_ton if n_content_per_ton > 0 else 0
+                cost = required_amount * specs["price_per_ton"]
+                unit = "t"
+            else:
+                # Other organic fertilizers: price per m³
+                n_content_per_m3 = specs["n_content"] * 10  # Convert % to kg/m³
+                required_amount = n_requirement_kg / n_content_per_m3 if n_content_per_m3 > 0 else 0
+                cost = required_amount * specs["price_per_m3"]
+                unit = "m³"
             
             options.append({
                 "fertilizer_type": fert_type,
                 "name": specs["name"],
-                "required_amount": round(required_volume, 2),
-                "unit": "m³",
+                "required_amount": round(required_amount, 2),
+                "unit": unit,
                 "cost": round(cost, 2),
                 "organic": True
             })
         elif specs["category"] == "mineral":
-            # Mineral fertilizers (kg)
-            n_content_percent = specs["n_content"]
-            required_amount = (n_requirement_kg / n_content_percent) * 100 if n_content_percent > 0 else 0
-            cost = (required_amount / 1000) * specs["price_per_ton"]
+            # Mineral fertilizers (kg) - corrected calculation for 250m²
+            n_content_percent = specs["n_content"] / 100  # Convert to decimal (21% = 0.21)
+            required_amount = n_requirement_kg / n_content_percent if n_content_percent > 0 else 0
+            cost = (required_amount / 1000) * specs["price_per_ton"]  # Convert kg to tons for cost
             
             options.append({
                 "fertilizer_type": fert_type,
@@ -763,6 +772,16 @@ def calculate_fertilizer_options(n_requirement_kg: float):
                 "required_amount": round(required_amount, 2),
                 "unit": "kg",
                 "cost": round(cost, 2),
+                "organic": False
+            })
+        else:
+            # No fertilizer option
+            options.append({
+                "fertilizer_type": fert_type,
+                "name": specs["name"],
+                "required_amount": 0,
+                "unit": "",
+                "cost": 0,
                 "organic": False
             })
     
