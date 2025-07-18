@@ -243,7 +243,7 @@ MACHINE_DATA = {
             "name": "John Deere T660i Mähdrescher",
             "type": MachineType.MAEHDRESCHER,
             "description": "Getreidemähdrescher",
-            "price_per_use": 3.50,
+            "price_per_use": 4.10,
             "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         },
