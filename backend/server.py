@@ -612,7 +612,7 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create sample machines with realistic costs
+    # Create machines with unique entries only
     sample_machines = [
         # Bodenbearbeitung
         MachineCreate(
