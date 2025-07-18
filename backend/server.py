@@ -95,10 +95,10 @@ MARKET_PRICES = {
     CropType.GERSTE: 150.0,
     CropType.TRITICALE: 165.0,
     CropType.SILOMAIS: 45.0,
-    CropType.ZUCKERRUEBEN: 35.0,
+    CropType.ZUCKERRUEBEN: 40.0,  # Updated to 40€/t
     CropType.LUZERNE: 180.0,
     CropType.GRAS: 120.0,
-    CropType.BLUEHMISCHUNG: 0.0,  # No market value - only subsidies
+    CropType.BLUEHMISCHUNG: 700.0,  # Special: 700€/ha subsidy
     CropType.ERBSEN: 250.0
 }
 
@@ -109,10 +109,10 @@ REAL_YIELDS_250M2 = {
     CropType.GERSTE: 100.0,      # 4 t/ha × 0.025 = 100 kg
     CropType.TRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg
     CropType.SILOMAIS: 1200.0,   # Keeping existing estimate
-    CropType.ZUCKERRUEBEN: 1375.0, # 55 t/ha × 0.025 = 1375 kg
+    CropType.ZUCKERRUEBEN: 1500.0, # 60 t/ha × 0.025 = 1500 kg
     CropType.LUZERNE: 150.0,     # 6 t/ha × 0.025 = 150 kg
     CropType.GRAS: 200.0,        # 8 t/ha × 0.025 = 200 kg
-    CropType.BLUEHMISCHUNG: 0.0, # No harvest
+    CropType.BLUEHMISCHUNG: 0.0, # No harvest - only subsidy
     CropType.ERBSEN: 50.0        # 2 t/ha × 0.025 = 50 kg
 }
 
@@ -123,10 +123,10 @@ MARKET_VALUES_250M2 = {
     CropType.GERSTE: 15.00,      # 100 kg × 150€/t = 15.00€
     CropType.TRITICALE: 16.50,   # 100 kg × 165€/t = 16.50€
     CropType.SILOMAIS: 54.00,    # 1200 kg × 45€/t = 54.00€
-    CropType.ZUCKERRUEBEN: 48.13, # 1375 kg × 35€/t = 48.13€
+    CropType.ZUCKERRUEBEN: 60.00, # 1500 kg × 40€/t = 60.00€
     CropType.LUZERNE: 27.00,     # 150 kg × 180€/t = 27.00€
     CropType.GRAS: 24.00,        # 200 kg × 120€/t = 24.00€
-    CropType.BLUEHMISCHUNG: 0.0, # Only subsidies
+    CropType.BLUEHMISCHUNG: 17.50, # 700€/ha × 0.025 = 17.50€
     CropType.ERBSEN: 12.50       # 50 kg × 250€/t = 12.50€
 }
 
