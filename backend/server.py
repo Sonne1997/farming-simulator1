@@ -225,9 +225,16 @@ class MachineCreate(BaseModel):
     suitable_for: List[CropType]
     image_url: Optional[str] = None
 
+class FertilizerChoice(BaseModel):
+    fertilizer_type: FertilizerType
+    amount: float  # kg für mineral., m³ für organisch
+    cost: float
+
 class FarmingDecision(BaseModel):
     cultivation_method: CultivationMethod
     crop_type: CropType
+    expected_yield_kg: float
+    fertilizer_choice: FertilizerChoice
     cultivation_machines: List[str]  # machine IDs
     protection_machines: List[str]  # machine IDs
     care_machines: List[str]  # machine IDs
