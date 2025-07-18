@@ -995,8 +995,9 @@ async def initialize_sample_data():
         {"id": "traktor_john_deere_6r195", "name": "John Deere 6R195", "type": MachineType.TRAKTOR_DUENGUNG, "description": "Traktor für Düngung", "price_per_use": 5.20, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
         {"id": "guellefass_18m", "name": "Güllefass 18m", "type": MachineType.GUELLEFASS, "description": "Güllefass (18m Arbeitsbreite)", "price_per_use": 2.10, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
         
-        # Pflege (1 machine)
+        # Pflege (2 machines)
         {"id": "cambridge_walze_01", "name": "Cambridge Walze", "type": MachineType.CAMBRIDGE_WALZE, "description": "Walze zur Bestockungsförderung", "price_per_use": 0.95, "working_step": WorkingStep.PFLEGE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
+        {"id": "steine_sammeln_01", "name": "Steine sammeln", "type": MachineType.CAMBRIDGE_WALZE, "description": "Steine von der Fläche sammeln", "price_per_use": 1.50, "working_step": WorkingStep.PFLEGE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN]},
         
         # Ernte (4 machines)
         {"id": "john_deere_t660i", "name": "John Deere T660i Mähdrescher", "type": MachineType.MAEHDRESCHER, "description": "Getreidemähdrescher", "price_per_use": 4.10, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
