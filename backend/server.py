@@ -912,7 +912,7 @@ async def initialize_sample_data():
     await db.plots.delete_many({})
     await db.machines.delete_many({})
     
-    # Create sample plots
+    # Create sample plots including premium plots
     sample_plots = [
         PlotCreate(
             name="A1 - Ritterfeld",
@@ -940,6 +940,24 @@ async def initialize_sample_data():
             description="Anlehmiger Sandboden, 42 Bodenpunkte",
             price_per_plot=10.00,
             image_url="https://images.pexels.com/photos/1000057/pexels-photo-1000057.jpeg"
+        ),
+        PlotCreate(
+            name="D4 - Ritterfeld",
+            soil_type=SoilType.SANDY_LOAM,
+            soil_points=48,
+            location="39291 Grabow",
+            description="Sandiger Lehm, 48 Bodenpunkte - Premium Boden",
+            price_per_plot=12.50,
+            image_url="https://images.unsplash.com/photo-1574864345403-6c3c1d4a3c3f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHw2fHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
+        ),
+        PlotCreate(
+            name="E5 - Ritterfeld",
+            soil_type=SoilType.SANDY_LOAM,
+            soil_points=52,
+            location="39291 Grabow",
+            description="Sandiger Lehm, 52 Bodenpunkte - Premium Boden",
+            price_per_plot=14.00,
+            image_url="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHw4fHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
         )
     ]
     
