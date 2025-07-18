@@ -627,7 +627,7 @@ async def initialize_sample_data():
             name="Scheibenegge",
             type=MachineType.SCHEIBENEGGE,
             description="Scheibenegge für Bodenbearbeitung",
-            price_per_use=2.40,
+            price_per_use=1.00,
             suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN],
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         ),
