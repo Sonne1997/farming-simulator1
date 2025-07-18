@@ -392,6 +392,39 @@ class VirtualFarmingTester:
             self.log_test("Update Order", False, f"Error: {str(e)}")
             return None
     
+    def test_john_deere_models(self, machines):
+        """Test that specific John Deere models are present"""
+        expected_models = ["John Deere 8R370", "John Deere 7820", "John Deere 6R195", "John Deere 6R145", "John Deere T660i"]
+        found_models = []
+        
+        for machine in machines:
+            if any(model in machine.get("name", "") for model in expected_models):
+                found_models.append(machine["name"])
+        
+        if len(found_models) >= 3:  # At least 3 John Deere models should be present
+            self.log_test("John Deere Models Check", True, f"Found John Deere models: {', '.join(found_models)}")
+            return True
+        else:
+            self.log_test("John Deere Models Check", False, f"Expected John Deere models not found. Found: {found_models}")
+            return False
+    
+    def test_working_steps_categorization(self, machines):
+        """Test that machines are properly categorized by working steps"""
+        working_steps = ["bodenbearbeitung", "aussaat", "pflanzenschutz", "duengung", "pflege", "ernte"]
+        step_counts = {}
+        
+        for machine in machines:
+            working_step = machine.get("working_step")
+            if working_step in working_steps:
+                step_counts[working_step] = step_counts.get(working_step, 0) + 1
+        
+        if len(step_counts) >= 4:  # At least 4 different working steps should have machines
+            self.log_test("Working Steps Categorization", True, f"Machines categorized across {len(step_counts)} working steps: {dict(step_counts)}")
+            return True
+        else:
+            self.log_test("Working Steps Categorization", False, f"Insufficient working step categorization. Found: {step_counts}")
+            return False
+    
     def run_comprehensive_test(self):
         """Run all backend tests in sequence"""
         print("=" * 60)
