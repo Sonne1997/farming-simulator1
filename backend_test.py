@@ -248,13 +248,14 @@ class VirtualFarmingTester:
             return False
     
     def test_create_machine(self):
-        """Test creating a new machine"""
+        """Test creating a new machine with working step"""
         machine_data = {
-            "name": "Test Tractor Model X",
-            "type": "tractor",
+            "name": "Test John Deere 8R370",
+            "type": "traktor",
             "description": "Test tractor for automated testing",
-            "price_per_use": 75.0,
-            "suitable_for": ["wheat", "corn"],
+            "price_per_use": 6.50,
+            "suitable_for": ["weizen", "roggen", "gerste"],
+            "working_step": "bodenbearbeitung",
             "image_url": "https://example.com/test-tractor.jpg"
         }
         
