@@ -373,7 +373,7 @@ const App = () => {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌾 Kulturauswahl</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {['roggen', 'weizen', 'gerste', 'triticale', 'silomais', 'zuckerrueben', 'luzerne', 'gras', 'bluehmischung'].map(crop => (
+            {['roggen', 'weizen', 'gerste', 'triticale', 'silomais', 'zuckerrueben', 'luzerne', 'gras', 'bluehmischung', 'erbsen'].map(crop => (
               <label key={crop} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                 <input
                   type="radio"
