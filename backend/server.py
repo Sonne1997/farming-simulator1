@@ -424,53 +424,53 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create sample machines
+    # Create sample machines with realistic costs
     sample_machines = [
         MachineCreate(
-            name="Fendt 314 Vario",
+            name="John Deere 7820",
             type=MachineType.TRAKTOR,
-            description="Kompakter Traktor für alle Arbeiten",
-            price_per_use=45.0,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE],
+            description="Traktor (5 Min. Arbeitszeit)",
+            price_per_use=2.73,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         ),
         MachineCreate(
-            name="Amazone Sämaschine",
+            name="Horsch Pronto 6 DC",
             type=MachineType.SAEMASCHINE,
-            description="Präzisionssämaschine für Getreide",
-            price_per_use=35.0,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE],
+            description="Drillmaschine (6m Arbeitsbreite)",
+            price_per_use=0.80,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
             image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         ),
         MachineCreate(
             name="Feldspritze",
             type=MachineType.FELDSPRITZE,
-            description="Präzise Pflanzenschutzspritze",
-            price_per_use=25.0,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN],
+            description="Pflanzenschutzspritze",
+            price_per_use=0.65,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
             image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         ),
         MachineCreate(
-            name="Claas Lexion Mähdrescher",
+            name="Mähdrescher",
             type=MachineType.MAEHDRESCHER,
-            description="Moderner Mähdrescher für Getreide",
-            price_per_use=120.0,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE],
+            description="Getreidemähdrescher",
+            price_per_use=3.50,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
             image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         ),
         MachineCreate(
             name="Grubber",
             type=MachineType.GRUBBER,
-            description="Bodenbearbeitungsgerät für Stoppelbearbeitung",
-            price_per_use=30.0,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS],
+            description="Bodenbearbeitungsgerät",
+            price_per_use=1.20,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         ),
         MachineCreate(
             name="Mais-Häcksler",
             type=MachineType.MAEHDRESCHER,
             description="Spezialhäcksler für Silomais",
-            price_per_use=80.0,
+            price_per_use=4.20,
             suitable_for=[CropType.SILOMAIS],
             image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         )
