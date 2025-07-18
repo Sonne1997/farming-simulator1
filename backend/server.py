@@ -320,17 +320,42 @@ MARKET_VALUES_250M2 = {
 }
 
 # Expected yield per 250m² (in kg) - varies by soil points
+# Base yields at 35 soil points, adjusted by soil quality
+def calculate_yield_by_soil_points(crop_type: CropType, soil_points: int):
+    """Calculate expected yield based on soil points (25-45 range)"""
+    base_yields = {
+        CropType.WEIZEN: 125.0,      # 5 t/ha × 0.025 = 125 kg at 35 soil points
+        CropType.ROGGEN: 75.0,       # 3 t/ha × 0.025 = 75 kg at 35 soil points
+        CropType.GERSTE: 100.0,      # 4 t/ha × 0.025 = 100 kg at 35 soil points
+        CropType.TRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg at 35 soil points
+        CropType.SILOMAIS: 1200.0,   # 48 t/ha × 0.025 = 1200 kg at 35 soil points
+        CropType.ZUCKERRUEBEN: 1500.0, # 60 t/ha × 0.025 = 1500 kg at 35 soil points
+        CropType.LUZERNE: 150.0,     # 6 t/ha × 0.025 = 150 kg at 35 soil points
+        CropType.GRAS: 200.0,        # 8 t/ha × 0.025 = 200 kg at 35 soil points
+        CropType.BLUEHMISCHUNG: 0.0, # No harvest - only subsidy
+        CropType.ERBSEN: 50.0        # 2 t/ha × 0.025 = 50 kg at 35 soil points
+    }
+    
+    base_yield = base_yields.get(crop_type, 0)
+    if base_yield == 0:
+        return 0
+    
+    # Soil quality factor: 25 points = 0.8x, 35 points = 1.0x, 45 points = 1.2x
+    soil_factor = 0.8 + (soil_points - 25) * 0.02  # Linear scale from 0.8 to 1.2
+    
+    return round(base_yield * soil_factor, 1)
+
 EXPECTED_YIELDS = {
-    CropType.WEIZEN: 180.0,
-    CropType.ROGGEN: 150.0,
-    CropType.GERSTE: 160.0,
-    CropType.TRITICALE: 170.0,
+    CropType.WEIZEN: 125.0,
+    CropType.ROGGEN: 75.0,
+    CropType.GERSTE: 100.0,
+    CropType.TRITICALE: 100.0,
     CropType.SILOMAIS: 1200.0,
-    CropType.ZUCKERRUEBEN: 1600.0,
-    CropType.LUZERNE: 250.0,
-    CropType.GRAS: 300.0,
+    CropType.ZUCKERRUEBEN: 1500.0,
+    CropType.LUZERNE: 150.0,
+    CropType.GRAS: 200.0,
     CropType.BLUEHMISCHUNG: 0.0,  # No harvest
-    CropType.ERBSEN: 120.0
+    CropType.ERBSEN: 50.0
 }
 
 # Seed costs per 250m² (in EUR)
