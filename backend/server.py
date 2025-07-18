@@ -571,6 +571,7 @@ async def initialize_sample_data():
     
     # Create sample machines with realistic costs
     sample_machines = [
+        # Bodenbearbeitung
         MachineCreate(
             name="John Deere 7820",
             type=MachineType.TRAKTOR,
@@ -580,6 +581,15 @@ async def initialize_sample_data():
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         ),
         MachineCreate(
+            name="Grubber",
+            type=MachineType.GRUBBER,
+            description="Bodenbearbeitungsgerät",
+            price_per_use=1.20,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
+            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        ),
+        # Aussaat
+        MachineCreate(
             name="Horsch Pronto 6 DC",
             type=MachineType.SAEMASCHINE,
             description="Drillmaschine (6m Arbeitsbreite)",
@@ -587,6 +597,7 @@ async def initialize_sample_data():
             suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
             image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         ),
+        # Pflanzenschutz
         MachineCreate(
             name="Feldspritze",
             type=MachineType.FELDSPRITZE,
@@ -596,6 +607,32 @@ async def initialize_sample_data():
             image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         ),
         MachineCreate(
+            name="Hacke",
+            type=MachineType.HACKE,
+            description="Hackgerät für biologischen Anbau",
+            price_per_use=1.15,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        ),
+        MachineCreate(
+            name="Striegel",
+            type=MachineType.STRIEGEL,
+            description="Striegelgerät für biologischen Anbau",
+            price_per_use=0.85,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
+        ),
+        # Pflege
+        MachineCreate(
+            name="Cambridge Walze",
+            type=MachineType.CAMBRIDGE_WALZE,
+            description="Walze zur Bestockungsförderung",
+            price_per_use=0.95,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        ),
+        # Ernte
+        MachineCreate(
             name="Mähdrescher",
             type=MachineType.MAEHDRESCHER,
             description="Getreidemähdrescher",
@@ -604,19 +641,27 @@ async def initialize_sample_data():
             image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         ),
         MachineCreate(
-            name="Grubber",
-            type=MachineType.GRUBBER,
-            description="Bodenbearbeitungsgerät",
-            price_per_use=1.20,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
-        ),
-        MachineCreate(
             name="Mais-Häcksler",
-            type=MachineType.MAEHDRESCHER,
+            type=MachineType.MAIS_HAECKSLER,
             description="Spezialhäcksler für Silomais",
             price_per_use=4.20,
             suitable_for=[CropType.SILOMAIS],
+            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        ),
+        MachineCreate(
+            name="Gras-Häcksler",
+            type=MachineType.GRAS_HAECKSLER,
+            description="Häcksler für Gras",
+            price_per_use=3.80,
+            suitable_for=[CropType.GRAS],
+            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        ),
+        MachineCreate(
+            name="Häcksler (Ganzpflanzensilage)",
+            type=MachineType.MAIS_HAECKSLER,
+            description="Häcksler für Roggen-Ganzpflanzensilage",
+            price_per_use=4.00,
+            suitable_for=[CropType.ROGGEN],
             image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         )
     ]
