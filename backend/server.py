@@ -965,11 +965,11 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create machines from structured data
+    # Create machines from structured data - prevent duplicates
     machine_count = 0
     for working_step, machines in MACHINE_DATA.items():
         for machine_data in machines:
-            # Check if machine already exists
+            # Check if machine already exists by ID
             existing_machine = await db.machines.find_one({"id": machine_data["id"]})
             if not existing_machine:
                 machine = Machine(
