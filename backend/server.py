@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -10,6 +10,11 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 from enum import Enum
+from paypalcheckoutsdk.core import SandboxEnvironment, LiveEnvironment
+from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersCaptureRequest
+from paypalhttp import HttpError
+import asyncio
+import json
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -18,6 +23,17 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+# PayPal configuration
+paypal_client_id = os.environ.get('PAYPAL_CLIENT_ID')
+paypal_client_secret = os.environ.get('PAYPAL_CLIENT_SECRET')
+paypal_environment = os.environ.get('PAYPAL_ENVIRONMENT', 'sandbox')
+
+# Initialize PayPal environment
+if paypal_environment == 'sandbox':
+    paypal_env = SandboxEnvironment(client_id=paypal_client_id, client_secret=paypal_client_secret)
+else:
+    paypal_env = LiveEnvironment(client_id=paypal_client_id, client_secret=paypal_client_secret)
 
 # Create the main app without a prefix
 app = FastAPI()
@@ -90,9 +106,174 @@ class OrderStatus(str, Enum):
     HARVEST_READY = "harvest_ready"
     COMPLETED = "completed"
 
+class PaymentStatus(str, Enum):
+    PENDING = "pending"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
 class HarvestOption(str, Enum):
     SHIP_HOME = "ship_home"
     SELL_TO_FARMER = "sell_to_farmer"
+
+# Machine data organized by working steps
+MACHINE_DATA = {
+    WorkingStep.BODENBEARBEITUNG: [
+        {
+            "id": "traktor_john_deere_8r370",
+            "name": "John Deere 8R370",
+            "type": MachineType.TRAKTOR,
+            "description": "Großtraktor (400 PS, 5 Min. Arbeitszeit)",
+            "price_per_use": 6.50,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        },
+        {
+            "id": "scheibenegge_01",
+            "name": "Scheibenegge",
+            "type": MachineType.SCHEIBENEGGE,
+            "description": "Scheibenegge für Bodenbearbeitung",
+            "price_per_use": 1.00,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        },
+        {
+            "id": "grubber_01",
+            "name": "Grubber",
+            "type": MachineType.GRUBBER,
+            "description": "Bodenbearbeitungsgerät",
+            "price_per_use": 1.20,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        }
+    ],
+    WorkingStep.AUSSAAT: [
+        {
+            "id": "horsch_pronto_6dc",
+            "name": "Horsch Pronto 6 DC",
+            "type": MachineType.SAEMASCHINE,
+            "description": "Drillmaschine (6m Arbeitsbreite)",
+            "price_per_use": 0.80,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
+        },
+        {
+            "id": "traktor_john_deere_7820",
+            "name": "John Deere 7820",
+            "type": MachineType.TRAKTOR_AUSSAAT,
+            "description": "Traktor für Aussaat",
+            "price_per_use": 5.50,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        }
+    ],
+    WorkingStep.PFLANZENSCHUTZ: [
+        {
+            "id": "feldspritze_01",
+            "name": "Feldspritze",
+            "type": MachineType.FELDSPRITZE,
+            "description": "Pflanzenschutzspritze",
+            "price_per_use": 0.65,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        },
+        {
+            "id": "traktor_john_deere_6r145",
+            "name": "John Deere 6R145",
+            "type": MachineType.TRAKTOR_PFLANZENSCHUTZ,
+            "description": "Traktor für Pflanzenschutz",
+            "price_per_use": 4.80,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        },
+        {
+            "id": "hacke_01",
+            "name": "Hacke",
+            "type": MachineType.HACKE,
+            "description": "Hackgerät für biologischen Anbau",
+            "price_per_use": 1.15,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        },
+        {
+            "id": "striegel_01",
+            "name": "Striegel",
+            "type": MachineType.STRIEGEL,
+            "description": "Striegelgerät für biologischen Anbau",
+            "price_per_use": 0.85,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
+        }
+    ],
+    WorkingStep.DUENGUNG: [
+        {
+            "id": "traktor_john_deere_6r195",
+            "name": "John Deere 6R195",
+            "type": MachineType.TRAKTOR_DUENGUNG,
+            "description": "Traktor für Düngung",
+            "price_per_use": 5.20,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        },
+        {
+            "id": "guellefass_18m",
+            "name": "Güllefass 18m",
+            "type": MachineType.GUELLEFASS,
+            "description": "Güllefass (18m Arbeitsbreite)",
+            "price_per_use": 2.10,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        }
+    ],
+    WorkingStep.PFLEGE: [
+        {
+            "id": "cambridge_walze_01",
+            "name": "Cambridge Walze",
+            "type": MachineType.CAMBRIDGE_WALZE,
+            "description": "Walze zur Bestockungsförderung",
+            "price_per_use": 0.95,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        }
+    ],
+    WorkingStep.ERNTE: [
+        {
+            "id": "john_deere_t660i",
+            "name": "John Deere T660i Mähdrescher",
+            "type": MachineType.MAEHDRESCHER,
+            "description": "Getreidemähdrescher",
+            "price_per_use": 3.50,
+            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
+        },
+        {
+            "id": "mais_haecksler_01",
+            "name": "Mais-Häcksler",
+            "type": MachineType.MAIS_HAECKSLER,
+            "description": "Spezialhäcksler für Silomais",
+            "price_per_use": 4.20,
+            "suitable_for": [CropType.SILOMAIS],
+            "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        },
+        {
+            "id": "gras_haecksler_01",
+            "name": "Gras-Häcksler",
+            "type": MachineType.GRAS_HAECKSLER,
+            "description": "Häcksler für Gras",
+            "price_per_use": 3.80,
+            "suitable_for": [CropType.GRAS],
+            "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        },
+        {
+            "id": "roggen_gps_haecksler",
+            "name": "Häcksler (Ganzpflanzensilage)",
+            "type": MachineType.MAIS_HAECKSLER,
+            "description": "Häcksler für Roggen-Ganzpflanzensilage",
+            "price_per_use": 4.00,
+            "suitable_for": [CropType.ROGGEN],
+            "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
+        }
+    ]
+}
 
 # Market prices per ton (in EUR) - updated with real prices
 MARKET_PRICES = {
@@ -134,20 +315,6 @@ MARKET_VALUES_250M2 = {
     CropType.GRAS: 24.00,        # 200 kg × 120€/t = 24.00€
     CropType.BLUEHMISCHUNG: 17.50, # 700€/ha × 0.025 = 17.50€
     CropType.ERBSEN: 12.50       # 50 kg × 250€/t = 12.50€
-}
-
-# Base yield per 250m² (in kg) at 35 soil points
-YIELD_BASE = {
-    CropType.WEIZEN: 180.0,
-    CropType.ROGGEN: 150.0,
-    CropType.GERSTE: 160.0,
-    CropType.TRITICALE: 170.0,
-    CropType.SILOMAIS: 1200.0,
-    CropType.ZUCKERRUEBEN: 1600.0,
-    CropType.LUZERNE: 250.0,
-    CropType.GRAS: 300.0,
-    CropType.BLUEHMISCHUNG: 0.0,  # No harvest
-    CropType.ERBSEN: 120.0
 }
 
 # Expected yield per 250m² (in kg) - varies by soil points
@@ -243,16 +410,6 @@ FERTILIZER_SPECS = {
 # Plant protection costs (35€/ha = 0.875€ per 250m²)
 PLANT_PROTECTION_COST_PER_250M2 = 0.88  # EUR per treatment
 
-# Fertilizer calculations for 250m² (120 kg N/ha = 3 kg N per 250m²)
-N_REQUIREMENT_PER_250M2 = 3.0  # kg N
-SSA_AMOUNT_PER_250M2 = N_REQUIREMENT_PER_250M2 / 0.21  # 14.29 kg SSA
-KAS_AMOUNT_PER_250M2 = N_REQUIREMENT_PER_250M2 / 0.27  # 11.11 kg KAS
-SSA_COST_PER_250M2 = (SSA_AMOUNT_PER_250M2 / 1000) * 350  # 5.00€
-KAS_COST_PER_250M2 = (KAS_AMOUNT_PER_250M2 / 1000) * 300  # 3.33€
-
-# Organic fertilizer volume per 250m² (40m³/ha = 1m³ per 250m²)
-ORGANIC_FERTILIZER_VOLUME_PER_250M2 = 1.0  # m³
-
 # Nitrogen requirements per crop (kg N per ton of expected yield)
 N_REQUIREMENTS = {
     CropType.WEIZEN: 23.0,  # kg N/t Ertrag
@@ -266,11 +423,6 @@ N_REQUIREMENTS = {
     CropType.BLUEHMISCHUNG: 8.0,
     CropType.ERBSEN: 0.0      # Leguminose - bindet selbst Stickstoff
 }
-
-# Roggen Ganzpflanzensilage pricing (updated with real data)
-ROGGEN_GPS_YIELD_PER_250M2 = 75.0   # kg (3t/ha × 0.025 = 75kg)
-ROGGEN_GPS_PRICE_PER_TON = 38.0      # EUR/t (real price)
-ROGGEN_GPS_VALUE_250M2 = (ROGGEN_GPS_YIELD_PER_250M2 / 1000) * ROGGEN_GPS_PRICE_PER_TON  # 2.85€
 
 # Data Models
 class Plot(BaseModel):
@@ -304,6 +456,7 @@ class Machine(BaseModel):
     description: str
     price_per_use: float
     suitable_for: List[CropType]
+    working_step: WorkingStep
     image_url: Optional[str] = None
 
 class MachineCreate(BaseModel):
@@ -312,6 +465,7 @@ class MachineCreate(BaseModel):
     description: str
     price_per_use: float
     suitable_for: List[CropType]
+    working_step: WorkingStep
     image_url: Optional[str] = None
 
 class FertilizerChoice(BaseModel):
@@ -337,6 +491,13 @@ class FarmingDecision(BaseModel):
     shipping_address: Optional[str] = None
     special_harvest: Optional[str] = None  # "gps" for Roggen Ganzpflanzensilage
 
+class PaymentData(BaseModel):
+    paypal_order_id: str
+    amount: float
+    currency: str = "EUR"
+    status: PaymentStatus = PaymentStatus.PENDING
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 class Advisory(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     order_id: str
@@ -360,6 +521,7 @@ class Order(BaseModel):
     total_cost: float
     expected_yield_kg: float
     expected_market_value: float
+    payment_data: Optional[PaymentData] = None
     status: OrderStatus = OrderStatus.PENDING
     notes: Optional[str] = None
     advisories: List[Advisory] = []
@@ -377,6 +539,13 @@ class OrderCreate(BaseModel):
 class OrderUpdate(BaseModel):
     status: OrderStatus
     notes: Optional[str] = None
+
+class PayPalOrderCreate(BaseModel):
+    order_id: str
+    amount: float
+
+class PayPalOrderCapture(BaseModel):
+    paypal_order_id: str
 
 # Routes
 @api_router.get("/")
@@ -413,6 +582,11 @@ async def get_machines_by_type(machine_type: MachineType):
     machines = await db.machines.find({"type": machine_type}).to_list(1000)
     return [Machine(**machine) for machine in machines]
 
+@api_router.get("/machines/step/{working_step}")
+async def get_machines_by_working_step(working_step: WorkingStep):
+    machines = await db.machines.find({"working_step": working_step}).to_list(1000)
+    return [Machine(**machine) for machine in machines]
+
 @api_router.post("/machines", response_model=Machine)
 async def create_machine(machine_data: MachineCreate):
     machine = Machine(**machine_data.dict())
@@ -425,7 +599,6 @@ async def get_expected_yields_by_soil(soil_points: int):
     if soil_points < 25 or soil_points > 45:
         raise HTTPException(status_code=400, detail="Bodenpunkte müssen zwischen 25 und 45 liegen")
     
-    # Use real yields regardless of soil points for now - can be adjusted later
     return REAL_YIELDS_250M2
 
 @api_router.get("/market-values")
@@ -443,6 +616,72 @@ async def get_fertilizer_specs():
 @api_router.get("/nitrogen-requirements")
 async def get_nitrogen_requirements():
     return N_REQUIREMENTS
+
+# PayPal payment endpoints
+@api_router.post("/payments/create-paypal-order")
+async def create_paypal_order(order_data: PayPalOrderCreate):
+    try:
+        request = OrdersCreateRequest()
+        request.prefer('return=representation')
+        request.request_body = {
+            "intent": "CAPTURE",
+            "purchase_units": [{
+                "reference_id": order_data.order_id,
+                "amount": {
+                    "currency_code": "EUR",
+                    "value": f"{order_data.amount:.2f}"
+                }
+            }]
+        }
+        
+        response = paypal_env.client().execute(request)
+        
+        # Update order with payment data
+        await db.orders.update_one(
+            {"id": order_data.order_id},
+            {
+                "$set": {
+                    "payment_data": {
+                        "paypal_order_id": response.result.id,
+                        "amount": order_data.amount,
+                        "currency": "EUR",
+                        "status": PaymentStatus.PENDING,
+                        "created_at": datetime.utcnow()
+                    }
+                }
+            }
+        )
+        
+        return {"paypal_order_id": response.result.id}
+    except HttpError as e:
+        raise HTTPException(status_code=400, detail=f"PayPal error: {e}")
+
+@api_router.post("/payments/capture-paypal-order")
+async def capture_paypal_order(capture_data: PayPalOrderCapture):
+    try:
+        request = OrdersCaptureRequest(capture_data.paypal_order_id)
+        response = paypal_env.client().execute(request)
+        
+        # Find order by PayPal order ID
+        order = await db.orders.find_one({"payment_data.paypal_order_id": capture_data.paypal_order_id})
+        if not order:
+            raise HTTPException(status_code=404, detail="Order not found")
+        
+        # Update payment status
+        await db.orders.update_one(
+            {"id": order["id"]},
+            {
+                "$set": {
+                    "payment_data.status": PaymentStatus.COMPLETED,
+                    "status": OrderStatus.CONFIRMED,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        return {"status": "success", "capture_id": response.result.id}
+    except HttpError as e:
+        raise HTTPException(status_code=400, detail=f"PayPal error: {e}")
 
 # Calculate nitrogen requirement for specific crop and yield
 @api_router.get("/calculate-nitrogen-need/{crop_type}/{expected_yield_kg}")
@@ -471,7 +710,7 @@ def calculate_fertilizer_options(n_requirement_kg: float):
     options = []
     
     for fert_type, specs in FERTILIZER_SPECS.items():
-        if specs["organic"]:
+        if specs["category"] == "organic":
             # Organic fertilizers (m³)
             n_content_per_m3 = specs["n_content"] * 10  # Convert % to kg/m³
             required_volume = n_requirement_kg / n_content_per_m3 if n_content_per_m3 > 0 else 0
@@ -485,11 +724,11 @@ def calculate_fertilizer_options(n_requirement_kg: float):
                 "cost": round(cost, 2),
                 "organic": True
             })
-        else:
+        elif specs["category"] == "mineral":
             # Mineral fertilizers (kg)
             n_content_percent = specs["n_content"]
             required_amount = (n_requirement_kg / n_content_percent) * 100 if n_content_percent > 0 else 0
-            cost = required_amount * specs["price_per_kg"]
+            cost = (required_amount / 1000) * specs["price_per_ton"]
             
             options.append({
                 "fertilizer_type": fert_type,
@@ -513,9 +752,14 @@ async def create_order(order_data: OrderCreate):
     plot_cost = plot["price_per_plot"]
     
     # Get machine costs
-    all_machine_ids = (order_data.farming_decision.cultivation_machines + 
-                      order_data.farming_decision.protection_machines + 
-                      order_data.farming_decision.care_machines)
+    all_machine_ids = (
+        order_data.farming_decision.machines.bodenbearbeitung +
+        order_data.farming_decision.machines.aussaat +
+        order_data.farming_decision.machines.pflanzenschutz +
+        order_data.farming_decision.machines.duengung +
+        order_data.farming_decision.machines.pflege +
+        order_data.farming_decision.machines.ernte
+    )
     
     machine_cost = 0
     for machine_id in all_machine_ids:
@@ -529,12 +773,15 @@ async def create_order(order_data: OrderCreate):
     market_price_per_ton = MARKET_PRICES.get(crop_type, 0)
     expected_market_value = (expected_yield / 1000) * market_price_per_ton  # Convert kg to tons
     
+    # Add fertilizer cost
+    fertilizer_cost = order_data.farming_decision.fertilizer_choice.cost
+    
     # Add shipping cost if applicable
     shipping_cost = 0
     if order_data.farming_decision.harvest_option == HarvestOption.SHIP_HOME:
         shipping_cost = 25.0  # Fixed shipping cost
     
-    total_cost = plot_cost + machine_cost + shipping_cost
+    total_cost = plot_cost + machine_cost + fertilizer_cost + shipping_cost
     
     order = Order(
         **order_data.dict(),
@@ -638,116 +885,27 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create machines with unique entries only
-    sample_machines = [
-        # Bodenbearbeitung
-        MachineCreate(
-            name="John Deere 8R370",
-            type=MachineType.TRAKTOR,
-            description="Großtraktor (400 PS, 5 Min. Arbeitszeit)",
-            price_per_use=6.50,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN],
-            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
-        ),
-        MachineCreate(
-            name="Scheibenegge",
-            type=MachineType.SCHEIBENEGGE,
-            description="Scheibenegge für Bodenbearbeitung",
-            price_per_use=1.00,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN],
-            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
-        ),
-        MachineCreate(
-            name="Grubber",
-            type=MachineType.GRUBBER,
-            description="Bodenbearbeitungsgerät",
-            price_per_use=1.20,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
-        ),
-        # Aussaat
-        MachineCreate(
-            name="Horsch Pronto 6 DC",
-            type=MachineType.SAEMASCHINE,
-            description="Drillmaschine (6m Arbeitsbreite)",
-            price_per_use=0.80,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
-        ),
-        # Pflanzenschutz
-        MachineCreate(
-            name="Feldspritze",
-            type=MachineType.FELDSPRITZE,
-            description="Pflanzenschutzspritze",
-            price_per_use=0.65,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
-        ),
-        MachineCreate(
-            name="Hacke",
-            type=MachineType.HACKE,
-            description="Hackgerät für biologischen Anbau",
-            price_per_use=1.15,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
-        ),
-        MachineCreate(
-            name="Striegel",
-            type=MachineType.STRIEGEL,
-            description="Striegelgerät für biologischen Anbau",
-            price_per_use=0.85,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
-        ),
-        # Pflege
-        MachineCreate(
-            name="Cambridge Walze",
-            type=MachineType.CAMBRIDGE_WALZE,
-            description="Walze zur Bestockungsförderung",
-            price_per_use=0.95,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
-        ),
-        # Ernte
-        MachineCreate(
-            name="Mähdrescher",
-            type=MachineType.MAEHDRESCHER,
-            description="Getreidemähdrescher",
-            price_per_use=3.50,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
-            image_url="https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
-        ),
-        MachineCreate(
-            name="Mais-Häcksler",
-            type=MachineType.MAIS_HAECKSLER,
-            description="Spezialhäcksler für Silomais",
-            price_per_use=4.20,
-            suitable_for=[CropType.SILOMAIS],
-            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
-        ),
-        MachineCreate(
-            name="Gras-Häcksler",
-            type=MachineType.GRAS_HAECKSLER,
-            description="Häcksler für Gras",
-            price_per_use=3.80,
-            suitable_for=[CropType.GRAS],
-            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
-        ),
-        MachineCreate(
-            name="Häcksler (Ganzpflanzensilage)",
-            type=MachineType.MAIS_HAECKSLER,
-            description="Häcksler für Roggen-Ganzpflanzensilage",
-            price_per_use=4.00,
-            suitable_for=[CropType.ROGGEN],
-            image_url="https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
-        )
-    ]
+    # Create machines from structured data
+    machine_count = 0
+    for working_step, machines in MACHINE_DATA.items():
+        for machine_data in machines:
+            # Check if machine already exists
+            existing_machine = await db.machines.find_one({"id": machine_data["id"]})
+            if not existing_machine:
+                machine = Machine(
+                    id=machine_data["id"],
+                    name=machine_data["name"],
+                    type=machine_data["type"],
+                    description=machine_data["description"],
+                    price_per_use=machine_data["price_per_use"],
+                    suitable_for=machine_data["suitable_for"],
+                    working_step=working_step,
+                    image_url=machine_data.get("image_url")
+                )
+                await db.machines.insert_one(machine.dict())
+                machine_count += 1
     
-    for machine_data in sample_machines:
-        machine = Machine(**machine_data.dict())
-        await db.machines.insert_one(machine.dict())
-    
-    return {"message": "Beispieldaten erfolgreich initialisiert"}
+    return {"message": f"Beispieldaten erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
 
 # Include the router in the main app
 app.include_router(api_router)
