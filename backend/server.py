@@ -81,6 +81,20 @@ MARKET_PRICES = {
     CropType.ERBSEN: 280.0
 }
 
+# Base yield per 250m² (in kg) at 35 soil points
+YIELD_BASE = {
+    CropType.WEIZEN: 180.0,
+    CropType.ROGGEN: 150.0,
+    CropType.GERSTE: 160.0,
+    CropType.TRITICALE: 170.0,
+    CropType.SILOMAIS: 1200.0,
+    CropType.ZUCKERRUEBEN: 1600.0,
+    CropType.LUZERNE: 250.0,
+    CropType.GRAS: 300.0,
+    CropType.BLUEHMISCHUNG: 0.0,  # No harvest
+    CropType.ERBSEN: 120.0
+}
+
 # Expected yield per 250m² (in kg) - varies by soil points
 EXPECTED_YIELDS = {
     CropType.WEIZEN: 180.0,
