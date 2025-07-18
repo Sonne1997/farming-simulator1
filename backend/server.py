@@ -1021,7 +1021,7 @@ async def initialize_sample_data():
         await db.machines.insert_one(machine.dict())
         machine_count += 1
     
-    return {"message": f"Datenbank erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
+    return {"message": f"Datenbank erfolgreich initialisiert: {len(sample_plots)} Parzellen, {len(machines_to_create)} Maschinen"}
 
 # Include the router in the main app
 app.include_router(api_router)
