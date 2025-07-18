@@ -348,6 +348,14 @@ async def get_seed_costs():
 async def get_machine_costs():
     return MACHINE_COSTS
 
+@api_router.get("/fertilizer-specs")
+async def get_fertilizer_specs():
+    return FERTILIZER_SPECS
+
+@api_router.get("/nitrogen-requirements")
+async def get_nitrogen_requirements():
+    return N_REQUIREMENTS
+
 # Order management
 @api_router.post("/orders", response_model=Order)
 async def create_order(order_data: OrderCreate):
