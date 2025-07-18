@@ -87,18 +87,46 @@ class HarvestOption(str, Enum):
     SHIP_HOME = "ship_home"
     SELL_TO_FARMER = "sell_to_farmer"
 
-# Market prices per ton (in EUR)
+# Market prices per ton (in EUR) - updated with real prices
 MARKET_PRICES = {
     CropType.WEIZEN: 170.0,
-    CropType.ROGGEN: 155.0,
-    CropType.GERSTE: 160.0,
+    CropType.ROGGEN: 155.0,  # Normal roggen
+    CropType.GERSTE: 150.0,
     CropType.TRITICALE: 165.0,
     CropType.SILOMAIS: 45.0,
     CropType.ZUCKERRUEBEN: 35.0,
     CropType.LUZERNE: 180.0,
     CropType.GRAS: 120.0,
-    CropType.BLUEHMISCHUNG: 0.0,  # No market value
-    CropType.ERBSEN: 280.0
+    CropType.BLUEHMISCHUNG: 0.0,  # No market value - only subsidies
+    CropType.ERBSEN: 250.0
+}
+
+# Real yields per 250m² based on Grabow location (in kg)
+REAL_YIELDS_250M2 = {
+    CropType.WEIZEN: 125.0,      # 5 t/ha × 0.025 = 125 kg
+    CropType.ROGGEN: 75.0,       # 3 t/ha × 0.025 = 75 kg
+    CropType.GERSTE: 100.0,      # 4 t/ha × 0.025 = 100 kg
+    CropType.TRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg
+    CropType.SILOMAIS: 1200.0,   # Keeping existing estimate
+    CropType.ZUCKERRUEBEN: 1375.0, # 55 t/ha × 0.025 = 1375 kg
+    CropType.LUZERNE: 150.0,     # 6 t/ha × 0.025 = 150 kg
+    CropType.GRAS: 200.0,        # 8 t/ha × 0.025 = 200 kg
+    CropType.BLUEHMISCHUNG: 0.0, # No harvest
+    CropType.ERBSEN: 50.0        # 2 t/ha × 0.025 = 50 kg
+}
+
+# Market values per 250m² plot (in EUR)
+MARKET_VALUES_250M2 = {
+    CropType.WEIZEN: 21.25,      # 125 kg × 170€/t = 21.25€
+    CropType.ROGGEN: 11.63,      # 75 kg × 155€/t = 11.63€
+    CropType.GERSTE: 15.00,      # 100 kg × 150€/t = 15.00€
+    CropType.TRITICALE: 16.50,   # 100 kg × 165€/t = 16.50€
+    CropType.SILOMAIS: 54.00,    # 1200 kg × 45€/t = 54.00€
+    CropType.ZUCKERRUEBEN: 48.13, # 1375 kg × 35€/t = 48.13€
+    CropType.LUZERNE: 27.00,     # 150 kg × 180€/t = 27.00€
+    CropType.GRAS: 24.00,        # 200 kg × 120€/t = 24.00€
+    CropType.BLUEHMISCHUNG: 0.0, # Only subsidies
+    CropType.ERBSEN: 12.50       # 50 kg × 250€/t = 12.50€
 }
 
 # Base yield per 250m² (in kg) at 35 soil points
