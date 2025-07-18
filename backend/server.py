@@ -58,6 +58,7 @@ class MachineType(str, Enum):
     TRAKTOR = "traktor"
     PFLUG = "pflug"
     GRUBBER = "grubber"
+    SCHEIBENEGGE = "scheibenegge"
     SAEMASCHINE = "saemaschine"
     MAEHDRESCHER = "maehdrescher"
     FELDSPRITZE = "feldspritze"
