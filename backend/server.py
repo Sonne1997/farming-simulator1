@@ -908,9 +908,10 @@ async def get_order_advisories(order_id: str):
 # Initialize sample data
 @api_router.post("/initialize-data")
 async def initialize_sample_data():
-    # Clear existing data
+    # Clear existing data completely
     await db.plots.delete_many({})
     await db.machines.delete_many({})
+    await db.orders.delete_many({})
     
     # Create sample plots including premium plots
     sample_plots = [
@@ -965,25 +966,23 @@ async def initialize_sample_data():
         plot = Plot(**plot_data.dict())
         await db.plots.insert_one(plot.dict())
     
-    # Create machines from structured data - prevent duplicates
+    # Create machines from structured data - ensure no duplicates
     machine_count = 0
     for working_step, machines in MACHINE_DATA.items():
         for machine_data in machines:
-            # Check if machine already exists by ID
-            existing_machine = await db.machines.find_one({"id": machine_data["id"]})
-            if not existing_machine:
-                machine = Machine(
-                    id=machine_data["id"],
-                    name=machine_data["name"],
-                    type=machine_data["type"],
-                    description=machine_data["description"],
-                    price_per_use=machine_data["price_per_use"],
-                    suitable_for=machine_data["suitable_for"],
-                    working_step=working_step,
-                    image_url=machine_data.get("image_url")
-                )
-                await db.machines.insert_one(machine.dict())
-                machine_count += 1
+            # Create machine with guaranteed unique ID
+            machine = Machine(
+                id=machine_data["id"],
+                name=machine_data["name"],
+                type=machine_data["type"],
+                description=machine_data["description"],
+                price_per_use=machine_data["price_per_use"],
+                suitable_for=machine_data["suitable_for"],
+                working_step=working_step,
+                image_url=machine_data.get("image_url")
+            )
+            await db.machines.insert_one(machine.dict())
+            machine_count += 1
     
     return {"message": f"Beispieldaten erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
 
