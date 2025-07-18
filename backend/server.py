@@ -58,12 +58,16 @@ class CultivationMethod(str, Enum):
 
 class MachineType(str, Enum):
     TRAKTOR = "traktor"
+    TRAKTOR_AUSSAAT = "traktor_aussaat"
+    TRAKTOR_DUENGUNG = "traktor_duengung"
+    TRAKTOR_PFLANZENSCHUTZ = "traktor_pflanzenschutz"
     PFLUG = "pflug"
     GRUBBER = "grubber"
     SCHEIBENEGGE = "scheibenegge"
     SAEMASCHINE = "saemaschine"
     MAEHDRESCHER = "maehdrescher"
     FELDSPRITZE = "feldspritze"
+    GUELLEFASS = "guellefass"
     HACKE = "hacke"
     STRIEGEL = "striegel"
     CAMBRIDGE_WALZE = "cambridge_walze"
