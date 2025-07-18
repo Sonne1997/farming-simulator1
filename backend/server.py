@@ -249,8 +249,8 @@ MACHINE_DATA = {
             "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         },
         {
-            "id": "mais_haecksler_01",
-            "name": "Mais-Häcksler",
+            "id": "mais_claas_jaguar_940",
+            "name": "Mais-Claas Jaguar 940",
             "type": MachineType.MAIS_HAECKSLER,
             "description": "Spezialhäcksler für Silomais",
             "price_per_use": 4.20,
@@ -258,8 +258,8 @@ MACHINE_DATA = {
             "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         },
         {
-            "id": "gras_haecksler_01",
-            "name": "Gras-Häcksler",
+            "id": "gras_claas_jaguar_940",
+            "name": "Gras-Claas Jaguar 940",
             "type": MachineType.GRAS_HAECKSLER,
             "description": "Häcksler für Gras",
             "price_per_use": 3.80,
@@ -267,8 +267,8 @@ MACHINE_DATA = {
             "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         },
         {
-            "id": "roggen_gps_haecksler",
-            "name": "Häcksler (Ganzpflanzensilage)",
+            "id": "ganzpflanzensilage_claas_jaguar_940",
+            "name": "Ganzpflanzensilage-Claas Jaguar 940",
             "type": MachineType.MAIS_HAECKSLER,
             "description": "Häcksler für Roggen-Ganzpflanzensilage",
             "price_per_use": 4.00,
