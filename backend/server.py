@@ -248,16 +248,23 @@ class FertilizerChoice(BaseModel):
     amount: float  # kg für mineral., m³ für organisch
     cost: float
 
+class WorkingStepMachines(BaseModel):
+    bodenbearbeitung: List[str] = []
+    aussaat: List[str] = []
+    pflanzenschutz: List[str] = []
+    duengung: List[str] = []
+    pflege: List[str] = []
+    ernte: List[str] = []
+
 class FarmingDecision(BaseModel):
     cultivation_method: CultivationMethod
     crop_type: CropType
     expected_yield_kg: float
     fertilizer_choice: FertilizerChoice
-    cultivation_machines: List[str]  # machine IDs
-    protection_machines: List[str]  # machine IDs
-    care_machines: List[str]  # machine IDs
+    machines: WorkingStepMachines
     harvest_option: HarvestOption
     shipping_address: Optional[str] = None
+    special_harvest: Optional[str] = None  # "gps" for Roggen Ganzpflanzensilage
 
 class Advisory(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
