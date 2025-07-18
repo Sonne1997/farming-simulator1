@@ -77,10 +77,11 @@ MARKET_PRICES = {
     CropType.ZUCKERRUEBEN: 35.0,
     CropType.LUZERNE: 180.0,
     CropType.GRAS: 120.0,
-    CropType.BLUEHMISCHUNG: 0.0  # No market value
+    CropType.BLUEHMISCHUNG: 0.0,  # No market value
+    CropType.ERBSEN: 280.0
 }
 
-# Expected yield per 250m² (in kg)
+# Expected yield per 250m² (in kg) - varies by soil points
 EXPECTED_YIELDS = {
     CropType.WEIZEN: 180.0,
     CropType.ROGGEN: 150.0,
@@ -90,7 +91,31 @@ EXPECTED_YIELDS = {
     CropType.ZUCKERRUEBEN: 1600.0,
     CropType.LUZERNE: 250.0,
     CropType.GRAS: 300.0,
-    CropType.BLUEHMISCHUNG: 0.0  # No harvest
+    CropType.BLUEHMISCHUNG: 0.0,  # No harvest
+    CropType.ERBSEN: 120.0
+}
+
+# Seed costs per 250m² (in EUR)
+SEED_COSTS = {
+    CropType.WEIZEN: 2.10,  # 150kg/ha * 0.025ha * 0.56€/kg = 2.10€
+    CropType.ROGGEN: 1.75,
+    CropType.GERSTE: 1.90,
+    CropType.TRITICALE: 1.85,
+    CropType.SILOMAIS: 12.50,
+    CropType.ZUCKERRUEBEN: 35.00,
+    CropType.LUZERNE: 8.75,
+    CropType.GRAS: 3.25,
+    CropType.BLUEHMISCHUNG: 15.00,
+    CropType.ERBSEN: 6.25
+}
+
+# Machine costs (based on actual costs)
+MACHINE_COSTS = {
+    "traktor_5min": 2.73,  # John Deere 7820 for 5 minutes
+    "drill_250m2": 0.80,   # Horsch Pronto 6 DC for 250m²
+    "sprayer_250m2": 0.65,
+    "harvester_250m2": 3.50,
+    "cultivator_250m2": 1.20
 }
 
 # Data Models
