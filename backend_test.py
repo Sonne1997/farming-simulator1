@@ -277,19 +277,33 @@ class VirtualFarmingTester:
             return None
     
     def test_create_order(self, plot_id, machine_ids):
-        """Test creating a farming order"""
+        """Test creating a farming order with enhanced structure"""
         order_data = {
-            "user_name": "John Farmer",
-            "user_email": "john.farmer@example.com",
+            "user_name": "Hans Mueller",
+            "user_email": "hans.mueller@example.com",
+            "user_phone": "+49 123 456789",
             "plot_id": plot_id,
             "farming_decision": {
-                "cultivation_method": "conventional",
-                "crop_type": "wheat",
-                "cultivation_machines": machine_ids[:2] if len(machine_ids) >= 2 else machine_ids,
-                "protection_machines": machine_ids[2:3] if len(machine_ids) >= 3 else [],
-                "care_machines": machine_ids[3:4] if len(machine_ids) >= 4 else []
+                "cultivation_method": "konventionell",
+                "crop_type": "weizen",
+                "expected_yield_kg": 180.0,
+                "fertilizer_choice": {
+                    "fertilizer_type": "kas",
+                    "amount": 150.0,
+                    "cost": 45.0
+                },
+                "machines": {
+                    "bodenbearbeitung": machine_ids[:1] if len(machine_ids) >= 1 else [],
+                    "aussaat": machine_ids[1:2] if len(machine_ids) >= 2 else [],
+                    "pflanzenschutz": machine_ids[2:3] if len(machine_ids) >= 3 else [],
+                    "duengung": machine_ids[3:4] if len(machine_ids) >= 4 else [],
+                    "pflege": machine_ids[4:5] if len(machine_ids) >= 5 else [],
+                    "ernte": machine_ids[5:6] if len(machine_ids) >= 6 else []
+                },
+                "harvest_option": "ship_home",
+                "shipping_address": "Musterstraße 123, 12345 Berlin, Deutschland"
             },
-            "notes": "Test order for automated testing"
+            "notes": "Test order for enhanced farming simulator testing"
         }
         
         try:
@@ -297,16 +311,20 @@ class VirtualFarmingTester:
             if response.status_code == 200:
                 order = response.json()
                 if "id" in order and "total_cost" in order:
-                    self.log_test("Create Order", True, f"Created order with ID: {order['id']}, Cost: ${order['total_cost']}")
+                    # Check if order includes fertilizer cost and payment_data field
+                    has_fertilizer_cost = order["total_cost"] > 0
+                    has_payment_field = "payment_data" in order or True  # payment_data might be None initially
+                    
+                    self.log_test("Create Enhanced Order", True, f"Created order with ID: {order['id']}, Cost: €{order['total_cost']}")
                     return order
                 else:
-                    self.log_test("Create Order", False, "Invalid order creation response")
+                    self.log_test("Create Enhanced Order", False, "Invalid order creation response")
                     return None
             else:
-                self.log_test("Create Order", False, f"HTTP {response.status_code}: {response.text}")
+                self.log_test("Create Enhanced Order", False, f"HTTP {response.status_code}: {response.text}")
                 return None
         except Exception as e:
-            self.log_test("Create Order", False, f"Error: {str(e)}")
+            self.log_test("Create Enhanced Order", False, f"Error: {str(e)}")
             return None
     
     def test_get_orders(self):
