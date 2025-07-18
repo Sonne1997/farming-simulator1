@@ -565,7 +565,7 @@ async def initialize_sample_data():
     # Create sample plots
     sample_plots = [
         PlotCreate(
-            name="Parzelle A1 - Sandfeld",
+            name="A1 - Ritterfeld",
             soil_type=SoilType.SAND,
             soil_points=28,
             location="39291 Grabow",
@@ -574,7 +574,7 @@ async def initialize_sample_data():
             image_url="https://images.unsplash.com/photo-1613036582025-ba1d4ccb3226?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwyfHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
         ),
         PlotCreate(
-            name="Parzelle B2 - Lehmiges Sandfeld",
+            name="B2 - Ritterfeld",
             soil_type=SoilType.LOAMY_SAND,
             soil_points=38,
             location="39291 Grabow",
@@ -583,7 +583,7 @@ async def initialize_sample_data():
             image_url="https://images.unsplash.com/photo-1519462568576-0c687427fb2e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwzfHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
         ),
         PlotCreate(
-            name="Parzelle C3 - Premium Boden",
+            name="C3 - Ritterfeld",
             soil_type=SoilType.CLAYEY_SAND,
             soil_points=42,
             location="39291 Grabow",
