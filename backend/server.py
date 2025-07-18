@@ -224,10 +224,10 @@ N_REQUIREMENTS = {
     CropType.ERBSEN: 0.0      # Leguminose - bindet selbst Stickstoff
 }
 
-# Roggen Ganzpflanzensilage pricing
-ROGGEN_GPS_YIELD_PER_250M2 = 25.0  # kg (10t/ha = 250kg/250m²)
-ROGGEN_GPS_PRICE_PER_TON = 38.0     # EUR/t
-ROGGEN_GPS_VALUE_250M2 = (ROGGEN_GPS_YIELD_PER_250M2 / 1000) * ROGGEN_GPS_PRICE_PER_TON  # 0.95€
+# Roggen Ganzpflanzensilage pricing (updated with real data)
+ROGGEN_GPS_YIELD_PER_250M2 = 75.0   # kg (3t/ha × 0.025 = 75kg)
+ROGGEN_GPS_PRICE_PER_TON = 38.0      # EUR/t (real price)
+ROGGEN_GPS_VALUE_250M2 = (ROGGEN_GPS_YIELD_PER_250M2 / 1000) * ROGGEN_GPS_PRICE_PER_TON  # 2.85€
 
 # Data Models
 class Plot(BaseModel):
