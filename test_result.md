@@ -107,39 +107,48 @@ user_problem_statement: "Create a virtual farming platform where users can lease
 backend:
   - task: "PayPal Payment Integration"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented PayPal payment integration with sandbox credentials, added payment endpoints for creating and capturing PayPal orders"
+      - working: true
+        agent: "testing"
+        comment: "✅ PayPal payment integration working correctly. Fixed PayPal SDK client initialization issue (changed from paypal_env.client() to PayPalHttpClient). Successfully tested POST /api/payments/create-paypal-order endpoint - creates PayPal orders with proper request body format. PayPal sandbox credentials are properly configured. Order creation returns valid PayPal order IDs (e.g., 5T486503BK5647003). Note: PayPal capture endpoint structure is correct but requires manual approval for full testing."
   
   - task: "Enhanced Machine Management with Working Steps"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Updated machine data structure to include working steps (Bodenbearbeitung, Aussaat, Pflanzenschutz, Düngung, Pflege, Ernte) with detailed John Deere tractor models"
+      - working: true
+        agent: "testing"
+        comment: "✅ Enhanced machine management working perfectly. GET /api/machines/step/{working_step} endpoint successfully retrieves machines by working steps. All 6 working steps properly categorized: bodenbearbeitung (3 machines), aussaat (2), pflanzenschutz (4), duengung (2), pflege (1), ernte (4). All required John Deere models present: 8R370, 7820, 6R145, 6R195, T660i. Machine data structure includes working_step field correctly."
   
   - task: "Fertilizer Specs API"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added fertilizer specs API endpoint with mineral (SSA, KAS) and organic (Schweinegülle, Rindergülle, Gärreste, Rindermist) fertilizer options"
+      - working: true
+        agent: "testing"
+        comment: "✅ Fertilizer specs API working correctly. GET /api/fertilizer-specs returns comprehensive fertilizer specifications including all required types: SSA, KAS (mineral fertilizers), Schweinegülle, Rindergülle, Gärreste, Rindermist (organic fertilizers). Each spec includes proper pricing, nitrogen content, and categorization. Total of 7 fertilizer specifications available including 'Ohne Düngung' option."
   
   - task: "Plot Management System"
     implemented: true
@@ -162,7 +171,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -173,6 +182,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Updated machine system with detailed working steps and specific John Deere models (8R370, 7820, 6R195, 6R145, T660i)"
+      - working: true
+        agent: "testing"
+        comment: "✅ Enhanced machine system fully functional. All 16 machines properly loaded with working step assignments. John Deere models correctly implemented and accessible via working step endpoints. Machine creation and retrieval working with enhanced data structure."
   
   - task: "Farming Decision Workflow"
     implemented: true
@@ -180,7 +192,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -191,6 +203,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Enhanced farming decision workflow with detailed fertilizer choices and structured machine selection by working steps"
+      - working: true
+        agent: "testing"
+        comment: "✅ Enhanced farming decision workflow working perfectly. Order creation successfully handles new structure with fertilizer_choice field, WorkingStepMachines categorization (bodenbearbeitung, aussaat, pflanzenschutz, duengung, pflege, ernte), and harvest options. Cost calculations include fertilizer costs correctly."
   
   - task: "Order Management System"
     implemented: true
@@ -198,7 +213,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -209,6 +224,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Updated order system to include PayPal payment data and enhanced cost calculations including fertilizer costs"
+      - working: true
+        agent: "testing"
+        comment: "✅ Enhanced order system working perfectly. Order creation includes payment_data field (initially null, populated during PayPal integration). Cost calculations properly include fertilizer costs (€45.00 for KAS fertilizer in test). Total cost calculation: plot cost + machine costs + fertilizer cost + shipping cost = €93.15. Order structure supports all enhanced farming decision fields."
   
   - task: "Sample Data Initialization"
     implemented: true
@@ -216,7 +234,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -227,6 +245,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Updated sample data initialization to use structured machine data with working steps and prevent duplicate entries"
+      - working: true
+        agent: "testing"
+        comment: "✅ Enhanced sample data initialization working correctly. Creates 3 plots and 16 machines from structured MACHINE_DATA. Duplicate prevention working - existing machines are not recreated. All machines properly assigned to working steps with correct John Deere models and specifications."
 
 frontend:
   - task: "PayPal Payment Integration"
