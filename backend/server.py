@@ -602,11 +602,19 @@ async def initialize_sample_data():
     sample_machines = [
         # Bodenbearbeitung
         MachineCreate(
-            name="John Deere 7820",
+            name="John Deere 8R370",
             type=MachineType.TRAKTOR,
-            description="Traktor (5 Min. Arbeitszeit)",
-            price_per_use=2.73,
-            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            description="Großtraktor (400 PS, 5 Min. Arbeitszeit)",
+            price_per_use=6.50,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN],
+            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        ),
+        MachineCreate(
+            name="Scheibenegge",
+            type=MachineType.SCHEIBENEGGE,
+            description="Scheibenegge für Bodenbearbeitung",
+            price_per_use=2.40,
+            suitable_for=[CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN],
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         ),
         MachineCreate(
