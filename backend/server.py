@@ -139,6 +139,59 @@ MACHINE_COSTS = {
     "cultivator_250m2": 1.20
 }
 
+# Fertilizer specifications
+FERTILIZER_SPECS = {
+    FertilizerType.SSA: {
+        "name": "Schwefelsaurer Ammoniak (SSA)",
+        "n_content": 21,  # % Stickstoff
+        "s_content": 24,  # % Schwefel
+        "price_per_kg": 0.42,  # EUR/kg
+        "organic": False
+    },
+    FertilizerType.KAS: {
+        "name": "Kalkammonsalpeter (KAS)",
+        "n_content": 27,  # % Stickstoff
+        "s_content": 0,
+        "price_per_kg": 0.45,  # EUR/kg
+        "organic": False
+    },
+    FertilizerType.SCHWEINEGULLE: {
+        "name": "Schweinegülle",
+        "n_content": 0.4,  # % Stickstoff (4 kg N/m³)
+        "s_content": 0,
+        "price_per_m3": 8.50,  # EUR/m³
+        "organic": True
+    },
+    FertilizerType.RINDERGUELLE: {
+        "name": "Rindergülle",
+        "n_content": 0.35,  # % Stickstoff (3.5 kg N/m³)
+        "s_content": 0,
+        "price_per_m3": 7.80,  # EUR/m³
+        "organic": True
+    },
+    FertilizerType.GAERREST: {
+        "name": "Gärrest (Biogasanlage)",
+        "n_content": 0.45,  # % Stickstoff (4.5 kg N/m³)
+        "s_content": 0,
+        "price_per_m3": 9.20,  # EUR/m³
+        "organic": True
+    }
+}
+
+# Nitrogen requirements per crop (kg N per ton of expected yield)
+N_REQUIREMENTS = {
+    CropType.WEIZEN: 23.0,  # kg N/t Ertrag
+    CropType.ROGGEN: 20.0,
+    CropType.GERSTE: 18.0,
+    CropType.TRITICALE: 21.0,
+    CropType.SILOMAIS: 2.8,   # kg N/t Frischmasse
+    CropType.ZUCKERRUEBEN: 1.8,
+    CropType.LUZERNE: 0.0,    # Leguminose - bindet selbst Stickstoff
+    CropType.GRAS: 15.0,
+    CropType.BLUEHMISCHUNG: 8.0,
+    CropType.ERBSEN: 0.0      # Leguminose - bindet selbst Stickstoff
+}
+
 # Data Models
 class Plot(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
