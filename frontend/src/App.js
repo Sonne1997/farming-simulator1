@@ -75,7 +75,7 @@ const App = () => {
 
   const fetchExpectedYields = async () => {
     try {
-      const response = await axios.get(`${API}/expected-yields`);
+      const response = await axios.get(`${API}/expected-yields/${selectedPlot?.soil_points || 35}`);
       setExpectedYields(response.data);
     } catch (error) {
       console.error('Error fetching expected yields:', error);
