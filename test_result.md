@@ -102,9 +102,45 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Create a virtual farming platform where users can lease real plots, make farming decisions (soil cultivation, crop selection, machine choices), and have their decisions implemented on actual land by a real farmer."
+user_problem_statement: "Create a virtual farming platform where users can lease real plots, make farming decisions (soil cultivation, crop selection, machine choices), and have their decisions implemented on actual land by a real farmer. Add PayPal payment integration and fix frontend-backend synchronization issues."
 
 backend:
+  - task: "PayPal Payment Integration"
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented PayPal payment integration with sandbox credentials, added payment endpoints for creating and capturing PayPal orders"
+  
+  - task: "Enhanced Machine Management with Working Steps"
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated machine data structure to include working steps (Bodenbearbeitung, Aussaat, Pflanzenschutz, Düngung, Pflege, Ernte) with detailed John Deere tractor models"
+  
+  - task: "Fertilizer Specs API"
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added fertilizer specs API endpoint with mineral (SSA, KAS) and organic (Schweinegülle, Rindergülle, Gärreste, Rindermist) fertilizer options"
+  
   - task: "Plot Management System"
     implemented: true
     working: true
@@ -126,7 +162,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -134,6 +170,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ All machine endpoints working correctly: GET /api/machines (retrieved 6 machines), GET /api/machines/{type} (filtered by tractor/seeder/harvester), POST /api/machines (successful creation). Machine types and suitable crops properly configured."
+      - working: "NA"
+        agent: "main"
+        comment: "Updated machine system with detailed working steps and specific John Deere models (8R370, 7820, 6R195, 6R145, T660i)"
   
   - task: "Farming Decision Workflow"
     implemented: true
@@ -141,7 +180,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -149,6 +188,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Farming decision workflow integrated into order creation works perfectly. Successfully tested cultivation methods (conventional), crop types (wheat), and machine selection across cultivation/protection/care categories. All enum validations working."
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced farming decision workflow with detailed fertilizer choices and structured machine selection by working steps"
   
   - task: "Order Management System"
     implemented: true
@@ -156,7 +198,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -164,6 +206,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Complete order system working flawlessly: POST /api/orders (creates orders with accurate cost calculation), GET /api/orders (retrieves all orders), GET /api/orders/{id} (individual order retrieval), PATCH /api/orders/{id} (status updates). Cost calculation verified: plot cost + machine costs = total cost. Plot availability properly updated on order creation."
+      - working: "NA"
+        agent: "main"
+        comment: "Updated order system to include PayPal payment data and enhanced cost calculations including fertilizer costs"
   
   - task: "Sample Data Initialization"
     implemented: true
@@ -171,7 +216,7 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -179,8 +224,47 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Sample data initialization working perfectly. POST /api/initialize-data successfully creates 3 realistic plots (Sunny Meadow, Valley View, Highland Fields) and 6 machines (tractors, seeders, harvesters, etc.) with proper soil types, crop compatibility, and pricing."
+      - working: "NA"
+        agent: "main"
+        comment: "Updated sample data initialization to use structured machine data with working steps and prevent duplicate entries"
 
 frontend:
+  - task: "PayPal Payment Integration"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented PayPal payment integration using @paypal/react-paypal-js with sandbox credentials"
+  
+  - task: "Enhanced Machine Selection UI"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed machine selection UI to properly sync with backend working steps structure (Bodenbearbeitung, Aussaat, Pflanzenschutz, Düngung, Pflege, Ernte)"
+  
+  - task: "Dynamic Fertilizer Selection"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented dynamic fertilizer selection fetching data from backend API instead of using hardcoded values"
+  
   - task: "Plot Selection Interface"
     implemented: true
     working: "NA"
@@ -192,6 +276,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implemented beautiful plot selection interface with cards showing plot details"
+      - working: "NA"
+        agent: "main"
+        comment: "Updated plot selection interface to sync with backend updates"
   
   - task: "Farming Decision Workflow"
     implemented: true
@@ -204,6 +291,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implemented step-by-step farming decision interface with cultivation methods, crop selection, and machine choices"
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced farming decision workflow with proper backend integration for machines and fertilizers"
   
   - task: "Order Review and Submission"
     implemented: true
@@ -216,6 +306,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implemented order review interface with cost calculations and user information collection"
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced order review with PayPal payment integration and updated cost calculations"
   
   - task: "Active Orders Display"
     implemented: true
@@ -228,20 +321,23 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implemented active orders display to show all virtual farms in progress"
+      - working: "NA"
+        agent: "main"
+        comment: "Updated active orders display to show payment status and enhanced order details"
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
-  test_sequence: 1
+  version: "2.0"
+  test_sequence: 2
   run_ui: false
 
 test_plan:
   current_focus:
-    - "Plot Management System"
-    - "Machine Management System"
-    - "Farming Decision Workflow"
-    - "Order Management System"
-    - "Sample Data Initialization"
+    - "PayPal Payment Integration"
+    - "Enhanced Machine Management with Working Steps"
+    - "Fertilizer Specs API"
+    - "Dynamic Fertilizer Selection"
+    - "Enhanced Machine Selection UI"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -251,3 +347,5 @@ agent_communication:
     message: "Built complete virtual farming platform with plot leasing, farming decisions, and order management. Ready for backend testing to verify all API endpoints and data flow."
   - agent: "testing"
     message: "✅ BACKEND TESTING COMPLETE: All 5 backend tasks are working perfectly! Comprehensive testing performed on all API endpoints with 100% success rate (14/14 tests passed). Key findings: 1) All CRUD operations working correctly with proper UUID handling, 2) Cost calculations are accurate (plot cost + machine costs), 3) Error handling is robust (404s for invalid IDs, 422 for invalid enums), 4) Sample data initialization creates realistic farming data, 5) Order workflow with farming decisions is fully functional. Backend is production-ready."
+  - agent: "main"
+    message: "Enhanced the farming simulator with PayPal payment integration and fixed frontend-backend synchronization issues. Added detailed machine categorization by working steps, dynamic fertilizer selection from backend API, and comprehensive PayPal payment workflow. User's requested changes with tractors and fertilization adjustments have been implemented."
