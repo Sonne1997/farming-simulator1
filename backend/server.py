@@ -948,7 +948,7 @@ async def initialize_sample_data():
             location="39291 Grabow",
             description="Sandiger Lehm, 48 Bodenpunkte - Premium Boden",
             price_per_plot=12.50,
-            image_url="https://images.unsplash.com/photo-1574864345403-6c3c1d4a3c3f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHw2fHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
+            image_url="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxmZXJ0aWxlJTIwc29pbHxlbnwwfHx8fDE3NTI4NDU0NzJ8MA&ixlib=rb-4.1.0&q=85"
         ),
         PlotCreate(
             name="E5 - Ritterfeld",
@@ -957,7 +957,7 @@ async def initialize_sample_data():
             location="39291 Grabow",
             description="Sandiger Lehm, 52 Bodenpunkte - Premium Boden",
             price_per_plot=14.00,
-            image_url="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHw4fHxzb2lsfGVufDB8fHx8MTc1MjgzMzA4NXww&ixlib=rb-4.1.0&q=85"
+            image_url="https://images.unsplash.com/photo-1492496913980-501348b61469?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxmZXJ0aWxlJTIwc29pbHxlbnwwfHx8fDE3NTI4NDU0NzJ8MA&ixlib=rb-4.1.0&q=85"
         )
     ]
     
