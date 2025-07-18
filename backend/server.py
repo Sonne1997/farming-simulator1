@@ -29,11 +29,13 @@ paypal_client_id = os.environ.get('PAYPAL_CLIENT_ID')
 paypal_client_secret = os.environ.get('PAYPAL_CLIENT_SECRET')
 paypal_environment = os.environ.get('PAYPAL_ENVIRONMENT', 'sandbox')
 
-# Initialize PayPal environment
+# Initialize PayPal environment and client
 if paypal_environment == 'sandbox':
     paypal_env = SandboxEnvironment(client_id=paypal_client_id, client_secret=paypal_client_secret)
 else:
     paypal_env = LiveEnvironment(client_id=paypal_client_id, client_secret=paypal_client_secret)
+
+paypal_client = PayPalHttpClient(paypal_env)
 
 # Create the main app without a prefix
 app = FastAPI()
