@@ -49,18 +49,45 @@ const App = () => {
 
   useEffect(() => {
     initializeData();
-    fetchPlots();
-    fetchMachines();
-    fetchFertilizerSpecs();
-    fetchMarketPrices();
-    fetchExpectedYields();
-    fetchMarketValues();
-    fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (plots.length === 0) {
+      fetchPlots();
+    }
+    if (machines.length === 0) {
+      fetchMachines();
+    }
+    if (Object.keys(fertilizerSpecs).length === 0) {
+      fetchFertilizerSpecs();
+    }
+    if (Object.keys(marketPrices).length === 0) {
+      fetchMarketPrices();
+    }
+    if (Object.keys(expectedYields).length === 0) {
+      fetchExpectedYields();
+    }
+    if (Object.keys(marketValues).length === 0) {
+      fetchMarketValues();
+    }
+    if (orders.length === 0) {
+      fetchOrders();
+    }
+  }, [plots, machines, fertilizerSpecs, marketPrices, expectedYields, marketValues, orders]);
 
   const initializeData = async () => {
     try {
       await axios.post(`${API}/initialize-data`);
+      // After initialization, fetch all data
+      setTimeout(() => {
+        fetchPlots();
+        fetchMachines();
+        fetchFertilizerSpecs();
+        fetchMarketPrices();
+        fetchExpectedYields();
+        fetchMarketValues();
+        fetchOrders();
+      }, 1000);
     } catch (error) {
       console.error('Error initializing data:', error);
     }
