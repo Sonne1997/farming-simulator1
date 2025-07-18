@@ -77,17 +77,43 @@ const App = () => {
 
   const initializeData = async () => {
     try {
-      await axios.post(`${API}/initialize-data`);
-      // After initialization, fetch all data
-      setTimeout(() => {
-        fetchPlots();
-        fetchMachines();
-        fetchFertilizerSpecs();
-        fetchMarketPrices();
-        fetchExpectedYields();
-        fetchMarketValues();
-        fetchOrders();
-      }, 1000);
+      // ONLY initialize once - don't call multiple times
+      const response = await axios.post(`${API}/initialize-data`);
+      console.log('Database initialized:', response.data);
+      
+      // Wait a moment then fetch data ONCE
+      setTimeout(async () => {
+        try {
+          const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes] = await Promise.all([
+            axios.get(`${API}/plots`),
+            axios.get(`${API}/machines`),
+            axios.get(`${API}/fertilizer-specs`),
+            axios.get(`${API}/market-values`),
+            axios.get(`${API}/orders`)
+          ]);
+          
+          setPlots(plotsRes.data);
+          setMachines(machinesRes.data);
+          setFertilizerSpecs(fertilizerRes.data);
+          setMarketPrices(marketRes.data);
+          setOrders(ordersRes.data);
+          
+          // Group machines by working step
+          const machinesByStep = {
+            bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
+            aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
+            pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
+            duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
+            pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
+            ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
+          };
+          setMachinesByStep(machinesByStep);
+          
+          console.log('All data loaded successfully');
+        } catch (error) {
+          console.error('Error loading data:', error);
+        }
+      }, 2000);
     } catch (error) {
       console.error('Error initializing data:', error);
     }
