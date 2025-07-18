@@ -175,17 +175,17 @@ const App = () => {
         <div className="flex items-center justify-center space-x-8">
           <div className={`flex items-center space-x-2 ${currentStep === 'plots' ? 'text-green-600' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'plots' ? 'bg-green-600 text-white' : 'bg-gray-300'}`}>1</div>
-            <span className="font-medium">Choose Plot</span>
+            <span className="font-medium">Parzelle wählen</span>
           </div>
           <div className="w-16 h-0.5 bg-gray-300"></div>
           <div className={`flex items-center space-x-2 ${currentStep === 'farming' ? 'text-green-600' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'farming' ? 'bg-green-600 text-white' : 'bg-gray-300'}`}>2</div>
-            <span className="font-medium">Plan Farming</span>
+            <span className="font-medium">Landwirtschaft planen</span>
           </div>
           <div className="w-16 h-0.5 bg-gray-300"></div>
           <div className={`flex items-center space-x-2 ${currentStep === 'review' ? 'text-green-600' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'review' ? 'bg-green-600 text-white' : 'bg-gray-300'}`}>3</div>
-            <span className="font-medium">Review & Order</span>
+            <span className="font-medium">Übersicht & Bestellung</span>
           </div>
         </div>
       </div>
