@@ -1,0 +1,24 @@
+{
+  "name": "farming-simulator-fullstack",
+  "version": "1.0.0",
+  "description": "Virtual Farming Platform - Full Stack Application",
+  "scripts": {
+    "build": "cd frontend && yarn install && yarn build",
+    "dev": "cd frontend && yarn start",
+    "backend": "cd backend && python -m uvicorn server:app --reload --host 0.0.0.0 --port 8001"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sonne1997/farming-simulator1.git"
+  },
+  "keywords": ["farming", "agriculture", "react", "fastapi", "virtual-farming"],
+  "author": "Sonne1997",
+  "license": "MIT"
+}
