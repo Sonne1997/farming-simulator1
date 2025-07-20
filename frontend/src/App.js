@@ -241,10 +241,18 @@ const App = () => {
 
   const fetchExpectedYields = async () => {
     try {
+      if (DEMO_MODE) {
+        // Demo mode - use mock data
+        setExpectedYields(MOCK_EXPECTED_YIELDS);
+        return;
+      }
+      
       const response = await axios.get(`${API}/expected-yields/${selectedPlot?.soil_points || 35}`);
       setExpectedYields(response.data);
     } catch (error) {
       console.error('Error fetching expected yields:', error);
+      // Fallback to mock data
+      setExpectedYields(MOCK_EXPECTED_YIELDS);
     }
   };
 
