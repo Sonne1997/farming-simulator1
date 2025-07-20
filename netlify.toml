@@ -1,0 +1,27 @@
+[build]
+  # Directory to change to before starting a build
+  base = "frontend/"
+  
+  # Directory that contains the deploy-ready HTML files and assets
+  publish = "frontend/build/"
+  
+  # Build command to run
+  command = "yarn build"
+
+[build.environment]
+  # Use Yarn instead of npm
+  NPM_FLAGS = "--version"
+  YARN_VERSION = "1.22.22"
+
+# Settings for Netlify's deploy preview feature
+[context.deploy-preview]
+  command = "yarn build"
+
+[context.branch-deploy]
+  command = "yarn build"
+
+# Redirect rules for Single Page Application (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
