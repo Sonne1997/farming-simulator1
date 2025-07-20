@@ -1,13 +1,11 @@
 [build]
-  base = "frontend/"
-  publish = "frontend/build/"
+  base = "frontend"
+  publish = "frontend/build"
   command = "npm install && npm run build"
 
 [build.environment]
-  NODE_VERSION = "18"
-  NPM_FLAGS = "--no-optional"
+  NODE_VERSION = "18.17.0"
 
-# Redirect rules for Single Page Application (SPA)
 [[redirects]]
   from = "/*"
   to = "/index.html"
