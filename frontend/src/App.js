@@ -535,6 +535,20 @@ const App = () => {
           </div>
         </div>
       </div>
+      
+      {/* Demo Mode Notification */}
+      {DEMO_MODE && (
+        <div className="bg-yellow-500 text-black py-3">
+          <div className="max-w-7xl mx-auto px-4 text-center">
+            <div className="flex items-center justify-center space-x-2">
+              <span className="text-yellow-800">⚠️</span>
+              <span className="font-semibold">Demo-Modus aktiv</span>
+              <span>•</span>
+              <span className="text-sm">Diese Version verwendet Beispieldaten zur Demonstration der Funktionalität</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
