@@ -51,7 +51,13 @@ const App = () => {
     initializeData();
   }, []);
 
-  // Remove the problematic useEffect with dependencies - this was causing infinite loops!
+  // Fetch expected yields when plot changes
+  useEffect(() => {
+    if (selectedPlot) {
+      fetchExpectedYields();
+      fetchMarketValues();
+    }
+  }, [selectedPlot]);
 
   const initializeData = async () => {
     try {
