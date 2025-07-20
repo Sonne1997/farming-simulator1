@@ -4,8 +4,65 @@ import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
+const DEMO_MODE = process.env.REACT_APP_DEMO_MODE === 'true' || !BACKEND_URL;
+
+// Mock data for demo mode
+const MOCK_PLOTS = [
+  {
+    id: "plot_001",
+    name: "A1 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "sand",
+    soil_points: 28,
+    lease_price_per_year: 7.5,
+    available: true
+  },
+  {
+    id: "plot_002",
+    name: "B2 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "loamy_sand",
+    soil_points: 38,
+    lease_price_per_year: 9.0,
+    available: true
+  },
+  {
+    id: "plot_003",
+    name: "C3 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "clayey_sand",
+    soil_points: 42,
+    lease_price_per_year: 10.0,
+    available: true
+  }
+];
+
+const MOCK_EXPECTED_YIELDS = {
+  roggen: 64.5,
+  weizen: 107.5,
+  gerste: 86.0,
+  triticale: 86.0,
+  silomais: 1032.0,
+  zuckerrueben: 1290.0,
+  luzerne: 129.0,
+  gras: 172.0,
+  bluehmischung: 0,
+  erbsen: 43.0
+};
+
+const MOCK_FERTILIZER_SPECS = {
+  ssa: { name: "Schwefelsaurer Ammoniak (SSA)", price_per_kg: 0.35, nitrogen_content: 21 },
+  kas: { name: "Kalkammonsalpeter (KAS)", price_per_kg: 0.30, nitrogen_content: 27 },
+  schweinegulle: { name: "Schweinegülle", price_per_m3: 8.50, nitrogen_content_per_m3: 3.8 },
+  rinderguelle: { name: "Rindergülle", price_per_m3: 7.86, nitrogen_content_per_m3: 3.2 },
+  gaerrest: { name: "Gärrest (Biogasanlage)", price_per_m3: 9.24, nitrogen_content_per_m3: 4.2 },
+  rindermist: { name: "Rindermist", price_per_t: 6.0, nitrogen_content_per_t: 5.0 }
+};
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState('plots');
