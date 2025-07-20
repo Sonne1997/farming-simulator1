@@ -118,7 +118,31 @@ const App = () => {
 
   const initializeData = async () => {
     try {
-      // ONLY initialize once - don't call multiple times
+      if (DEMO_MODE) {
+        // Demo mode - use mock data
+        console.log('Running in demo mode with mock data');
+        setPlots(MOCK_PLOTS);
+        setFertilizerSpecs(MOCK_FERTILIZER_SPECS);
+        setExpectedYields(MOCK_EXPECTED_YIELDS);
+        
+        // Set mock market prices
+        setMarketPrices({
+          roggen: 0.18,
+          weizen: 0.22,
+          gerste: 0.19,
+          triticale: 0.17,
+          silomais: 0.035,
+          zuckerrueben: 0.045,
+          luzerne: 0.15,
+          gras: 0.12,
+          erbsen: 0.35
+        });
+        
+        console.log('Demo data loaded successfully');
+        return;
+      }
+      
+      // Production mode - use real API
       const response = await axios.post(`${API}/initialize-data`);
       console.log('Database initialized:', response.data);
       
@@ -157,6 +181,11 @@ const App = () => {
       }, 2000);
     } catch (error) {
       console.error('Error initializing data:', error);
+      // Fallback to demo mode if API fails
+      console.log('Falling back to demo mode');
+      setPlots(MOCK_PLOTS);
+      setFertilizerSpecs(MOCK_FERTILIZER_SPECS);
+      setExpectedYields(MOCK_EXPECTED_YIELDS);
     }
   };
 
