@@ -1,6 +1,6 @@
 [build]
-  publish = "frontend/build"
-  command = "echo 'Using pre-built files'"
+  publish = "build"
+  command = "echo 'Static deployment ready'"
 
 [[redirects]]
   from = "/*"
