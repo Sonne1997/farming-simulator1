@@ -1,6 +1,6 @@
 [build]
-  publish = "build"
-  command = "echo 'Static deployment ready'"
+  publish = "."
+  command = "mkdir -p temp && echo '<h1>Lust auf Landwirtschaft - Demo</h1><p>Laden...</p>' > index.html"
 
 [[redirects]]
   from = "/*"
