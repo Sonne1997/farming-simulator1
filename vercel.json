@@ -1,0 +1,22 @@
+{
+  "name": "lust-auf-landwirtschaft",
+  "version": 2,
+  "public": true,
+  "github": {
+    "silent": true
+  },
+  "functions": {
+    "app/api/**/*.js": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
