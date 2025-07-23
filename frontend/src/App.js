@@ -17,29 +17,78 @@ const MOCK_PLOTS = [
     size_m2: 250,
     soil_type: "sand",
     soil_points: 28,
-    lease_price_per_year: 7.5,
+    lease_price_per_year: 7.0,
     available: true
   },
   {
     id: "plot_002",
-    name: "B2 - Ritterfeld",
+    name: "B2 - Ritterfeld", 
     location: "39291 Grabow",
     size_m2: 250,
     soil_type: "loamy_sand",
     soil_points: 38,
-    lease_price_per_year: 9.0,
+    lease_price_per_year: 9.5,
     available: true
   },
   {
     id: "plot_003",
     name: "C3 - Ritterfeld",
-    location: "39291 Grabow",
+    location: "39291 Grabow", 
     size_m2: 250,
     soil_type: "clayey_sand",
     soil_points: 42,
-    lease_price_per_year: 10.0,
+    lease_price_per_year: 10.5,
+    available: true
+  },
+  {
+    id: "plot_004",
+    name: "D4 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "sandy_loam",
+    soil_points: 48,
+    lease_price_per_year: 12.0,
+    available: true
+  },
+  {
+    id: "plot_005", 
+    name: "E5 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "clayey_loam",
+    soil_points: 52,
+    lease_price_per_year: 13.0,
     available: true
   }
+];
+
+const MOCK_MACHINES = [
+  // Bodenbearbeitung
+  { id: "m001", name: "John Deere 8R370", working_step: "bodenbearbeitung", cost_per_hectare: 45.0, specifications: "370 PS Traktor" },
+  { id: "m002", name: "Lemken Rubin 10", working_step: "bodenbearbeitung", cost_per_hectare: 35.0, specifications: "Grubber 4m" },
+  { id: "m003", name: "Amazone Catros 6001", working_step: "bodenbearbeitung", cost_per_hectare: 40.0, specifications: "Scheibenegge 6m" },
+  
+  // Aussaat
+  { id: "m004", name: "Amazone Primera DMC 6000", working_step: "aussaat", cost_per_hectare: 38.0, specifications: "Drillmaschine 6m" },
+  { id: "m005", name: "John Deere 750A", working_step: "aussaat", cost_per_hectare: 42.0, specifications: "Direktsaatmaschine" },
+  
+  // Pflanzenschutz
+  { id: "m006", name: "Amazone UX 5200", working_step: "pflanzenschutz", cost_per_hectare: 25.0, specifications: "Feldspritze 28m" },
+  { id: "m007", name: "John Deere 6R195", working_step: "pflanzenschutz", cost_per_hectare: 22.0, specifications: "195 PS Traktor + Spritze" },
+  
+  // Düngung
+  { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer" },
+  { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer" },
+  
+  // Pflege
+  { id: "m010", name: "Krone EasyCut F 320M", working_step: "pflege", cost_per_hectare: 28.0, specifications: "Frontmähwerk 3.2m" },
+  { id: "m011", name: "John Deere 6R145", working_step: "pflege", cost_per_hectare: 32.0, specifications: "145 PS Traktor" },
+  
+  // Ernte  
+  { id: "m012", name: "John Deere T660i", working_step: "ernte", cost_per_hectare: 85.0, specifications: "Mähdrescher 7.6m" },
+  { id: "m013", name: "John Deere 7820", working_step: "ernte", cost_per_hectare: 75.0, specifications: "Feldhäcksler" },
+  { id: "m014", name: "Ropa euro-Tiger V8-4a", working_step: "ernte", cost_per_hectare: 120.0, specifications: "Rübenroder 6-reihig" },
+  { id: "m015", name: "Grimme Varitron 470", working_step: "ernte", cost_per_hectare: 95.0, specifications: "Kartoffelroder" }
 ];
 
 const MOCK_EXPECTED_YIELDS = {
