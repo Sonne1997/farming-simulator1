@@ -1,0 +1,29 @@
+{
+  "name": "farming-simulator-backend",
+  "description": "FastAPI Backend for Virtual Farming Platform",
+  "version": "1.0.0",
+  "engines": {
+    "python": "3.11.x"
+  },
+  "build": {
+    "python": "3.11.9"
+  },
+  "env": {
+    "MONGO_URL": {
+      "description": "MongoDB Atlas Connection String",
+      "required": true
+    },
+    "PAYPAL_CLIENT_ID": {
+      "description": "PayPal Live Client ID",
+      "required": true
+    },
+    "PAYPAL_CLIENT_SECRET": {
+      "description": "PayPal Live Client Secret", 
+      "required": true
+    },
+    "PAYPAL_ENVIRONMENT": {
+      "description": "PayPal Environment (live for production)",
+      "value": "live"
+    }
+  }
+}
