@@ -159,7 +159,7 @@ const App = () => {
 
   // Fetch expected yields when plot changes
   useEffect(() => {
-    if (selectedPlot) {
+    if (selectedPlot && !DEMO_MODE) {
       fetchExpectedYields();
       fetchMarketValues();
     }
