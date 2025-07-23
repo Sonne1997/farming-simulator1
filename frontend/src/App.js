@@ -171,8 +171,20 @@ const App = () => {
         // Demo mode - use mock data
         console.log('Running in demo mode with mock data');
         setPlots(MOCK_PLOTS);
+        setMachines(MOCK_MACHINES);
         setFertilizerSpecs(MOCK_FERTILIZER_SPECS);
         setExpectedYields(MOCK_EXPECTED_YIELDS);
+        
+        // Group machines by working step for demo mode
+        const machinesByStep = {
+          bodenbearbeitung: MOCK_MACHINES.filter(m => m.working_step === 'bodenbearbeitung'),
+          aussaat: MOCK_MACHINES.filter(m => m.working_step === 'aussaat'),
+          pflanzenschutz: MOCK_MACHINES.filter(m => m.working_step === 'pflanzenschutz'),
+          duengung: MOCK_MACHINES.filter(m => m.working_step === 'duengung'),
+          pflege: MOCK_MACHINES.filter(m => m.working_step === 'pflege'),
+          ernte: MOCK_MACHINES.filter(m => m.working_step === 'ernte')
+        };
+        setMachinesByStep(machinesByStep);
         
         // Set mock market prices
         setMarketPrices({
