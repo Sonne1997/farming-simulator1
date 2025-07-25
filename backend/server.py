@@ -128,7 +128,7 @@ MACHINE_DATA = {
             "type": MachineType.TRAKTOR,
             "description": "Großtraktor (400 PS, 5 Min. Arbeitszeit)",
             "price_per_use": 6.50,
-            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.WINTERRAPS],
             "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         },
         {
