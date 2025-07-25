@@ -86,6 +86,13 @@ const MOCK_MACHINES = [
   { id: "m024", name: "Zuckerrüben Insektizid", working_step: "pflanzenschutz", cost_per_hectare: 10.0, specifications: "Insektizid gegen Schädlinge", treatment_type: "insektizid", crop_specific: "zuckerrueben" },
   { id: "m025", name: "Spurrennährstoffe Zuckerrüben", working_step: "pflanzenschutz", cost_per_hectare: 8.0, specifications: "Bor, Mangan für Zuckerrüben", treatment_type: "spurennaehrstoffe", crop_specific: "zuckerrueben" },
   
+  // Spezielle Silomais-Behandlungen
+  { id: "m026", name: "Silomais Herbizid", working_step: "pflanzenschutz", cost_per_hectare: 60.0, specifications: "Herbizid gegen Unkräuter", treatment_type: "herbizid", crop_specific: "silomais" },
+  
+  // Spezielle Erbsen-Behandlungen
+  { id: "m027", name: "Erbsen Herbizid", working_step: "pflanzenschutz", cost_per_hectare: 120.0, specifications: "Herbizid gegen Unkräuter", treatment_type: "herbizid", crop_specific: "erbsen" },
+  { id: "m028", name: "Erbsen Insektizid", working_step: "pflanzenschutz", cost_per_hectare: 18.0, specifications: "Gegen Blattläuse und Erbsenwickler", treatment_type: "insektizid", crop_specific: "erbsen" },
+  
   // Düngung
   { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer", fertilizer_type: "mineral" },
   { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer", fertilizer_type: "mineral" },
