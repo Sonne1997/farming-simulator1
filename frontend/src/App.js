@@ -190,10 +190,10 @@ const App = () => {
         
         // Set mock market prices
         setMarketPrices({
-          roggen: 0.18,
-          weizen: 0.22,
-          gerste: 0.19,
-          triticale: 0.17,
+          winterroggen: 0.18,
+          winterweizen: 0.22,
+          wintergerste: 0.19,
+          wintertriticale: 0.17,
           silomais: 0.035,
           zuckerrueben: 0.045,
           luzerne: 0.15,
