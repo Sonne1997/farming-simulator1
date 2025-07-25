@@ -353,10 +353,11 @@ def calculate_yield_by_soil_points(crop_type: CropType, soil_points: int):
     return round(base_yield * soil_factor, 1)
 
 EXPECTED_YIELDS = {
-    CropType.WEIZEN: 125.0,
-    CropType.ROGGEN: 75.0,
-    CropType.GERSTE: 100.0,
-    CropType.TRITICALE: 100.0,
+    CropType.WINTERWEIZEN: 125.0,
+    CropType.WINTERROGGEN: 75.0,
+    CropType.WINTERGERSTE: 100.0,
+    CropType.WINTERTRITICALE: 100.0,
+    CropType.WINTERRAPS: 25.0,  # 2.5 t/ha
     CropType.SILOMAIS: 1200.0,
     CropType.ZUCKERRUEBEN: 1500.0,
     CropType.LUZERNE: 150.0,
