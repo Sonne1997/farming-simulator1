@@ -529,16 +529,17 @@ const App = () => {
 
   const getGermanCropType = (cropType) => {
     const translations = {
-      'roggen': 'Roggen',
-      'weizen': 'Weizen',
-      'gerste': 'Gerste',
-      'triticale': 'Triticale',
+      'winterroggen': 'Winterroggen',
+      'winterweizen': 'Winterweizen',
+      'wintergerste': 'Wintergerste',
+      'wintertriticale': 'Wintertriticale',
       'silomais': 'Silomais',
       'zuckerrueben': 'Zuckerrüben',
       'luzerne': 'Luzerne',
       'gras': 'Gras',
       'bluehmischung': 'Blühmischung',
-      'erbsen': 'Erbsen'
+      'erbsen': 'Erbsen',
+      'winterraps': 'Winterraps'
     };
     return translations[cropType] || cropType;
   };
