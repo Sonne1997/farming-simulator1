@@ -75,8 +75,8 @@ const MOCK_MACHINES = [
   
   // Pflanzenschutz
   { id: "m006", name: "Amazone UX 5200", working_step: "pflanzenschutz", cost_per_hectare: 30.0, specifications: "Feldspritze 28m - Herbizid", treatment_type: "herbizid", season: "herbst" },
-  { id: "m007", name: "John Deere 6R195", working_step: "pflanzenschutz", cost_per_hectare: 22.0, specifications: "195 PS Traktor + Spritze - Frühjahr", treatment_type: "herbizid", season: "fruejahr" },
-  { id: "m017", name: "Hardi Navigator 3000", working_step: "pflanzenschutz", cost_per_hectare: 28.0, specifications: "Anbauspritze - Insektizid", treatment_type: "insektizid", season: "fruejahr" },
+  { id: "m007", name: "John Deere 6R195", working_step: "pflanzenschutz", cost_per_hectare: 25.0, specifications: "195 PS Traktor + Spritze - Frühjahr", treatment_type: "herbizid", season: "fruejahr" },
+  { id: "m017", name: "Hardi Navigator 3000", working_step: "pflanzenschutz", cost_per_hectare: 8.0, specifications: "Anbauspritze - Insektizid", treatment_type: "insektizid", season: "fruejahr" },
   { id: "m018", name: "Striegel 6m", working_step: "pflanzenschutz", cost_per_hectare: 12.0, specifications: "Mechanischer Unkrautstriegel", treatment_type: "mechanisch", season: "bio" },
   { id: "m019", name: "Hackgerät", working_step: "pflanzenschutz", cost_per_hectare: 15.0, specifications: "Reihenhackgerät", treatment_type: "mechanisch", season: "bio" },
   
