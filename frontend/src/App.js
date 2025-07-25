@@ -507,6 +507,12 @@ const App = () => {
         amount: 0,
         cost: 0
       },
+      plant_protection: {
+        herbst_herbizid: false,
+        fruejahr_herbizid: false,
+        insektizid: false,
+        mechanisch: false
+      },
       machines: {
         bodenbearbeitung: [],
         aussaat: [],
