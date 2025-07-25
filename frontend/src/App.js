@@ -79,16 +79,17 @@ const MOCK_MACHINES = [
   // Düngung
   { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer" },
   { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer" },
+  { id: "m010", name: "Rauch AXIS M", working_step: "duengung", cost_per_hectare: 17.0, specifications: "Düngerstreuer mit GPS" },
   
   // Pflege
-  { id: "m010", name: "Krone EasyCut F 320M", working_step: "pflege", cost_per_hectare: 28.0, specifications: "Frontmähwerk 3.2m" },
-  { id: "m011", name: "John Deere 6R145", working_step: "pflege", cost_per_hectare: 32.0, specifications: "145 PS Traktor" },
+  { id: "m011", name: "Krone EasyCut F 320M", working_step: "pflege", cost_per_hectare: 28.0, specifications: "Frontmähwerk 3.2m" },
+  { id: "m012", name: "John Deere 6R145", working_step: "pflege", cost_per_hectare: 32.0, specifications: "145 PS Traktor" },
   
   // Ernte  
-  { id: "m012", name: "John Deere T660i", working_step: "ernte", cost_per_hectare: 85.0, specifications: "Mähdrescher 7.6m" },
-  { id: "m013", name: "John Deere 7820", working_step: "ernte", cost_per_hectare: 75.0, specifications: "Feldhäcksler" },
-  { id: "m014", name: "Ropa euro-Tiger V8-4a", working_step: "ernte", cost_per_hectare: 120.0, specifications: "Rübenroder 6-reihig" },
-  { id: "m015", name: "Grimme Varitron 470", working_step: "ernte", cost_per_hectare: 95.0, specifications: "Kartoffelroder" }
+  { id: "m013", name: "John Deere T660i", working_step: "ernte", cost_per_hectare: 85.0, specifications: "Mähdrescher 7.6m" },
+  { id: "m014", name: "John Deere 7820", working_step: "ernte", cost_per_hectare: 75.0, specifications: "Feldhäcksler" },
+  { id: "m015", name: "Ropa euro-Tiger V8-4a", working_step: "ernte", cost_per_hectare: 120.0, specifications: "Rübenroder 6-reihig" },
+  { id: "m016", name: "Grimme Varitron 470", working_step: "ernte", cost_per_hectare: 95.0, specifications: "Kartoffelroder" }
 ];
 
 const MOCK_EXPECTED_YIELDS = {
