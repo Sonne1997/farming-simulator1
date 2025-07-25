@@ -204,7 +204,7 @@ MACHINE_DATA = {
             "type": MachineType.STRIEGEL,
             "description": "Striegelgerät für biologischen Anbau",
             "price_per_use": 0.85,
-            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         }
     ],
