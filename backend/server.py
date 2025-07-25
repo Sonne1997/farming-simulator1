@@ -985,7 +985,7 @@ async def initialize_sample_data():
         {"id": "grubber_01", "name": "Grubber", "type": MachineType.GRUBBER, "description": "Bodenbearbeitungsgerät", "price_per_use": 1.20, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN]},
         
         # Aussaat (2 machines)
-        {"id": "horsch_pronto_6dc", "name": "Horsch Pronto 6 DC", "type": MachineType.SAEMASCHINE, "description": "Drillmaschine (6m Arbeitsbreite)", "price_per_use": 0.80, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
+        {"id": "horsch_pronto_6dc", "name": "Horsch Pronto 6 DC", "type": MachineType.SAEMASCHINE, "description": "Drillmaschine (6m Arbeitsbreite)", "price_per_use": 0.80, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
         {"id": "traktor_john_deere_7820", "name": "John Deere 7820", "type": MachineType.TRAKTOR_AUSSAAT, "description": "Traktor für Aussaat", "price_per_use": 5.50, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS]},
         
         # Pflanzenschutz (5 machines)
