@@ -968,7 +968,59 @@ const App = () => {
                           </div>
                         </div>
                         
-                        {/* Zusätzliche Insektizidbehandlung (allgemein) */}
+                        {/* Kulturspezifische Behandlungen */}
+                        {farmingDecision.crop_type === 'zuckerrueben' && (
+                          <div>
+                            <h5 className="font-medium text-gray-700 mb-2">🍬 Zuckerrüben-spezifische Behandlungen (INTENSIV)</h5>
+                            <div className="grid grid-cols-1 gap-4">
+                              {machines.filter(m => m.crop_specific === 'zuckerrueben').map(machine => (
+                                <label key={machine.id} className="flex items-center space-x-3 p-3 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-50">
+                                  <input
+                                    type="checkbox"
+                                    checked={farmingDecision.machines[step].includes(machine.id)}
+                                    onChange={() => handleMachineSelection(step, machine.id)}
+                                    className="text-purple-600"
+                                  />
+                                  <div className="flex-1">
+                                    <div className="font-medium">{machine.name}</div>
+                                    <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                    <div className="text-sm font-semibold text-purple-600">{machine.cost_per_hectare}€/ha</div>
+                                  </div>
+                                </label>
+                              ))}
+                            </div>
+                            <div className="mt-2 p-3 bg-purple-50 rounded-lg">
+                              <p className="text-sm text-purple-700">
+                                <strong>💡 Zuckerrüben-Info:</strong> Sehr intensive Kultur mit hohem Pflanzenschutzaufwand. 
+                                Gesamtkosten: ca. 468€/ha für alle Behandlungen.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Silomais Behandlungen - PLACEHOLDER */}
+                        {farmingDecision.crop_type === 'silomais' && (
+                          <div>
+                            <h5 className="font-medium text-gray-700 mb-2">🌽 Silomais-Behandlungen</h5>
+                            <div className="p-3 bg-yellow-50 rounded-lg">
+                              <p className="text-sm text-yellow-700">
+                                Silomais-spezifische Behandlungen werden hinzugefügt...
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Erbsen Behandlungen - PLACEHOLDER */}
+                        {farmingDecision.crop_type === 'erbsen' && (
+                          <div>
+                            <h5 className="font-medium text-gray-700 mb-2">🟢 Erbsen-Behandlungen</h5>
+                            <div className="p-3 bg-green-50 rounded-lg">
+                              <p className="text-sm text-green-700">
+                                Erbsen-spezifische Behandlungen werden hinzugefügt...
+                              </p>
+                            </div>
+                          </div>
+                        )}
                         <div>
                           <h5 className="font-medium text-gray-700 mb-2">🐛 Zusätzliche Insektizidbehandlung (bei Bedarf)</h5>
                           <div className="grid grid-cols-1 gap-4">
