@@ -198,7 +198,8 @@ const App = () => {
           zuckerrueben: 0.045,
           luzerne: 0.15,
           gras: 0.12,
-          erbsen: 0.35
+          erbsen: 0.35,
+          winterraps: 0.40
         });
         
         console.log('Demo data loaded successfully');
