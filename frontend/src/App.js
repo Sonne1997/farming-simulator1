@@ -961,6 +961,54 @@ const App = () => {
                     )}
                   </div>
                 );
+              } else if (step === 'duengung') {
+                return (
+                  <div key={step}>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-3">🌿 {getGermanWorkingStep(step)}</h4>
+                    
+                    {farmingDecision.fertilizer_choice.fertilizer_type ? (
+                      <div>
+                        {/* Show machines based on fertilizer type */}
+                        {Object.entries(fertilizerSpecs).map(([fertType, spec]) => {
+                          if (farmingDecision.fertilizer_choice.fertilizer_type === fertType) {
+                            const relevantMachines = machines.filter(m => 
+                              (spec.category === 'mineral' && m.fertilizer_type === 'mineral') ||
+                              (spec.category === 'organic' && m.fertilizer_type === 'organic')
+                            );
+                            
+                            return (
+                              <div key={fertType}>
+                                <p className="text-sm text-gray-600 mb-3">
+                                  Maschinen für {spec.name}:
+                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {relevantMachines.map(machine => (
+                                    <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                      <input
+                                        type="checkbox"
+                                        checked={farmingDecision.machines[step].includes(machine.id)}
+                                        onChange={() => handleMachineSelection(step, machine.id)}
+                                        className="text-green-600"
+                                      />
+                                      <div className="flex-1">
+                                        <div className="font-medium">{machine.name}</div>
+                                        <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                        <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                      </div>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">Bitte zuerst einen Dünger auswählen</p>
+                    )}
+                  </div>
+                );
               } else {
                 // Andere Arbeitsschritte (unverändert)
                 return (
