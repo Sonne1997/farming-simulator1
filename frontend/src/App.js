@@ -81,9 +81,11 @@ const MOCK_MACHINES = [
   { id: "m019", name: "Hackgerät", working_step: "pflanzenschutz", cost_per_hectare: 15.0, specifications: "Reihenhackgerät", treatment_type: "mechanisch", season: "bio" },
   
   // Düngung
-  { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer" },
-  { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer" },
-  { id: "m010", name: "Rauch AXIS M", working_step: "duengung", cost_per_hectare: 17.0, specifications: "Düngerstreuer mit GPS" },
+  { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer", fertilizer_type: "mineral" },
+  { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer", fertilizer_type: "mineral" },
+  { id: "m010", name: "Rauch AXIS M", working_step: "duengung", cost_per_hectare: 17.0, specifications: "Düngerstreuer mit GPS", fertilizer_type: "mineral" },
+  { id: "m020", name: "Güllefass 12m³", working_step: "duengung", cost_per_hectare: 22.0, specifications: "Güllefass für organische Düngung", fertilizer_type: "organic" },
+  { id: "m021", name: "John Deere 6R195 + Güllefass", working_step: "duengung", cost_per_hectare: 25.0, specifications: "Traktor mit Güllefass", fertilizer_type: "organic" },
   
   // Pflege
   { id: "m011", name: "Krone EasyCut F 320M", working_step: "pflege", cost_per_hectare: 28.0, specifications: "Frontmähwerk 3.2m" },
