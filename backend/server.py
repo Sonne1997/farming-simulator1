@@ -327,7 +327,7 @@ MARKET_VALUES_250M2 = {
 def calculate_yield_by_soil_points(crop_type: CropType, soil_points: int):
     """Calculate expected yield based on soil points (25-56 range)"""
     base_yields = {
-        CropType.WEIZEN: 125.0,      # 5 t/ha × 0.025 = 125 kg at 35 soil points
+        CropType.WINTERWEIZEN: 125.0,      # 5 t/ha × 0.025 = 125 kg at 35 soil points
         CropType.ROGGEN: 75.0,       # 3 t/ha × 0.025 = 75 kg at 35 soil points
         CropType.GERSTE: 100.0,      # 4 t/ha × 0.025 = 100 kg at 35 soil points
         CropType.TRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg at 35 soil points
