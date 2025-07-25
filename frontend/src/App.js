@@ -80,6 +80,12 @@ const MOCK_MACHINES = [
   { id: "m018", name: "Striegel 6m", working_step: "pflanzenschutz", cost_per_hectare: 12.0, specifications: "Mechanischer Unkrautstriegel", treatment_type: "mechanisch", season: "bio" },
   { id: "m019", name: "Hackgerät", working_step: "pflanzenschutz", cost_per_hectare: 15.0, specifications: "Reihenhackgerät", treatment_type: "mechanisch", season: "bio" },
   
+  // Spezielle Zuckerrüben-Behandlungen
+  { id: "m022", name: "Zuckerrüben Herbizid-Programm", working_step: "pflanzenschutz", cost_per_hectare: 400.0, specifications: "Komplettes Herbizid-Programm", treatment_type: "herbizid", crop_specific: "zuckerrueben" },
+  { id: "m023", name: "Zuckerrüben Fungizid", working_step: "pflanzenschutz", cost_per_hectare: 50.0, specifications: "Fungizid gegen Pilzkrankheiten", treatment_type: "fungizid", crop_specific: "zuckerrueben" },
+  { id: "m024", name: "Zuckerrüben Insektizid", working_step: "pflanzenschutz", cost_per_hectare: 10.0, specifications: "Insektizid gegen Schädlinge", treatment_type: "insektizid", crop_specific: "zuckerrueben" },
+  { id: "m025", name: "Spurrennährstoffe Zuckerrüben", working_step: "pflanzenschutz", cost_per_hectare: 8.0, specifications: "Bor, Mangan für Zuckerrüben", treatment_type: "spurennaehrstoffe", crop_specific: "zuckerrueben" },
+  
   // Düngung
   { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer", fertilizer_type: "mineral" },
   { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer", fertilizer_type: "mineral" },
