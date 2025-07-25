@@ -580,7 +580,7 @@ const App = () => {
   const renderHeader = () => (
     <div className="bg-gradient-to-r from-green-800 to-green-600 text-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <div className="flex items-center space-x-6 mb-6 md:mb-0">
             <div className="bg-white rounded-lg p-2 shadow-sm">
               <div className="w-20 h-20 bg-green-100 rounded-lg flex items-center justify-center">
@@ -600,6 +600,11 @@ const App = () => {
             <div className="text-3xl font-bold">{orders.length}</div>
             <div className="text-green-100">Aktive Parzellen</div>
           </div>
+        </div>
+        
+        {/* Weather Widget */}
+        <div className="max-w-sm">
+          <WeatherWidget />
         </div>
       </div>
       
