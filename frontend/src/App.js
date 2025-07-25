@@ -93,10 +93,10 @@ const MOCK_MACHINES = [
 ];
 
 const MOCK_EXPECTED_YIELDS = {
-  roggen: 64.5,
-  weizen: 107.5,
-  gerste: 86.0,
-  triticale: 86.0,
+  winterroggen: 64.5,
+  winterweizen: 107.5,
+  wintergerste: 86.0,
+  wintertriticale: 86.0,
   silomais: 1032.0,
   zuckerrueben: 1290.0,
   luzerne: 129.0,
