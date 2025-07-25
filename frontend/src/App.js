@@ -1014,7 +1014,7 @@ const App = () => {
                 className="text-green-600"
               />
               <div className="flex-1">
-                <div className="font-medium">An Landwirt zu Weltmarktpreisen verkaufen</div>
+                <div className="font-medium">An Landwirt zu aktuellen Marktpreisen verkaufen</div>
                 <div className="text-sm text-gray-500">Keine Versandkosten</div>
               </div>
             </label>
