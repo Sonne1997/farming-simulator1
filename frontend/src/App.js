@@ -851,27 +851,133 @@ const App = () => {
           <h3 className="text-xl font-bold text-gray-800 mb-4">🚜 Maschinenauswahl</h3>
           
           <div className="space-y-6">
-            {Object.entries(machinesByStep).map(([step, machines]) => (
-              <div key={step}>
-                <h4 className="text-lg font-semibold text-gray-700 mb-3">{getGermanWorkingStep(step)}</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {machines.map(machine => (
-                    <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                      <input
-                        type="checkbox"
-                        checked={farmingDecision.machines[step].includes(machine.id)}
-                        onChange={() => handleMachineSelection(step, machine.id)}
-                        className="text-green-600"
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium">{machine.name}</div>
-                        <div className="text-sm text-gray-500">{machine.price_per_use}€</div>
+            {Object.entries(machinesByStep).map(([step, machines]) => {
+              if (step === 'pflanzenschutz') {
+                return (
+                  <div key={step}>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-3">🌱 {getGermanWorkingStep(step)}</h4>
+                    
+                    {farmingDecision.cultivation_method === 'biological' ? (
+                      // Biologischer Pflanzenschutz - nur mechanisch
+                      <div>
+                        <p className="text-sm text-green-600 mb-3">Biologische Landwirtschaft - Nur mechanischer Pflanzenschutz möglich</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {machines.filter(m => m.treatment_type === 'mechanisch').map(machine => (
+                            <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                              <input
+                                type="checkbox"
+                                checked={farmingDecision.machines[step].includes(machine.id)}
+                                onChange={() => handleMachineSelection(step, machine.id)}
+                                className="text-green-600"
+                              />
+                              <div className="flex-1">
+                                <div className="font-medium">{machine.name}</div>
+                                <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
                       </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
+                    ) : (
+                      // Konventioneller Pflanzenschutz
+                      <div className="space-y-4">
+                        {/* Winterkulturen brauchen Herbstbehandlung */}
+                        {(farmingDecision.crop_type.startsWith('winter')) && (
+                          <div>
+                            <h5 className="font-medium text-gray-700 mb-2">🍂 Herbstbehandlung (empfohlen für Winterkulturen)</h5>
+                            <div className="grid grid-cols-1 gap-4">
+                              {machines.filter(m => m.season === 'herbst').map(machine => (
+                                <label key={machine.id} className="flex items-center space-x-3 p-3 border border-orange-200 rounded-lg cursor-pointer hover:bg-orange-50">
+                                  <input
+                                    type="checkbox"
+                                    checked={farmingDecision.machines[step].includes(machine.id)}
+                                    onChange={() => handleMachineSelection(step, machine.id)}
+                                    className="text-orange-600"
+                                  />
+                                  <div className="flex-1">
+                                    <div className="font-medium">{machine.name}</div>
+                                    <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                    <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                  </div>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Frühjahrsbehandlung */}
+                        <div>
+                          <h5 className="font-medium text-gray-700 mb-2">🌸 Frühjahrsbehandlung</h5>
+                          <div className="grid grid-cols-1 gap-4">
+                            {machines.filter(m => m.season === 'fruejahr' && m.treatment_type === 'herbizid').map(machine => (
+                              <label key={machine.id} className="flex items-center space-x-3 p-3 border border-green-200 rounded-lg cursor-pointer hover:bg-green-50">
+                                <input
+                                  type="checkbox"
+                                  checked={farmingDecision.machines[step].includes(machine.id)}
+                                  onChange={() => handleMachineSelection(step, machine.id)}
+                                  className="text-green-600"
+                                />
+                                <div className="flex-1">
+                                  <div className="font-medium">{machine.name}</div>
+                                  <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                  <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {/* Insektizidbehandlung */}
+                        <div>
+                          <h5 className="font-medium text-gray-700 mb-2">🐛 Insektizidbehandlung (bei Bedarf)</h5>
+                          <div className="grid grid-cols-1 gap-4">
+                            {machines.filter(m => m.treatment_type === 'insektizid').map(machine => (
+                              <label key={machine.id} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
+                                <input
+                                  type="checkbox"
+                                  checked={farmingDecision.machines[step].includes(machine.id)}
+                                  onChange={() => handleMachineSelection(step, machine.id)}
+                                  className="text-blue-600"
+                                />
+                                <div className="flex-1">
+                                  <div className="font-medium">{machine.name}</div>
+                                  <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                  <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              } else {
+                // Andere Arbeitsschritte (unverändert)
+                return (
+                  <div key={step}>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-3">{getGermanWorkingStep(step)}</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {machines.map(machine => (
+                        <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={farmingDecision.machines[step].includes(machine.id)}
+                            onChange={() => handleMachineSelection(step, machine.id)}
+                            className="text-green-600"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium">{machine.name}</div>
+                            <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+            })}
           </div>
         </div>
 
