@@ -101,7 +101,8 @@ const MOCK_EXPECTED_YIELDS = {
   luzerne: 129.0,
   gras: 172.0,
   bluehmischung: 0,
-  erbsen: 43.0
+  erbsen: 43.0,
+  winterraps: 62.5
 };
 
 const MOCK_FERTILIZER_SPECS = {
