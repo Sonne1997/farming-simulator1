@@ -51,10 +51,11 @@ class SoilType(str, Enum):
     SANDY_LOAM = "sandy_loam"
 
 class CropType(str, Enum):
-    ROGGEN = "roggen"
-    WEIZEN = "weizen"
-    GERSTE = "gerste"
-    TRITICALE = "triticale"
+    WINTERROGGEN = "winterroggen"
+    WINTERWEIZEN = "winterweizen"
+    WINTERGERSTE = "wintergerste"
+    WINTERTRITICALE = "wintertriticale"
+    WINTERRAPS = "winterraps"
     SILOMAIS = "silomais"
     ZUCKERRUEBEN = "zuckerrueben"
     LUZERNE = "luzerne"
