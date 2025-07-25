@@ -890,12 +890,18 @@ const App = () => {
                     ) : (
                       // Konventioneller Pflanzenschutz
                       <div className="space-y-4">
-                        {/* Winterkulturen brauchen Herbstbehandlung */}
-                        {(farmingDecision.crop_type.startsWith('winter')) && (
+                        {/* Herbstbehandlung für alle Winterkulturen */}
+                        {farmingDecision.crop_type.startsWith('winter') && (
                           <div>
-                            <h5 className="font-medium text-gray-700 mb-2">🍂 Herbstbehandlung (empfohlen für Winterkulturen)</h5>
+                            <h5 className="font-medium text-gray-700 mb-2">
+                              🍂 Herbstbehandlung 
+                              {farmingDecision.crop_type === 'wintergerste' && <span className="text-orange-600"> (Blattläuse - EMPFOHLEN)</span>}
+                              {farmingDecision.crop_type === 'winterraps' && <span className="text-red-600"> (Erdfloh - WICHTIG)</span>}
+                              {(farmingDecision.crop_type === 'winterweizen' || farmingDecision.crop_type === 'winterroggen' || farmingDecision.crop_type === 'wintertriticale') && <span className="text-blue-600"> (Unkräuter)</span>}
+                            </h5>
                             <div className="grid grid-cols-1 gap-4">
-                              {machines.filter(m => m.season === 'herbst').map(machine => (
+                              {/* Herbizid für Getreide/Raps */}
+                              {machines.filter(m => m.season === 'herbst' && m.treatment_type === 'herbizid').map(machine => (
                                 <label key={machine.id} className="flex items-center space-x-3 p-3 border border-orange-200 rounded-lg cursor-pointer hover:bg-orange-50">
                                   <input
                                     type="checkbox"
@@ -906,6 +912,26 @@ const App = () => {
                                   <div className="flex-1">
                                     <div className="font-medium">{machine.name}</div>
                                     <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                    <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                  </div>
+                                </label>
+                              ))}
+                              
+                              {/* Insektizid für Wintergerste und Winterraps */}
+                              {(farmingDecision.crop_type === 'wintergerste' || farmingDecision.crop_type === 'winterraps') && 
+                                machines.filter(m => m.treatment_type === 'insektizid').map(machine => (
+                                <label key={`herbst-${machine.id}`} className="flex items-center space-x-3 p-3 border border-red-200 rounded-lg cursor-pointer hover:bg-red-50">
+                                  <input
+                                    type="checkbox"
+                                    checked={farmingDecision.machines[step].includes(machine.id)}
+                                    onChange={() => handleMachineSelection(step, machine.id)}
+                                    className="text-red-600"
+                                  />
+                                  <div className="flex-1">
+                                    <div className="font-medium">{machine.name}</div>
+                                    <div className="text-sm text-gray-500">
+                                      {farmingDecision.crop_type === 'wintergerste' ? 'Gegen Blattläuse im Herbst' : 'Gegen Erdfloh nach Auflaufen'}
+                                    </div>
                                     <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
                                   </div>
                                 </label>
@@ -936,12 +962,12 @@ const App = () => {
                           </div>
                         </div>
                         
-                        {/* Insektizidbehandlung */}
+                        {/* Zusätzliche Insektizidbehandlung (allgemein) */}
                         <div>
-                          <h5 className="font-medium text-gray-700 mb-2">🐛 Insektizidbehandlung (bei Bedarf)</h5>
+                          <h5 className="font-medium text-gray-700 mb-2">🐛 Zusätzliche Insektizidbehandlung (bei Bedarf)</h5>
                           <div className="grid grid-cols-1 gap-4">
                             {machines.filter(m => m.treatment_type === 'insektizid').map(machine => (
-                              <label key={machine.id} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
+                              <label key={`spring-${machine.id}`} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
                                 <input
                                   type="checkbox"
                                   checked={farmingDecision.machines[step].includes(machine.id)}
@@ -950,7 +976,7 @@ const App = () => {
                                 />
                                 <div className="flex-1">
                                   <div className="font-medium">{machine.name}</div>
-                                  <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                  <div className="text-sm text-gray-500">Gegen verschiedene Schädlinge</div>
                                   <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
                                 </div>
                               </label>
