@@ -310,7 +310,7 @@ REAL_YIELDS_250M2 = {
 
 # Market values per 250m² plot (in EUR)
 MARKET_VALUES_250M2 = {
-    CropType.WEIZEN: 21.25,      # 125 kg × 170€/t = 21.25€
+    CropType.WINTERWEIZEN: 21.25,      # 125 kg × 170€/t = 21.25€
     CropType.ROGGEN: 11.63,      # 75 kg × 155€/t = 11.63€
     CropType.GERSTE: 15.00,      # 100 kg × 150€/t = 15.00€
     CropType.TRITICALE: 16.50,   # 100 kg × 165€/t = 16.50€
