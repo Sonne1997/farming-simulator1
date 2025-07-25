@@ -1005,25 +1005,61 @@ const App = () => {
                           </div>
                         )}
                         
-                        {/* Silomais Behandlungen - PLACEHOLDER */}
+                        {/* Silomais Behandlungen */}
                         {farmingDecision.crop_type === 'silomais' && (
                           <div>
                             <h5 className="font-medium text-gray-700 mb-2">🌽 Silomais-Behandlungen</h5>
-                            <div className="p-3 bg-yellow-50 rounded-lg">
+                            <div className="grid grid-cols-1 gap-4">
+                              {machines.filter(m => m.crop_specific === 'silomais').map(machine => (
+                                <label key={machine.id} className="flex items-center space-x-3 p-3 border border-yellow-200 rounded-lg cursor-pointer hover:bg-yellow-50">
+                                  <input
+                                    type="checkbox"
+                                    checked={farmingDecision.machines[step].includes(machine.id)}
+                                    onChange={() => handleMachineSelection(step, machine.id)}
+                                    className="text-yellow-600"
+                                  />
+                                  <div className="flex-1">
+                                    <div className="font-medium">{machine.name}</div>
+                                    <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                    <div className="text-sm font-semibold text-yellow-600">{machine.cost_per_hectare}€/ha</div>
+                                  </div>
+                                </label>
+                              ))}
+                            </div>
+                            <div className="mt-2 p-3 bg-yellow-50 rounded-lg">
                               <p className="text-sm text-yellow-700">
-                                Silomais-spezifische Behandlungen werden hinzugefügt...
+                                <strong>💡 Silomais-Info:</strong> Insektizidbehandlung meist nicht notwendig. 
+                                Gesamtkosten: ca. 60€/ha.
                               </p>
                             </div>
                           </div>
                         )}
                         
-                        {/* Erbsen Behandlungen - PLACEHOLDER */}
+                        {/* Erbsen Behandlungen */}
                         {farmingDecision.crop_type === 'erbsen' && (
                           <div>
-                            <h5 className="font-medium text-gray-700 mb-2">🟢 Erbsen-Behandlungen</h5>
-                            <div className="p-3 bg-green-50 rounded-lg">
+                            <h5 className="font-medium text-gray-700 mb-2">🟢 Sommer-Erbsen-Behandlungen</h5>
+                            <div className="grid grid-cols-1 gap-4">
+                              {machines.filter(m => m.crop_specific === 'erbsen').map(machine => (
+                                <label key={machine.id} className="flex items-center space-x-3 p-3 border border-green-200 rounded-lg cursor-pointer hover:bg-green-50">
+                                  <input
+                                    type="checkbox"
+                                    checked={farmingDecision.machines[step].includes(machine.id)}
+                                    onChange={() => handleMachineSelection(step, machine.id)}
+                                    className="text-green-600"
+                                  />
+                                  <div className="flex-1">
+                                    <div className="font-medium">{machine.name}</div>
+                                    <div className="text-sm text-gray-500">{machine.specifications}</div>
+                                    <div className="text-sm font-semibold text-green-600">{machine.cost_per_hectare}€/ha</div>
+                                  </div>
+                                </label>
+                              ))}
+                            </div>
+                            <div className="mt-2 p-3 bg-green-50 rounded-lg">
                               <p className="text-sm text-green-700">
-                                Erbsen-spezifische Behandlungen werden hinzugefügt...
+                                <strong>💡 Erbsen-Info:</strong> Herbizid relativ teuer, Insektizid gegen Blattläuse und Erbsenwickler wichtig. 
+                                Gesamtkosten: ca. 138€/ha.
                               </p>
                             </div>
                           </div>
