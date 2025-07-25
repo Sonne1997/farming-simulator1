@@ -140,6 +140,7 @@ const App = () => {
       amount: 0,
       cost: 0
     },
+    fertilizer_method: '', // 'mineral' or 'organic'
     plant_protection: {
       herbst_herbizid: false,
       fruejahr_herbizid: false,
