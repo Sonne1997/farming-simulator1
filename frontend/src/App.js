@@ -597,18 +597,17 @@ const App = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <div className="flex items-center space-x-6 mb-6 md:mb-0">
-            <div className="bg-white rounded-lg p-2 shadow-sm">
-              <div className="w-20 h-20 bg-green-100 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-lg font-bold text-green-800">🌾</div>
-                  <div className="text-xs font-bold text-green-700">LUST AUF</div>
-                  <div className="text-xs font-bold text-green-700">LANDWIRTSCHAFT</div>
-                </div>
+            {/* Logo */}
+            <div className="flex items-center space-x-4">
+              <img 
+                src="/logo.svg" 
+                alt="Lust auf Landwirtschaft Logo" 
+                className="w-20 h-20"
+              />
+              <div>
+                <h1 className="text-4xl font-bold mb-2">Lust auf Landwirtschaft</h1>
+                <p className="text-xl text-green-100">250m² Parzellen pachten • Echte Landwirtschaft erleben</p>
               </div>
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold mb-2">Lust auf Landwirtschaft</h1>
-              <p className="text-xl text-green-100">250m² Parzellen pachten • Echte Landwirtschaft erleben</p>
             </div>
           </div>
           <div className="text-center">
