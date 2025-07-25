@@ -235,7 +235,7 @@ MACHINE_DATA = {
             "type": MachineType.CAMBRIDGE_WALZE,
             "description": "Walze zur Bestockungsförderung",
             "price_per_use": 0.95,
-            "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         }
     ],
