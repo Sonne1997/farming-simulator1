@@ -157,7 +157,7 @@ MACHINE_DATA = {
             "type": MachineType.SAEMASCHINE,
             "description": "Drillmaschine (6m Arbeitsbreite)",
             "price_per_use": 0.80,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/594059/pexels-photo-594059.jpeg"
         },
         {
