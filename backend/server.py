@@ -1011,6 +1011,10 @@ async def initialize_sample_data():
         {"id": "ganzpflanzensilage_claas_jaguar_940", "name": "Ganzpflanzensilage-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Häcksler für Roggen-Ganzpflanzensilage", "price_per_use": 4.00, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.WINTERROGGEN]}
     ]
     
+    # Clear existing data first
+    await db.machines.delete_many({})
+    await db.plots.delete_many({})
+    
     machine_count = 0
     for machine_data in machines_to_create:
         machine = Machine(
