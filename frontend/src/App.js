@@ -165,9 +165,7 @@ const App = () => {
 
   const fetchExpectedYields = async () => {
     try {
-      if (DEMO_MODE) {
-        // Demo mode - use mock data
-        setExpectedYields(MOCK_EXPECTED_YIELDS);
+      if (!selectedPlot) {
         return;
       }
       
@@ -175,8 +173,6 @@ const App = () => {
       setExpectedYields(response.data);
     } catch (error) {
       console.error('Error fetching expected yields:', error);
-      // Fallback to mock data
-      setExpectedYields(MOCK_EXPECTED_YIELDS);
     }
   };
 
