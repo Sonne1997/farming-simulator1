@@ -88,6 +88,7 @@ class MachineType(str, Enum):
     MAEHDRESCHER = "maehdrescher"
     FELDSPRITZE = "feldspritze"
     GUELLEFASS = "guellefass"
+    MISTSTREUER = "miststreuer"
     HACKE = "hacke"
     STRIEGEL = "striegel"
     CAMBRIDGE_WALZE = "cambridge_walze"
