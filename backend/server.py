@@ -273,7 +273,7 @@ MACHINE_DATA = {
             "type": MachineType.MAIS_HAECKSLER,
             "description": "Häcksler für Roggen-Ganzpflanzensilage",
             "price_per_use": 4.00,
-            "suitable_for": [CropType.ROGGEN],
+            "suitable_for": [CropType.WINTERROGGEN],
             "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         }
     ]
