@@ -590,9 +590,10 @@ class VirtualFarmingTester:
             return False
     
     def run_comprehensive_test(self):
-        """Run all backend tests in sequence including new enhanced features"""
+        """Run all backend tests in sequence including new enhanced features and crop type validation"""
         print("=" * 80)
         print("ENHANCED VIRTUAL FARMING PLATFORM - BACKEND API TESTING")
+        print("Testing WINTER* Crop Type System After Major Backend Update")
         print("=" * 80)
         
         # Test 1: API Root
@@ -619,6 +620,9 @@ class VirtualFarmingTester:
             # Test working steps categorization
             self.test_working_steps_categorization(machines)
             
+            # Test machine crop compatibility with WINTER* crops (NEW TEST)
+            self.test_machine_crop_compatibility()
+            
             # Test getting machines by working step (NEW FEATURE)
             working_steps = ["bodenbearbeitung", "aussaat", "pflanzenschutz", "duengung", "pflege", "ernte"]
             for step in working_steps:
@@ -629,7 +633,17 @@ class VirtualFarmingTester:
         # Test 5: Fertilizer Specs API (NEW FEATURE)
         fertilizer_specs = self.test_fertilizer_specs_api()
         
-        # Test 6: Enhanced Order Management with PayPal Integration
+        # Test 6: WINTER* Crop Type System Tests (CRITICAL NEW TESTS)
+        print("\n" + "=" * 60)
+        print("TESTING WINTER* CROP TYPE SYSTEM")
+        print("=" * 60)
+        
+        self.test_crop_type_enum_validation()
+        self.test_expected_yields_endpoint()
+        self.test_market_values_endpoint()
+        self.test_seed_costs_endpoint()
+        
+        # Test 7: Enhanced Order Management with PayPal Integration
         if plots and machines:
             # Create an order with enhanced farming decisions
             machine_ids = [m["id"] for m in machines[:6]]  # Get first 6 machine IDs
@@ -687,7 +701,11 @@ class VirtualFarmingTester:
             "PayPal Create Order", 
             "John Deere Models Check",
             "Working Steps Categorization",
-            "Create Enhanced Order"
+            "Create Enhanced Order",
+            "Crop Type Enum Validation",
+            "Machine Crop Compatibility",
+            "Market Values for WINTER* Crops",
+            "Seed Costs for WINTER* Crops"
         ]
         
         for feature in key_features:
