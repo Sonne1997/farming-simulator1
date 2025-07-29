@@ -430,7 +430,7 @@ FERTILIZER_SPECS = {
         "name": "Rindermist",
         "n_content": 0.5,  # % Stickstoff (5 kg N/t)
         "s_content": 0,
-        "price_per_ton": 12.00,  # EUR/t
+        "price_per_m3": 15.00,  # EUR/m³ (umgerechnet von Tonnen)
         "organic": True,
         "category": "organic"
     },
