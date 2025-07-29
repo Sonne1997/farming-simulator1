@@ -450,7 +450,7 @@ PLANT_PROTECTION_COST_PER_250M2 = 0.88  # EUR per treatment
 N_REQUIREMENTS = {
     CropType.WINTERWEIZEN: 23.0,  # kg N/t Ertrag
     CropType.WINTERROGGEN: 20.0,
-    CropType.GERSTE: 18.0,
+    CropType.WINTERGERSTE: 18.0,
     CropType.TRITICALE: 21.0,
     CropType.SILOMAIS: 2.8,   # kg N/t Frischmasse
     CropType.ZUCKERRUEBEN: 1.8,
