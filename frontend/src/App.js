@@ -16,14 +16,7 @@ const MOCK_MACHINES = []; // Empty in live mode
 
 const MOCK_EXPECTED_YIELDS = {}; // Empty in live mode
 
-const MOCK_FERTILIZER_SPECS = {
-  ssa: { name: "Schwefelsaurer Ammoniak (SSA)", price_per_kg: 0.35, nitrogen_content: 21 },
-  kas: { name: "Kalkammonsalpeter (KAS)", price_per_kg: 0.30, nitrogen_content: 27 },
-  schweinegulle: { name: "Schweinegülle", price_per_m3: 8.50, nitrogen_content_per_m3: 3.8 },
-  rinderguelle: { name: "Rindergülle", price_per_m3: 7.86, nitrogen_content_per_m3: 3.2 },
-  gaerrest: { name: "Gärrest (Biogasanlage)", price_per_m3: 9.24, nitrogen_content_per_m3: 4.2 },
-  rindermist: { name: "Rindermist", price_per_t: 6.0, nitrogen_content_per_t: 5.0 }
-};
+const MOCK_FERTILIZER_SPECS = {}; // Empty in live mode
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState('plots');
