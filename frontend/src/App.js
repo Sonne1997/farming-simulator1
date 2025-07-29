@@ -81,53 +81,43 @@ const App = () => {
     try {
       console.log('Loading live data from API');
       
-      // Production mode - use real API
-      const response = await axios.post(`${API}/initialize-data`);
-      console.log('Database initialized:', response.data);
+      // Load live data directly - no initialization needed
+      const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes] = await Promise.all([
+        axios.get(`${API}/plots`),
+        axios.get(`${API}/machines`),
+        axios.get(`${API}/fertilizer-specs`),
+        axios.get(`${API}/market-values`),
+        axios.get(`${API}/orders`)
+      ]);
       
-      // Wait a moment then fetch data ONCE
-      setTimeout(async () => {
-        try {
-          const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes] = await Promise.all([
-            axios.get(`${API}/plots`),
-            axios.get(`${API}/machines`),
-            axios.get(`${API}/fertilizer-specs`),
-            axios.get(`${API}/market-values`),
-            axios.get(`${API}/orders`)
-          ]);
-          
-          setPlots(plotsRes.data);
-          setMachines(machinesRes.data);
-          setFertilizerSpecs(fertilizerRes.data);
-          setMarketPrices(marketRes.data);
-          setOrders(ordersRes.data);
-          
-          // Group machines by working step with debug info
-          const machinesByStep = {
-            bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
-            aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
-            pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
-            duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
-            pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
-            ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
-          };
-          
-          console.log('Machines by working step:', {
-            bodenbearbeitung: machinesByStep.bodenbearbeitung.length,
-            aussaat: machinesByStep.aussaat.length,
-            pflanzenschutz: machinesByStep.pflanzenschutz.length,
-            duengung: machinesByStep.duengung.length,
-            pflege: machinesByStep.pflege.length,
-            ernte: machinesByStep.ernte.length
-          });
-          
-          setMachinesByStep(machinesByStep);
-          
-          console.log('All data loaded successfully');
-        } catch (error) {
-          console.error('Error loading data:', error);
-        }
-      }, 2000);
+      setPlots(plotsRes.data);
+      setMachines(machinesRes.data);
+      setFertilizerSpecs(fertilizerRes.data);
+      setMarketPrices(marketRes.data);
+      setOrders(ordersRes.data);
+      
+      // Group machines by working step with debug info
+      const machinesByStep = {
+        bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
+        aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
+        pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
+        duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
+        pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
+        ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
+      };
+      
+      console.log('Machines by working step:', {
+        bodenbearbeitung: machinesByStep.bodenbearbeitung.length,
+        aussaat: machinesByStep.aussaat.length,
+        pflanzenschutz: machinesByStep.pflanzenschutz.length,
+        duengung: machinesByStep.duengung.length,
+        pflege: machinesByStep.pflege.length,
+        ernte: machinesByStep.ernte.length
+      });
+      
+      setMachinesByStep(machinesByStep);
+      
+      console.log('All data loaded successfully');
     } catch (error) {
       console.error('Error initializing data:', error);
       // No fallback - force live mode only
