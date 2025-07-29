@@ -248,6 +248,12 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Enhanced sample data initialization working correctly. Creates 3 plots and 16 machines from structured MACHINE_DATA. Duplicate prevention working - existing machines are not recreated. All machines properly assigned to working steps with correct John Deere models and specifications."
+      - working: "NA"
+        agent: "main"
+        comment: "Updated sample data initialization with WINTER* crop type references after major backend crop type system overhaul"
+      - working: true
+        agent: "testing"
+        comment: "✅ FINAL VERIFICATION: Sample data initialization working flawlessly with WINTER* crop type system. Successfully creates 5 plots and 17 machines without errors. All machines properly configured with WINTER* crop compatibility (15/17 machines compatible). Database initialization completes successfully with message: 'Datenbank erfolgreich initialisiert: 5 Parzellen, 17 Maschinen'."
 
 frontend:
   - task: "PayPal Payment Integration"
