@@ -260,7 +260,7 @@ class VirtualFarmingTester:
             "type": "traktor",
             "description": "Test tractor for automated testing",
             "price_per_use": 6.50,
-            "suitable_for": ["weizen", "roggen", "gerste"],
+            "suitable_for": ["winterweizen", "winterroggen", "wintergerste"],
             "working_step": "bodenbearbeitung",
             "image_url": "https://example.com/test-tractor.jpg"
         }
