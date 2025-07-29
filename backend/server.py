@@ -986,7 +986,7 @@ async def initialize_sample_data():
         
         # Aussaat (2 machines)
         {"id": "horsch_pronto_6dc", "name": "Horsch Pronto 6 DC", "type": MachineType.SAEMASCHINE, "description": "Drillmaschine (6m Arbeitsbreite)", "price_per_use": 0.80, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.ERBSEN]},
-        {"id": "traktor_john_deere_7820", "name": "John Deere 7820", "type": MachineType.TRAKTOR_AUSSAAT, "description": "Traktor für Aussaat", "price_per_use": 5.50, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS]},
+        {"id": "traktor_john_deere_7820", "name": "John Deere 7820", "type": MachineType.TRAKTOR_AUSSAAT, "description": "Traktor für Aussaat", "price_per_use": 5.50, "working_step": WorkingStep.AUSSAAT, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS]},
         
         # Pflanzenschutz (5 machines)
         {"id": "feldspritze_01", "name": "Feldspritze", "type": MachineType.FELDSPRITZE, "description": "Pflanzenschutzspritze", "price_per_use": 0.65, "working_step": WorkingStep.PFLANZENSCHUTZ, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
