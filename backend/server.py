@@ -146,7 +146,7 @@ MACHINE_DATA = {
             "type": MachineType.GRUBBER,
             "description": "Bodenbearbeitungsgerät",
             "price_per_use": 1.20,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         }
     ],
