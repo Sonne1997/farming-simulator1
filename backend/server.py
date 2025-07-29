@@ -449,7 +449,7 @@ PLANT_PROTECTION_COST_PER_250M2 = 0.88  # EUR per treatment
 # Nitrogen requirements per crop (kg N per ton of expected yield)
 N_REQUIREMENTS = {
     CropType.WINTERWEIZEN: 23.0,  # kg N/t Ertrag
-    CropType.ROGGEN: 20.0,
+    CropType.WINTERROGGEN: 20.0,
     CropType.GERSTE: 18.0,
     CropType.TRITICALE: 21.0,
     CropType.SILOMAIS: 2.8,   # kg N/t Frischmasse
