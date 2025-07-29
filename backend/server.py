@@ -999,7 +999,7 @@ async def initialize_sample_data():
         {"id": "guellefass_18m", "name": "Güllefass 18m", "type": MachineType.GUELLEFASS, "description": "Güllefass (18m Arbeitsbreite)", "price_per_use": 2.10, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
         
         # Pflege (2 machines)
-        {"id": "cambridge_walze_01", "name": "Cambridge Walze", "type": MachineType.CAMBRIDGE_WALZE, "description": "Walze zur Bestockungsförderung", "price_per_use": 0.95, "working_step": WorkingStep.PFLEGE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
+        {"id": "cambridge_walze_01", "name": "Cambridge Walze", "type": MachineType.CAMBRIDGE_WALZE, "description": "Walze zur Bestockungsförderung", "price_per_use": 0.95, "working_step": WorkingStep.PFLEGE, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN]},
         {"id": "steine_sammeln_01", "name": "Steine sammeln", "type": MachineType.CAMBRIDGE_WALZE, "description": "Steine von der Fläche sammeln", "price_per_use": 1.50, "working_step": WorkingStep.PFLEGE, "suitable_for": [CropType.WEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN]},
         
         # Ernte (4 machines)
