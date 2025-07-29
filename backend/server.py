@@ -166,7 +166,7 @@ MACHINE_DATA = {
             "type": MachineType.TRAKTOR_AUSSAAT,
             "description": "Traktor für Aussaat",
             "price_per_use": 5.50,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.ERBSEN, CropType.SILOMAIS],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.ERBSEN, CropType.SILOMAIS],
             "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         }
     ],
