@@ -288,15 +288,18 @@ frontend:
   
   - task: "Dynamic Fertilizer Selection"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented dynamic fertilizer selection fetching data from backend API instead of using hardcoded values"
+      - working: true
+        agent: "testing"
+        comment: "✅ Dynamic fertilizer selection working perfectly. Successfully displays 2 mineral fertilizer options (SSA, KAS) and 4 organic fertilizer options (Schweinegülle, Rindergülle, Gärrest, Rindermist) with correct pricing information. Fertilizer selection updates properly when user makes choices, and selected fertilizer (KAS) appears correctly in order summary. Cost calculations include fertilizer costs properly in total order cost."
   
   - task: "Plot Selection Interface"
     implemented: true
