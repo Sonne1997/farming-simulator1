@@ -215,7 +215,7 @@ MACHINE_DATA = {
             "type": MachineType.TRAKTOR_DUENGUNG,
             "description": "Traktor für Düngung",
             "price_per_use": 5.20,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         },
         {
