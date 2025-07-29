@@ -9,6 +9,13 @@ const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const DEMO_MODE = process.env.REACT_APP_DEMO_MODE === 'true' || !BACKEND_URL;
 
+// Debug output
+console.log('Environment variables:');
+console.log('REACT_APP_BACKEND_URL:', process.env.REACT_APP_BACKEND_URL);
+console.log('REACT_APP_DEMO_MODE:', process.env.REACT_APP_DEMO_MODE);
+console.log('BACKEND_URL:', BACKEND_URL);
+console.log('DEMO_MODE:', DEMO_MODE);
+
 // Mock data for demo mode
 const MOCK_PLOTS = [
   {
