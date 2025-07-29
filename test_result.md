@@ -260,13 +260,16 @@ frontend:
     implemented: true
     working: false
     file: "/app/frontend/src/App.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented PayPal payment integration using @paypal/react-paypal-js with sandbox credentials"
+      - working: false
+        agent: "testing"
+        comment: "❌ PayPal payment integration partially working. Payment page loads correctly with proper order creation (43.13€ total cost), PayPal SDK loads successfully, but PayPal buttons are not rendering properly. The PayPal script provider and payment flow structure is correct, but the actual payment buttons are missing from the DOM. This prevents users from completing payments. All other payment setup works including order creation API calls."
   
   - task: "Enhanced Machine Selection UI"
     implemented: true
