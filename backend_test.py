@@ -414,6 +414,164 @@ class VirtualFarmingTester:
             self.log_test("John Deere Models Check", False, f"Expected John Deere models not found. Found: {found_models}")
             return False
     
+    def test_crop_type_enum_validation(self):
+        """Test that new WINTER* crop types are accepted in order creation"""
+        # Test all new crop types
+        winter_crops = ["winterweizen", "winterroggen", "wintergerste", "wintertriticale", "winterraps"]
+        
+        plots = self.test_get_plots()
+        machines = self.test_get_machines()
+        
+        if not plots or not machines:
+            self.log_test("Crop Type Enum Validation", False, "No plots or machines available for testing")
+            return False
+        
+        machine_ids = [m["id"] for m in machines[:6]]
+        successful_crops = []
+        failed_crops = []
+        
+        for crop_type in winter_crops:
+            order_data = {
+                "user_name": "Test User",
+                "user_email": "test@example.com",
+                "plot_id": plots[0]["id"],
+                "farming_decision": {
+                    "cultivation_method": "konventionell",
+                    "crop_type": crop_type,
+                    "expected_yield_kg": 100.0,
+                    "fertilizer_choice": {
+                        "fertilizer_type": "kas",
+                        "amount": 100.0,
+                        "cost": 30.0
+                    },
+                    "machines": {
+                        "bodenbearbeitung": machine_ids[:1],
+                        "aussaat": machine_ids[1:2],
+                        "pflanzenschutz": machine_ids[2:3],
+                        "duengung": machine_ids[3:4],
+                        "pflege": machine_ids[4:5],
+                        "ernte": machine_ids[5:6]
+                    },
+                    "harvest_option": "sell_to_farmer"
+                }
+            }
+            
+            try:
+                response = self.session.post(f"{self.base_url}/orders", json=order_data)
+                if response.status_code == 200:
+                    successful_crops.append(crop_type)
+                else:
+                    failed_crops.append(f"{crop_type} (HTTP {response.status_code})")
+            except Exception as e:
+                failed_crops.append(f"{crop_type} (Error: {str(e)})")
+        
+        if len(successful_crops) >= 4:  # At least 4 winter crops should work
+            self.log_test("Crop Type Enum Validation", True, f"Successfully validated crop types: {', '.join(successful_crops)}")
+            return True
+        else:
+            self.log_test("Crop Type Enum Validation", False, f"Failed crops: {', '.join(failed_crops)}. Successful: {', '.join(successful_crops)}")
+            return False
+    
+    def test_expected_yields_endpoint(self):
+        """Test expected yields endpoint with different soil points"""
+        soil_points_to_test = [28, 35, 42, 48]
+        
+        for soil_points in soil_points_to_test:
+            try:
+                response = self.session.get(f"{self.base_url}/expected-yields/{soil_points}")
+                if response.status_code == 200:
+                    yields = response.json()
+                    
+                    # Check if WINTER* crop types are present in yields
+                    winter_crops_found = []
+                    for crop_type in ["winterweizen", "winterroggen", "wintergerste", "wintertriticale"]:
+                        if crop_type in yields and yields[crop_type] > 0:
+                            winter_crops_found.append(crop_type)
+                    
+                    if len(winter_crops_found) >= 3:
+                        self.log_test(f"Expected Yields (Soil Points {soil_points})", True, f"Found yields for: {', '.join(winter_crops_found)}")
+                    else:
+                        self.log_test(f"Expected Yields (Soil Points {soil_points})", False, f"Missing yields for WINTER* crops. Found: {winter_crops_found}")
+                else:
+                    self.log_test(f"Expected Yields (Soil Points {soil_points})", False, f"HTTP {response.status_code}: {response.text}")
+            except Exception as e:
+                self.log_test(f"Expected Yields (Soil Points {soil_points})", False, f"Error: {str(e)}")
+    
+    def test_machine_crop_compatibility(self):
+        """Test that machines are compatible with new WINTER* crop types"""
+        machines = self.test_get_machines()
+        if not machines:
+            self.log_test("Machine Crop Compatibility", False, "No machines available for testing")
+            return False
+        
+        compatible_machines = 0
+        winter_crops = ["winterweizen", "winterroggen", "wintergerste", "wintertriticale"]
+        
+        for machine in machines:
+            suitable_for = machine.get("suitable_for", [])
+            winter_compatible = any(crop in suitable_for for crop in winter_crops)
+            if winter_compatible:
+                compatible_machines += 1
+        
+        if compatible_machines >= 10:  # Most machines should be compatible with winter crops
+            self.log_test("Machine Crop Compatibility", True, f"{compatible_machines}/{len(machines)} machines compatible with WINTER* crops")
+            return True
+        else:
+            self.log_test("Machine Crop Compatibility", False, f"Only {compatible_machines}/{len(machines)} machines compatible with WINTER* crops")
+            return False
+    
+    def test_market_values_endpoint(self):
+        """Test market values endpoint for WINTER* crops"""
+        try:
+            response = self.session.get(f"{self.base_url}/market-values")
+            if response.status_code == 200:
+                market_values = response.json()
+                
+                # Check if WINTER* crop types have market values
+                winter_crops_with_values = []
+                for crop_type in ["winterweizen", "winterroggen", "wintergerste", "wintertriticale"]:
+                    if crop_type in market_values and market_values[crop_type] > 0:
+                        winter_crops_with_values.append(f"{crop_type}: €{market_values[crop_type]}")
+                
+                if len(winter_crops_with_values) >= 3:
+                    self.log_test("Market Values for WINTER* Crops", True, f"Found values for: {', '.join(winter_crops_with_values)}")
+                    return True
+                else:
+                    self.log_test("Market Values for WINTER* Crops", False, f"Missing market values for WINTER* crops. Found: {winter_crops_with_values}")
+                    return False
+            else:
+                self.log_test("Market Values for WINTER* Crops", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Market Values for WINTER* Crops", False, f"Error: {str(e)}")
+            return False
+    
+    def test_seed_costs_endpoint(self):
+        """Test seed costs endpoint for WINTER* crops"""
+        try:
+            response = self.session.get(f"{self.base_url}/seed-costs")
+            if response.status_code == 200:
+                seed_costs = response.json()
+                
+                # Check if WINTER* crop types have seed costs
+                winter_crops_with_costs = []
+                for crop_type in ["winterweizen", "winterroggen", "wintergerste", "wintertriticale"]:
+                    if crop_type in seed_costs and seed_costs[crop_type] > 0:
+                        winter_crops_with_costs.append(f"{crop_type}: €{seed_costs[crop_type]}")
+                
+                if len(winter_crops_with_costs) >= 3:
+                    self.log_test("Seed Costs for WINTER* Crops", True, f"Found costs for: {', '.join(winter_crops_with_costs)}")
+                    return True
+                else:
+                    self.log_test("Seed Costs for WINTER* Crops", False, f"Missing seed costs for WINTER* crops. Found: {winter_crops_with_costs}")
+                    return False
+            else:
+                self.log_test("Seed Costs for WINTER* Crops", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Seed Costs for WINTER* Crops", False, f"Error: {str(e)}")
+            return False
+
     def test_working_steps_categorization(self, machines):
         """Test that machines are properly categorized by working steps"""
         working_steps = ["bodenbearbeitung", "aussaat", "pflanzenschutz", "duengung", "pflege", "ernte"]
