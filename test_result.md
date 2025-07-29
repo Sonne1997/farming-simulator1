@@ -382,11 +382,10 @@ metadata:
 test_plan:
   current_focus:
     - "PayPal Payment Integration"
-    - "Enhanced Machine Management with Working Steps"
-    - "Fertilizer Specs API"
-    - "Dynamic Fertilizer Selection"
     - "Enhanced Machine Selection UI"
-  stuck_tasks: []
+  stuck_tasks:
+    - "PayPal Payment Integration"
+    - "Enhanced Machine Selection UI"
   test_all: false
   test_priority: "high_first"
 
