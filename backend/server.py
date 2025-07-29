@@ -224,7 +224,7 @@ MACHINE_DATA = {
             "type": MachineType.GUELLEFASS,
             "description": "Güllefass (18m Arbeitsbreite)",
             "price_per_use": 2.10,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         }
     ],
