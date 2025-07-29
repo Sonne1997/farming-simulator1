@@ -291,7 +291,7 @@ class VirtualFarmingTester:
             "plot_id": plot_id,
             "farming_decision": {
                 "cultivation_method": "konventionell",
-                "crop_type": "weizen",
+                "crop_type": "winterweizen",
                 "expected_yield_kg": 180.0,
                 "fertilizer_choice": {
                     "fertilizer_type": "kas",
