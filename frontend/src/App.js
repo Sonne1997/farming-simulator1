@@ -178,23 +178,6 @@ const App = () => {
 
   const fetchMarketValues = async () => {
     try {
-      if (DEMO_MODE) {
-        // Demo mode - use market prices as market values
-        setMarketValues({
-          winterroggen: 0.18,
-          winterweizen: 0.22,
-          wintergerste: 0.19,
-          wintertriticale: 0.17,
-          silomais: 0.035,
-          zuckerrueben: 0.045,
-          luzerne: 0.15,
-          gras: 0.12,
-          erbsen: 0.35,
-          winterraps: 0.40
-        });
-        return;
-      }
-      
       const response = await axios.get(`${API}/market-values`);
       setMarketValues(response.data);
     } catch (error) {
