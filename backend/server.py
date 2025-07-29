@@ -137,7 +137,7 @@ MACHINE_DATA = {
             "type": MachineType.SCHEIBENEGGE,
             "description": "Scheibenegge für Bodenbearbeitung",
             "price_per_use": 1.00,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.ROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN],
             "image_url": "https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         },
         {
