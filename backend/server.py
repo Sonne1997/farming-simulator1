@@ -177,7 +177,7 @@ MACHINE_DATA = {
             "type": MachineType.FELDSPRITZE,
             "description": "Pflanzenschutzspritze",
             "price_per_use": 0.65,
-            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
+            "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN],
             "image_url": "https://images.pexels.com/photos/833895/pexels-photo-833895.jpeg"
         },
         {
