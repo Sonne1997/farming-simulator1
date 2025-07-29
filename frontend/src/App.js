@@ -288,6 +288,29 @@ const App = () => {
     }
   };
 
+  const fetchMachines = async () => {
+    try {
+      const response = await axios.get(`${API}/machines`);
+      console.log('Machines loaded:', response.data.length);
+      setMachines(response.data);
+      
+      // Group machines by working step
+      const machinesByStep = {
+        bodenbearbeitung: response.data.filter(m => m.working_step === 'bodenbearbeitung'),
+        aussaat: response.data.filter(m => m.working_step === 'aussaat'),
+        pflanzenschutz: response.data.filter(m => m.working_step === 'pflanzenschutz'),
+        duengung: response.data.filter(m => m.working_step === 'duengung'),
+        pflege: response.data.filter(m => m.working_step === 'pflege'),
+        ernte: response.data.filter(m => m.working_step === 'ernte')
+      };
+      
+      console.log('Machines by step:', machinesByStep);
+      setMachinesByStep(machinesByStep);
+    } catch (error) {
+      console.error('Error fetching machines:', error);
+    }
+  };
+
 
 
   const fetchFertilizerSpecs = async () => {
