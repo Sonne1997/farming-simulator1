@@ -116,13 +116,13 @@ const MOCK_EXPECTED_YIELDS = {
   winterweizen: 107.5,
   wintergerste: 86.0,
   wintertriticale: 86.0,
+  winterraps: 50.0,
   silomais: 1032.0,
   zuckerrueben: 1290.0,
   luzerne: 129.0,
   gras: 172.0,
   bluehmischung: 0,
   erbsen: 43.0,
-  winterraps: 62.5
 };
 
 const MOCK_FERTILIZER_SPECS = {
