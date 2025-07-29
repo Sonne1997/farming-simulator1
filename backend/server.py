@@ -995,7 +995,7 @@ async def initialize_sample_data():
         {"id": "striegel_01", "name": "Striegel", "type": MachineType.STRIEGEL, "description": "Striegelgerät für biologischen Anbau", "price_per_use": 0.85, "working_step": WorkingStep.PFLANZENSCHUTZ, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
         
         # Düngung (2 machines)
-        {"id": "traktor_john_deere_6r195", "name": "John Deere 6R195", "type": MachineType.TRAKTOR_DUENGUNG, "description": "Traktor für Düngung", "price_per_use": 5.20, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
+        {"id": "traktor_john_deere_6r195", "name": "John Deere 6R195", "type": MachineType.TRAKTOR_DUENGUNG, "description": "Traktor für Düngung", "price_per_use": 5.20, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
         {"id": "guellefass_18m", "name": "Güllefass 18m", "type": MachineType.GUELLEFASS, "description": "Güllefass (18m Arbeitsbreite)", "price_per_use": 2.10, "working_step": WorkingStep.DUENGUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.GERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ZUCKERRUEBEN, CropType.ERBSEN]},
         
         # Pflege (2 machines)
