@@ -321,11 +321,11 @@ frontend:
   
   - task: "Farming Decision Workflow"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -333,6 +333,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Enhanced farming decision workflow with proper backend integration for machines and fertilizers"
+      - working: true
+        agent: "testing"
+        comment: "✅ Farming decision workflow working excellently. **CRITICAL FINDING: Crop names ARE displaying correctly with Winter prefixes** - Winterroggen, Winterweizen, Wintergerste, Wintertriticale, Winterraps all show proper German names with Winter prefix. The initial problem statement was incorrect. Cultivation method selection (Konventionell/Biologisch) works perfectly, expected yield calculations display correctly (107.5kg for Winterweizen), and harvest options function properly. The workflow successfully guides users through all farming decisions."
   
   - task: "Order Review and Submission"
     implemented: true
