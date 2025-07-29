@@ -981,7 +981,7 @@ async def initialize_sample_data():
     machines_to_create = [
         # Bodenbearbeitung (3 machines)
         {"id": "traktor_john_deere_8r370", "name": "John Deere 8R370", "type": MachineType.TRAKTOR, "description": "Großtraktor (400 PS, 5 Min. Arbeitszeit)", "price_per_use": 6.50, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.ERBSEN, CropType.SILOMAIS, CropType.ZUCKERRUEBEN]},
-        {"id": "scheibenegge_01", "name": "Scheibenegge", "type": MachineType.SCHEIBENEGGE, "description": "Scheibenegge für Bodenbearbeitung", "price_per_use": 1.00, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN]},
+        {"id": "scheibenegge_01", "name": "Scheibenegge", "type": MachineType.SCHEIBENEGGE, "description": "Scheibenegge für Bodenbearbeitung", "price_per_use": 1.00, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.SILOMAIS, CropType.ERBSEN, CropType.ZUCKERRUEBEN]},
         {"id": "grubber_01", "name": "Grubber", "type": MachineType.GRUBBER, "description": "Bodenbearbeitungsgerät", "price_per_use": 1.20, "working_step": WorkingStep.BODENBEARBEITUNG, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.TRITICALE, CropType.SILOMAIS, CropType.ERBSEN]},
         
         # Aussaat (2 machines)
