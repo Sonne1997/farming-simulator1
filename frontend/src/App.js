@@ -207,7 +207,7 @@ const App = () => {
           setMarketPrices(marketRes.data);
           setOrders(ordersRes.data);
           
-          // Group machines by working step
+          // Group machines by working step with debug info
           const machinesByStep = {
             bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
             aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
@@ -216,6 +216,16 @@ const App = () => {
             pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
             ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
           };
+          
+          console.log('Machines by working step:', {
+            bodenbearbeitung: machinesByStep.bodenbearbeitung.length,
+            aussaat: machinesByStep.aussaat.length,
+            pflanzenschutz: machinesByStep.pflanzenschutz.length,
+            duengung: machinesByStep.duengung.length,
+            pflege: machinesByStep.pflege.length,
+            ernte: machinesByStep.ernte.length
+          });
+          
           setMachinesByStep(machinesByStep);
           
           console.log('All data loaded successfully');
