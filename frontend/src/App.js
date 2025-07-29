@@ -924,7 +924,7 @@ const App = () => {
                                     <div className="text-sm text-gray-500">
                                       {farmingDecision.crop_type === 'wintergerste' ? 'Gegen Blattläuse im Herbst' : 'Gegen Erdfloh nach Auflaufen'}
                                     </div>
-                                    <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                    <div className="text-sm text-gray-500">{machine.price_per_use || machine.cost_per_hectare}€/ha</div>
                                   </div>
                                 </label>
                               ))}
