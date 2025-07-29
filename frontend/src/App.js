@@ -79,42 +79,7 @@ const App = () => {
 
   const initializeData = async () => {
     try {
-      if (DEMO_MODE) {
-        // Demo mode - use mock data
-        console.log('Running in demo mode with mock data');
-        setPlots(MOCK_PLOTS);
-        setMachines(MOCK_MACHINES);
-        setFertilizerSpecs(MOCK_FERTILIZER_SPECS);
-        setExpectedYields(MOCK_EXPECTED_YIELDS);
-        
-        // Group machines by working step for demo mode
-        const machinesByStep = {
-          bodenbearbeitung: MOCK_MACHINES.filter(m => m.working_step === 'bodenbearbeitung'),
-          aussaat: MOCK_MACHINES.filter(m => m.working_step === 'aussaat'),
-          pflanzenschutz: MOCK_MACHINES.filter(m => m.working_step === 'pflanzenschutz'),
-          duengung: MOCK_MACHINES.filter(m => m.working_step === 'duengung'),
-          pflege: MOCK_MACHINES.filter(m => m.working_step === 'pflege'),
-          ernte: MOCK_MACHINES.filter(m => m.working_step === 'ernte')
-        };
-        setMachinesByStep(machinesByStep);
-        
-        // Set mock market prices
-        setMarketPrices({
-          winterroggen: 0.18,
-          winterweizen: 0.22,
-          wintergerste: 0.19,
-          wintertriticale: 0.17,
-          silomais: 0.035,
-          zuckerrueben: 0.045,
-          luzerne: 0.15,
-          gras: 0.12,
-          erbsen: 0.35,
-          winterraps: 0.40
-        });
-        
-        console.log('Demo data loaded successfully');
-        return;
-      }
+      console.log('Loading live data from API');
       
       // Production mode - use real API
       const response = await axios.post(`${API}/initialize-data`);
