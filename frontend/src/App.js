@@ -1057,7 +1057,7 @@ const App = () => {
                                 <div className="flex-1">
                                   <div className="font-medium">{machine.name}</div>
                                   <div className="text-sm text-gray-500">Gegen verschiedene Schädlinge</div>
-                                  <div className="text-sm text-gray-500">{machine.cost_per_hectare}€/ha</div>
+                                  <div className="text-sm text-gray-500">{machine.price_per_use || machine.cost_per_hectare}€/ha</div>
                                 </div>
                               </label>
                             ))}
