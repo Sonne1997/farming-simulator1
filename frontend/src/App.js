@@ -63,53 +63,7 @@ const MOCK_PLOTS = [
   }
 ];
 
-const MOCK_MACHINES = [
-  // Bodenbearbeitung
-  { id: "m001", name: "John Deere 8R370", working_step: "bodenbearbeitung", cost_per_hectare: 45.0, specifications: "370 PS Traktor" },
-  { id: "m002", name: "Lemken Rubin 10", working_step: "bodenbearbeitung", cost_per_hectare: 35.0, specifications: "Grubber 4m" },
-  { id: "m003", name: "Amazone Catros 6001", working_step: "bodenbearbeitung", cost_per_hectare: 40.0, specifications: "Scheibenegge 6m" },
-  
-  // Aussaat
-  { id: "m004", name: "Amazone Primera DMC 6000", working_step: "aussaat", cost_per_hectare: 38.0, specifications: "Drillmaschine 6m" },
-  { id: "m005", name: "John Deere 750A", working_step: "aussaat", cost_per_hectare: 42.0, specifications: "Direktsaatmaschine" },
-  
-  // Pflanzenschutz
-  { id: "m006", name: "Amazone UX 5200", working_step: "pflanzenschutz", cost_per_hectare: 30.0, specifications: "Feldspritze 28m - Herbizid", treatment_type: "herbizid", season: "herbst" },
-  { id: "m007", name: "John Deere 6R195", working_step: "pflanzenschutz", cost_per_hectare: 25.0, specifications: "195 PS Traktor + Spritze - Frühjahr", treatment_type: "herbizid", season: "fruejahr" },
-  { id: "m017", name: "Hardi Navigator 3000", working_step: "pflanzenschutz", cost_per_hectare: 8.0, specifications: "Anbauspritze - Insektizid", treatment_type: "insektizid", season: "fruejahr" },
-  { id: "m018", name: "Striegel 6m", working_step: "pflanzenschutz", cost_per_hectare: 12.0, specifications: "Mechanischer Unkrautstriegel", treatment_type: "mechanisch", season: "bio" },
-  { id: "m019", name: "Hackgerät", working_step: "pflanzenschutz", cost_per_hectare: 15.0, specifications: "Reihenhackgerät", treatment_type: "mechanisch", season: "bio" },
-  
-  // Spezielle Zuckerrüben-Behandlungen
-  { id: "m022", name: "Zuckerrüben Herbizid-Programm", working_step: "pflanzenschutz", cost_per_hectare: 400.0, specifications: "Komplettes Herbizid-Programm", treatment_type: "herbizid", crop_specific: "zuckerrueben" },
-  { id: "m023", name: "Zuckerrüben Fungizid", working_step: "pflanzenschutz", cost_per_hectare: 50.0, specifications: "Fungizid gegen Pilzkrankheiten", treatment_type: "fungizid", crop_specific: "zuckerrueben" },
-  { id: "m024", name: "Zuckerrüben Insektizid", working_step: "pflanzenschutz", cost_per_hectare: 10.0, specifications: "Insektizid gegen Schädlinge", treatment_type: "insektizid", crop_specific: "zuckerrueben" },
-  { id: "m025", name: "Spurrennährstoffe Zuckerrüben", working_step: "pflanzenschutz", cost_per_hectare: 8.0, specifications: "Bor, Mangan für Zuckerrüben", treatment_type: "spurennaehrstoffe", crop_specific: "zuckerrueben" },
-  
-  // Spezielle Silomais-Behandlungen
-  { id: "m026", name: "Silomais Herbizid", working_step: "pflanzenschutz", cost_per_hectare: 60.0, specifications: "Herbizid gegen Unkräuter", treatment_type: "herbizid", crop_specific: "silomais" },
-  
-  // Spezielle Erbsen-Behandlungen
-  { id: "m027", name: "Erbsen Herbizid", working_step: "pflanzenschutz", cost_per_hectare: 120.0, specifications: "Herbizid gegen Unkräuter", treatment_type: "herbizid", crop_specific: "erbsen" },
-  { id: "m028", name: "Erbsen Insektizid", working_step: "pflanzenschutz", cost_per_hectare: 18.0, specifications: "Gegen Blattläuse und Erbsenwickler", treatment_type: "insektizid", crop_specific: "erbsen" },
-  
-  // Düngung
-  { id: "m008", name: "Rauch AXIS 30.2", working_step: "duengung", cost_per_hectare: 18.0, specifications: "Düngerstreuer", fertilizer_type: "mineral" },
-  { id: "m009", name: "Amazone ZA-M 1501", working_step: "duengung", cost_per_hectare: 16.0, specifications: "Zentrifugalstreuer", fertilizer_type: "mineral" },
-  { id: "m010", name: "Rauch AXIS M", working_step: "duengung", cost_per_hectare: 17.0, specifications: "Düngerstreuer mit GPS", fertilizer_type: "mineral" },
-  { id: "m020", name: "Güllefass 12m³", working_step: "duengung", cost_per_hectare: 22.0, specifications: "Güllefass für organische Düngung", fertilizer_type: "organic" },
-  { id: "m021", name: "John Deere 6R195 + Güllefass", working_step: "duengung", cost_per_hectare: 25.0, specifications: "Traktor mit Güllefass", fertilizer_type: "organic" },
-  
-  // Pflege
-  { id: "m011", name: "Krone EasyCut F 320M", working_step: "pflege", cost_per_hectare: 28.0, specifications: "Frontmähwerk 3.2m" },
-  { id: "m012", name: "John Deere 6R145", working_step: "pflege", cost_per_hectare: 32.0, specifications: "145 PS Traktor" },
-  
-  // Ernte  
-  { id: "m013", name: "John Deere T660i", working_step: "ernte", cost_per_hectare: 85.0, specifications: "Mähdrescher 7.6m" },
-  { id: "m014", name: "John Deere 7820", working_step: "ernte", cost_per_hectare: 75.0, specifications: "Feldhäcksler" },
-  { id: "m015", name: "Ropa euro-Tiger V8-4a", working_step: "ernte", cost_per_hectare: 120.0, specifications: "Rübenroder 6-reihig" },
-  { id: "m016", name: "Grimme Varitron 470", working_step: "ernte", cost_per_hectare: 95.0, specifications: "Kartoffelroder" }
-];
+const MOCK_MACHINES = []; // Empty in live mode
 
 const MOCK_EXPECTED_YIELDS = {
   winterroggen: 64.5,
