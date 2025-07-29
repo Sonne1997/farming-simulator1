@@ -372,7 +372,7 @@ SEED_COSTS = {
     CropType.WINTERWEIZEN: 2.10,  # 150kg/ha * 0.025ha * 0.56€/kg = 2.10€
     CropType.WINTERROGGEN: 1.75,
     CropType.WINTERGERSTE: 1.90,
-    CropType.TRITICALE: 1.85,
+    CropType.WINTERTRITICALE: 1.85,
     CropType.SILOMAIS: 12.50,
     CropType.ZUCKERRUEBEN: 35.00,
     CropType.LUZERNE: 8.75,
