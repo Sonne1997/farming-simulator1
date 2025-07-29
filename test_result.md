@@ -275,13 +275,16 @@ frontend:
     implemented: true
     working: false
     file: "/app/frontend/src/App.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Fixed machine selection UI to properly sync with backend working steps structure (Bodenbearbeitung, Aussaat, Pflanzenschutz, Düngung, Pflege, Ernte)"
+      - working: false
+        agent: "testing"
+        comment: "❌ Enhanced machine selection UI partially working. Most working steps display correctly: Bodenbearbeitung (6 machines), Aussaat (4 machines), Pflege (4 machines), Ernte (8 machines) all show machines with proper €/ha pricing. However, critical issues found: Pflanzenschutz section shows 0 machines available when it should show plant protection options, and Düngung section shows 0 machines when fertilizer application machines should be available. This breaks the farming workflow as users cannot select plant protection or fertilizer application machines."
   
   - task: "Dynamic Fertilizer Selection"
     implemented: true
