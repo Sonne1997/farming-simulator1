@@ -225,11 +225,7 @@ const App = () => {
       }, 2000);
     } catch (error) {
       console.error('Error initializing data:', error);
-      // Fallback to demo mode if API fails
-      console.log('Falling back to demo mode');
-      setPlots(MOCK_PLOTS);
-      setFertilizerSpecs(MOCK_FERTILIZER_SPECS);
-      setExpectedYields(MOCK_EXPECTED_YIELDS);
+      // No fallback - force live mode only
     }
   };
 
