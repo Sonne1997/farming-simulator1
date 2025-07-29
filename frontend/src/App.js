@@ -14,19 +14,7 @@ const MOCK_PLOTS = []; // Empty in live mode
 
 const MOCK_MACHINES = []; // Empty in live mode
 
-const MOCK_EXPECTED_YIELDS = {
-  winterroggen: 64.5,
-  winterweizen: 107.5,
-  wintergerste: 86.0,
-  wintertriticale: 86.0,
-  winterraps: 50.0,
-  silomais: 1032.0,
-  zuckerrueben: 1290.0,
-  luzerne: 129.0,
-  gras: 172.0,
-  bluehmischung: 0,
-  erbsen: 43.0,
-};
+const MOCK_EXPECTED_YIELDS = {}; // Empty in live mode
 
 const MOCK_FERTILIZER_SPECS = {
   ssa: { name: "Schwefelsaurer Ammoniak (SSA)", price_per_kg: 0.35, nitrogen_content: 21 },
