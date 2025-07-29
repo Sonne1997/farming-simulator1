@@ -299,7 +299,7 @@ REAL_YIELDS_250M2 = {
     CropType.WINTERWEIZEN: 125.0,      # 5 t/ha × 0.025 = 125 kg
     CropType.WINTERROGGEN: 75.0,       # 3 t/ha × 0.025 = 75 kg
     CropType.WINTERGERSTE: 100.0,      # 4 t/ha × 0.025 = 100 kg
-    CropType.TRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg
+    CropType.WINTERTRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg
     CropType.SILOMAIS: 1200.0,   # Keeping existing estimate
     CropType.ZUCKERRUEBEN: 1500.0, # 60 t/ha × 0.025 = 1500 kg
     CropType.LUZERNE: 150.0,     # 6 t/ha × 0.025 = 150 kg
