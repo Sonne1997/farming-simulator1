@@ -315,6 +315,7 @@ MARKET_VALUES_250M2 = {
     CropType.WINTERROGGEN: 11.63,      # 75 kg × 155€/t = 11.63€
     CropType.WINTERGERSTE: 15.00,      # 100 kg × 150€/t = 15.00€
     CropType.WINTERTRITICALE: 16.50,   # 100 kg × 165€/t = 16.50€
+    CropType.WINTERRAPS: 22.50,        # 50 kg × 450€/t = 22.50€
     CropType.SILOMAIS: 54.00,    # 1200 kg × 45€/t = 54.00€
     CropType.ZUCKERRUEBEN: 60.00, # 1500 kg × 40€/t = 60.00€
     CropType.LUZERNE: 27.00,     # 150 kg × 180€/t = 27.00€
