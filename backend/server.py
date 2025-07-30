@@ -975,7 +975,18 @@ async def initialize_sample_data():
     ]
     
     for plot_data in sample_plots:
-        plot = Plot(**plot_data.dict())
+        plot = Plot(
+            id=str(uuid.uuid4()),
+            name=plot_data.name,
+            soil_type=plot_data.soil_type,
+            soil_points=plot_data.soil_points,
+            location=plot_data.location,
+            description=plot_data.description,
+            price_per_plot=plot_data.price_per_plot,
+            image_url=plot_data.image_url,
+            available=True,
+            created_at=datetime.now()
+        )
         await db.plots.insert_one(plot.dict())
     
     # Create exactly 16 unique machines
