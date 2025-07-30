@@ -181,6 +181,7 @@ def calculate_yield_by_soil_points(crop_type: CropType, soil_points: int):
         CropType.WINTERGERSTE: 100.0,      # 4 t/ha × 0.025 = 100 kg at 35 soil points
         CropType.WINTERTRITICALE: 100.0,   # 4 t/ha × 0.025 = 100 kg at 35 soil points
         CropType.WINTERRAPS: 50.0,   # 2 t/ha × 0.025 = 50 kg at 35 soil points  
+        CropType.KHORASAN_WEIZEN: 12.5,   # 0.5 t/ha × 0.025 = 12.5 kg at 35 soil points (schlechteste)  
         CropType.SILOMAIS: 1200.0,   # 48 t/ha × 0.025 = 1200 kg at 35 soil points
         CropType.ZUCKERRUEBEN: 1500.0, # 60 t/ha × 0.025 = 1500 kg at 35 soil points
         CropType.LUZERNE: 150.0,     # 6 t/ha × 0.025 = 150 kg at 35 soil points
