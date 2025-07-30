@@ -7,7 +7,7 @@ import WeatherWidget from './components/WeatherWidget';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
-const DEMO_MODE = false; // Force live mode
+const DEMO_MODE = process.env.REACT_APP_DEMO_MODE === 'true' || !BACKEND_URL;
 
 // Mock data for demo mode
 const MOCK_PLOTS = []; // Empty in live mode
