@@ -145,6 +145,9 @@ const App = () => {
         axios.get(`${API}/orders`)
       ]);
       
+      console.log('Raw machines from API:', machinesRes.data.length);
+      console.log('First 3 machine names:', machinesRes.data.slice(0,3).map(m => m.name));
+      
       setPlots(plotsRes.data);
       setMachines(machinesRes.data);
       setFertilizerSpecs(fertilizerRes.data);
