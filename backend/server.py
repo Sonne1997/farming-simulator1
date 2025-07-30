@@ -922,10 +922,14 @@ async def reset_database():
 
 @api_router.post("/initialize-data")
 async def initialize_sample_data():
-    # First, completely reset the database
-    await db.plots.delete_many({})
+    # COMPLETELY clear existing data first
     await db.machines.delete_many({})
+    await db.plots.delete_many({})
     await db.orders.delete_many({})
+    
+    # Wait a moment to ensure deletion is complete
+    import asyncio
+    await asyncio.sleep(0.1)
     
     # Create sample plots
     sample_plots = [
