@@ -429,7 +429,8 @@ const App = () => {
       'gras': 'Gras',
       'bluehmischung': 'Blühmischung',
       'erbsen': 'Erbsen',
-      'winterraps': 'Winterraps'
+      'winterraps': 'Winterraps',
+      'khorasan_weizen': 'Khorasan-Weizen'
     };
     return translations[cropType] || cropType;
   };
