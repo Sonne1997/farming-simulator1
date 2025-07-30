@@ -132,6 +132,7 @@ MARKET_PRICES = {
     CropType.WINTERGERSTE: 190.0,  # 0.19€/kg = 190€/t
     CropType.WINTERTRITICALE: 170.0,  # 0.17€/kg = 170€/t
     CropType.WINTERRAPS: 450.0,  # 0.45€/kg = 450€/t
+    CropType.KHORASAN_WEIZEN: 800.0,  # 0.80€/kg = 800€/t (teuer, viel Protein)
     CropType.SILOMAIS: 35.0,  # 0.035€/kg = 35€/t
     CropType.ZUCKERRUEBEN: 45.0,  # 0.045€/kg = 45€/t
     CropType.LUZERNE: 150.0,  # 0.15€/kg = 150€/t
