@@ -1022,8 +1022,43 @@ async def initialize_sample_data():
         {"id": "ganzpflanzensilage_claas_jaguar_940", "name": "Ganzpflanzensilage-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Häcksler für Roggen-Ganzpflanzensilage", "price_per_use": 4.00, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.WINTERROGGEN]}
     ]
     
-    # Don't clear data - use existing data
-    return {"message": "Using existing database data"}
+    # Initialize database with sample data
+    await db.machines.delete_many({})
+    await db.plots.delete_many({})
+    
+    # Create 5 sample plots
+    for plot_data in sample_plots:
+        plot = Plot(
+            id=str(uuid.uuid4()),
+            name=plot_data.name,
+            soil_type=plot_data.soil_type,
+            soil_points=plot_data.soil_points,
+            location=plot_data.location,
+            description=plot_data.description,
+            price_per_plot=plot_data.price_per_plot,
+            image_url=plot_data.image_url,
+            available=True,
+            created_at=datetime.now()
+        )
+        await db.plots.insert_one(plot.dict())
+
+    # Create 18 sample machines
+    machine_count = 0
+    for machine_data in machines_to_create:
+        machine = Machine(
+            id=machine_data["id"],
+            name=machine_data["name"],
+            type=machine_data["type"],
+            description=machine_data["description"],
+            price_per_use=machine_data["price_per_use"],
+            suitable_for=machine_data["suitable_for"],
+            working_step=machine_data["working_step"],
+            image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
+        )
+        await db.machines.insert_one(machine.dict())
+        machine_count += 1
+    
+    return {"message": f"Datenbank erfolgreich initialisiert: {len(sample_plots)} Parzellen, {machine_count} Maschinen"}
 
 # Include the router in the main app
 app.include_router(api_router)
