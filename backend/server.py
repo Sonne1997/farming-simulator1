@@ -292,7 +292,7 @@ MARKET_PRICES = {
     CropType.LUZERNE: 150.0,  # 0.15€/kg = 150€/t
     CropType.GRAS: 120.0,  # 0.12€/kg = 120€/t
     CropType.BLUEHMISCHUNG: 0,  # Subsidized, no market price
-    CropType.ERBSEN: 350.0  # 0.35€/kg = 350€/t
+    CropType.ERBSEN: 250.0  # 0.25€/kg = 250€/t
 }
 
 # Real yields per 250m² based on Grabow location (in kg)
