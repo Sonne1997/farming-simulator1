@@ -209,7 +209,7 @@ EXPECTED_YIELDS = {
     CropType.WINTERGERSTE: 100.0,
     CropType.WINTERTRITICALE: 100.0,
     CropType.WINTERRAPS: 50.0,   # 2 t/ha × 0.025 = 50 kg per 250m²
-    CropType.KHORASAN_WEIZEN: 37.5,  # 1.5 t/ha × 0.025 = 37.5 kg per 250m² (wenig Ertrag)
+    CropType.KHORASAN_WEIZEN: 12.5,  # 0.5 t/ha × 0.025 = 12.5 kg at 35 soil points (schlechteste Parzelle)
     CropType.SILOMAIS: 1200.0,
     CropType.ZUCKERRUEBEN: 1500.0,
     CropType.LUZERNE: 150.0,
