@@ -81,7 +81,11 @@ const App = () => {
     try {
       console.log('Loading live data from API');
       
-      // Load live data directly - no initialization needed
+      // Initialize database first
+      await axios.post(`${API}/initialize-data`);
+      console.log('Database initialized');
+      
+      // Then load data  
       const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes] = await Promise.all([
         axios.get(`${API}/plots`),
         axios.get(`${API}/machines`),
