@@ -10,7 +10,58 @@ const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const DEMO_MODE = process.env.REACT_APP_DEMO_MODE === 'true' || !BACKEND_URL;
 
 // Mock data for demo mode
-const MOCK_PLOTS = []; // Empty in live mode
+const MOCK_PLOTS = [
+  {
+    id: "plot_001",
+    name: "A1 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "sand",
+    soil_points: 28,
+    lease_price_per_year: 7.0,
+    available: true
+  },
+  {
+    id: "plot_002",
+    name: "B2 - Ritterfeld", 
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "loamy_sand",
+    soil_points: 38,
+    lease_price_per_year: 9.5,
+    available: true
+  },
+  {
+    id: "plot_003",
+    name: "C3 - Ritterfeld",
+    location: "39291 Grabow", 
+    size_m2: 250,
+    soil_type: "clayey_sand",
+    soil_points: 42,
+    lease_price_per_year: 10.5,
+    available: true
+  },
+  {
+    id: "plot_004",
+    name: "D4 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "sandy_loam",
+    soil_points: 48,
+    lease_price_per_year: 12.0,
+    available: true
+  },
+  {
+    id: "plot_005", 
+    name: "E5 - Ritterfeld",
+    location: "39291 Grabow",
+    size_m2: 250,
+    soil_type: "clayey_loam",
+    soil_points: 52,
+    lease_price_per_year: 13.0,
+    available: true
+  }
+];
 
 const MOCK_MACHINES = []; // Empty in live mode
 
