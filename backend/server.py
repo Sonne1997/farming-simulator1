@@ -56,6 +56,7 @@ class CropType(str, Enum):
     WINTERGERSTE = "wintergerste"
     WINTERTRITICALE = "wintertriticale"
     WINTERRAPS = "winterraps"
+    KHORASAN_WEIZEN = "khorasan_weizen"  # Sommerweizen, wenig Ertrag, teuer, viel Protein
     SILOMAIS = "silomais"
     ZUCKERRUEBEN = "zuckerrueben"
     LUZERNE = "luzerne"
