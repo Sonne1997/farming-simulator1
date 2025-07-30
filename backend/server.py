@@ -359,13 +359,13 @@ EXPECTED_YIELDS = {
     CropType.WINTERROGGEN: 75.0,
     CropType.WINTERGERSTE: 100.0,
     CropType.WINTERTRITICALE: 100.0,
-    CropType.WINTERRAPS: 25.0,  # 2.5 t/ha
+    CropType.WINTERRAPS: 50.0,   # 2 t/ha × 0.025 = 50 kg per 250m²
     CropType.SILOMAIS: 1200.0,
     CropType.ZUCKERRUEBEN: 1500.0,
     CropType.LUZERNE: 150.0,
     CropType.GRAS: 200.0,
     CropType.BLUEHMISCHUNG: 0.0,  # No harvest
-    CropType.ERBSEN: 50.0
+    CropType.ERBSEN: 57.5         # Erhöht um 15%: 50 * 1.15 = 57.5
 }
 
 # Seed costs per 250m² (in EUR)
