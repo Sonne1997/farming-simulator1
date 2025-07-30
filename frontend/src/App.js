@@ -173,6 +173,8 @@ const App = () => {
         ernte: machinesByStep.ernte.length
       });
       
+      console.log('Bodenbearbeitung machines:', machinesByStep.bodenbearbeitung.map(m => m.name));
+      
       setMachinesByStep(machinesByStep);
       
       console.log('All data loaded successfully');
