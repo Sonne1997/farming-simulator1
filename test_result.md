@@ -381,7 +381,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Harvest Machine Filtering"
     - "PayPal Payment Integration"
     - "Enhanced Machine Selection UI"
   stuck_tasks:
