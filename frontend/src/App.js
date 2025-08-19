@@ -908,7 +908,7 @@ const App = () => {
                               <div className="flex-1">
                                 <div className="font-medium">{machine.name}</div>
                                 <div className="text-sm text-gray-500">{machine.specifications}</div>
-                                <div className="text-sm text-gray-500">{machine.price_per_use || machine.cost_per_hectare}€/ha</div>
+                                <div className="text-sm text-gray-500">{(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha</div>
                               </div>
                             </label>
                           ))}
