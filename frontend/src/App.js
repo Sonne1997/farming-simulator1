@@ -1160,6 +1160,52 @@ const App = () => {
                     )}
                   </div>
                 );
+              } else if (step === 'ernte') {
+                // Harvest machines - filter by crop type
+                const suitableMachines = machines.filter(machine => {
+                  return machine.suitable_for && machine.suitable_for.includes(farmingDecision.crop_type);
+                });
+                
+                return (
+                  <div key={step}>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-3">🌾 {getGermanWorkingStep(step)}</h4>
+                    {suitableMachines.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {suitableMachines.map(machine => (
+                          <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input
+                              type="checkbox"
+                              checked={farmingDecision.machines[step].includes(machine.id)}
+                              onChange={() => handleMachineSelection(step, machine.id)}
+                              className="text-green-600"
+                            />
+                            <div className="flex-1">
+                              <div className="font-medium">{machine.name}</div>
+                              <div className="text-sm text-gray-500">{machine.description}</div>
+                              <div className="text-sm text-gray-500">{machine.price_per_use || machine.cost_per_hectare}€/ha</div>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p className="text-yellow-700">
+                          Keine passenden Erntemaschinen für {getGermanCropType(farmingDecision.crop_type)} verfügbar.
+                        </p>
+                      </div>
+                    )}
+                    
+                    {/* Special info for Winterroggen */}
+                    {farmingDecision.crop_type === 'winterroggen' && suitableMachines.length > 0 && (
+                      <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <p className="text-sm text-blue-700">
+                          <strong>💡 Winterroggen-Info:</strong> Sie können zwischen Körnerernte (Mähdrescher) 
+                          oder Ganzpflanzensilage (Häcksler) wählen. Ganzpflanzensilage wird als Futter verwendet.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
               } else {
                 // Andere Arbeitsschritte (unverändert)
                 return (
