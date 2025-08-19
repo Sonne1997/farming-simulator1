@@ -345,6 +345,7 @@ class Machine(BaseModel):
     price_per_use: float
     suitable_for: List[CropType]
     working_step: WorkingStep
+    fertilizer_type: Optional[str] = None  # For fertilizer application machines
     image_url: Optional[str] = None
 
 class MachineCreate(BaseModel):
