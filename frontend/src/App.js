@@ -138,12 +138,13 @@ const App = () => {
       console.log('Database initialized');
       
       // Then load data  
-      const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes] = await Promise.all([
+      const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes, activePlotsRes] = await Promise.all([
         axios.get(`${API}/plots`),
         axios.get(`${API}/machines`),
         axios.get(`${API}/fertilizer-specs`),
         axios.get(`${API}/market-values`),
-        axios.get(`${API}/orders`)
+        axios.get(`${API}/orders`),
+        axios.get(`${API}/active-plots-count`)
       ]);
       
       console.log('Raw machines from API:', machinesRes.data.length);
