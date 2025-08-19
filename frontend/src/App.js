@@ -725,6 +725,91 @@ const App = () => {
             </div>
           </div>
         </div>
+
+        {/* Soil Quality and Season Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Soil Quality Display */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">🏞️ Bodenqualität</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Bodentyp:</span>
+                <span className="text-green-600 font-semibold">
+                  {selectedPlot?.soil_type === 'sand' && 'Sandboden'}
+                  {selectedPlot?.soil_type === 'loamy_sand' && 'Lehmiger Sandboden'}
+                  {selectedPlot?.soil_type === 'clayey_sand' && 'Anlehmiger Sandboden'}  
+                  {selectedPlot?.soil_type === 'sandy_loam' && 'Sandiger Lehm'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Bodenpunkte:</span>
+                <span className="text-green-600 font-semibold">{selectedPlot?.soil_points}/56</span>
+              </div>
+              {/* Soil Quality Bar */}
+              <div className="mt-3">
+                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                  <span>Bodenqualität</span>
+                  <span>{Math.round(((selectedPlot?.soil_points || 0) / 56) * 100)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div 
+                    className={`h-3 rounded-full transition-all duration-500 ${
+                      (selectedPlot?.soil_points || 0) >= 45 ? 'bg-green-500' : 
+                      (selectedPlot?.soil_points || 0) >= 35 ? 'bg-yellow-500' : 'bg-orange-500'
+                    }`}
+                    style={{width: `${Math.min(((selectedPlot?.soil_points || 0) / 56) * 100, 100)}%`}}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>25</span>
+                  <span>35</span>
+                  <span>45</span>
+                  <span>56</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Season Progress */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">📅 Saison-Fortschritt</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Aktueller Monat:</span>
+                <span className="text-blue-600 font-semibold">Juni 2025</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Anbaustatus:</span>
+                <span className="text-green-600 font-semibold">Bereit für Aussaat</span>
+              </div>
+              {/* Season Progress Bar */}
+              <div className="mt-3">
+                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                  <span>Anbausaison</span>
+                  <span>25%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div 
+                    className="bg-blue-500 h-3 rounded-full transition-all duration-500"
+                    style={{width: '25%'}}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Sep</span>
+                  <span>Dez</span>
+                  <span>Mär</span>
+                  <span>Jun</span>
+                  <span>Sep</span>
+                </div>
+              </div>
+              <div className="mt-2 p-2 bg-blue-50 rounded-lg">
+                <p className="text-xs text-blue-700">
+                  🌱 Optimale Zeit für Winterkulturen-Aussaat: September - Oktober
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
         
         {/* Cultivation Method */}
         <div className="bg-white rounded-lg shadow-lg p-6">
