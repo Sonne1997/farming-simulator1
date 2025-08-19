@@ -923,7 +923,10 @@ class VirtualFarmingTester:
         # Test 5: Fertilizer Specs API (NEW FEATURE)
         fertilizer_specs = self.test_fertilizer_specs_api()
         
-        # Test 6: HARVEST MACHINE FILTERING (CRITICAL BUG FIX TEST)
+        # Test 6: WINTERRAPS FUNCTIONALITY (USER REQUEST)
+        self.test_winterraps_functionality()
+        
+        # Test 7: HARVEST MACHINE FILTERING (CRITICAL BUG FIX TEST)
         print("\n" + "=" * 60)
         print("TESTING HARVEST MACHINE FILTERING - CRITICAL BUG FIX")
         print("=" * 60)
