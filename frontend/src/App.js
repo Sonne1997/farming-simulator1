@@ -967,7 +967,7 @@ const App = () => {
                           if (farmingDecision.fertilizer_choice.fertilizer_type === fertType) {
                             const relevantMachines = machines.filter(m => 
                               (spec.category === 'mineral' && m.fertilizer_type === 'mineral') ||
-                              (spec.category === 'organic' && m.fertilizer_type === 'organic')
+                              (spec.category === 'organic' && (m.fertilizer_type === 'organic_liquid' || m.fertilizer_type === 'organic_solid'))
                             );
                             
                             return (
