@@ -155,6 +155,7 @@ const App = () => {
       setFertilizerSpecs(fertilizerRes.data);
       setMarketPrices(marketRes.data);
       setOrders(ordersRes.data);
+      setActivePlotsCount(activePlotsRes.data.active_plots);
       
       // Group machines by working step with debug info
       const machinesByStep = {
