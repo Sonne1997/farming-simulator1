@@ -914,6 +914,7 @@ async def initialize_sample_data():
             price_per_use=machine_data["price_per_use"],
             suitable_for=machine_data["suitable_for"],
             working_step=machine_data["working_step"],
+            fertilizer_type=machine_data.get("fertilizer_type"),  # Add fertilizer_type support
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         )
         await db.machines.insert_one(machine.dict())
