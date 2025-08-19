@@ -494,7 +494,7 @@ const App = () => {
             </div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold">{orders.length}</div>
+            <div className="text-3xl font-bold">{activePlotsCount}</div>
             <div className="text-green-100">Aktive Parzellen</div>
           </div>
         </div>
