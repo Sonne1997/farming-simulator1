@@ -769,7 +769,11 @@ async def reset_database():
     await db.orders.delete_many({})
     return {"message": "Database completely reset"}
 
-@api_router.post("/initialize-data")
+@api_router.get("/active-plots-count")
+async def get_active_plots_count():
+    """Count how many plots have active orders"""
+    active_count = await db.orders.count_documents({"status": {"$in": ["confirmed", "implementing", "completed"]}})
+    return {"active_plots": active_count}
 async def initialize_sample_data():
     # COMPLETELY clear existing data first
     await db.machines.delete_many({})
