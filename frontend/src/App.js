@@ -965,10 +965,20 @@ const App = () => {
                         {/* Show machines based on fertilizer type */}
                         {Object.entries(fertilizerSpecs).map(([fertType, spec]) => {
                           if (farmingDecision.fertilizer_choice.fertilizer_type === fertType) {
-                            const relevantMachines = machines.filter(m => 
-                              (spec.category === 'mineral' && m.fertilizer_type === 'mineral') ||
-                              (spec.category === 'organic' && (m.fertilizer_type === 'organic_liquid' || m.fertilizer_type === 'organic_solid'))
-                            );
+                            const relevantMachines = machines.filter(m => {
+                              if (spec.category === 'mineral') {
+                                return m.fertilizer_type === 'mineral';
+                              } else if (spec.category === 'organic') {
+                                // Spezifische Zuordnung für organische Dünger
+                                if (fertType === 'rindermist') {
+                                  return m.fertilizer_type === 'organic_solid';
+                                } else {
+                                  // Flüssige organische Dünger (gülle, gärrest)
+                                  return m.fertilizer_type === 'organic_liquid';
+                                }
+                              }
+                              return false;
+                            });
                             
                             return (
                               <div key={fertType}>
