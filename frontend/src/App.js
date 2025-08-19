@@ -744,6 +744,31 @@ const App = () => {
           <div className="space-y-6">
             {Object.entries(machinesByStep).map(([step, machines]) => {
               if (step === 'pflanzenschutz') {
+                // Keine Pflanzenschutz für Gras, Luzerne und Blühmischung (realistisch)
+                if (['gras', 'luzerne', 'bluehmischung'].includes(farmingDecision.crop_type)) {
+                  return (
+                    <div key={step}>
+                      <div className="bg-white rounded-lg shadow-lg p-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">🛡️ Pflanzenschutz</h3>
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm">✓</span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-green-800">Kein Pflanzenschutz erforderlich</h4>
+                              <p className="text-sm text-green-600 mt-1">
+                                {farmingDecision.crop_type === 'gras' && 'Gras ist sehr robust und benötigt normalerweise keinen Pflanzenschutz.'}
+                                {farmingDecision.crop_type === 'luzerne' && 'Luzerne ist eine sehr widerstandsfähige Leguminose ohne Pflanzenschutzbedarf.'}
+                                {farmingDecision.crop_type === 'bluehmischung' && 'Blühmischungen sind natürlich und benötigen keinen Pflanzenschutz.'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
                   <div key={step}>
                     <h4 className="text-lg font-semibold text-gray-700 mb-3">🌱 {getGermanWorkingStep(step)}</h4>
