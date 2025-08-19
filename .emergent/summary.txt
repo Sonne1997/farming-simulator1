@@ -1,46 +1,27 @@
 <analysis>
-The AI engineer's work trajectory chronicles a challenging journey from a non-functional MVP to a fully deployed, feature-rich application. Initially, the core problem was getting the app online, which involved debugging a missing  dependency and persistent Netlify deployment failures. This phase highlighted the complexities of containerized environments,  file management, and external CI/CD platforms. Despite numerous guaranteed fixes, Netlify proved problematic due to issues like Yarn Workspaces,  exclusions, and caching. The frustration led to a pivot to Vercel for frontend and Render for backend.
-
-Once deployed on Vercel/Render, the focus shifted to enhancing realism and functionality. This included adding new crops, machinery, detailed fertilization and plant protection logic with dynamic pricing, and a weather widget. A significant challenge arose when backend data inconsistencies (old crop names) caused display issues on the live frontend, leading to a crucial backend update phase. The trajectory ends mid-update of the backend, with the AI engineer recognizing the need to update numerous references to old crop types, indicating the iterative nature of development and the intricacies of a full-stack application. The persistent debugging of deployment issues and the meticulous addition of agricultural realism define this work.
+The AI engineer's trajectory shows an iterative and often challenging development process for Lust auf Landwirtschaft. Initially, the focus was on deploying a non-functional MVP, facing significant hurdles with Netlify before successfully migrating to Vercel (frontend) and Render (backend). A major recurring theme was synchronizing backend data (especially crop names and machine attributes) with frontend expectations, leading to extensive debugging of  and . The AI engineer frequently introduced new issues while fixing existing ones, leading to user frustration over wasted credits and broken functionality. Key features added include dynamic crop yields, market prices, detailed fertilization and plant protection logic, a weather widget, and visual enhancements like soil quality and seasonal progress. The conversation highlights the complexities of full-stack consistency, environment variables, and careful deployment. The work concludes with the AI engineer acknowledging persistent issues, specifically with harvest machine filtering and a critical decision to Fork Session to resolve it.
 </analysis>
 
 <product_requirements>
-The user's primary goal was to make a virtual farming platform, Lust auf Landwirtschaft, fully functional and accessible online for users to lease plots and experience real agriculture. Initially, the application was not accessible, and the core problem was identified as a backend issue due to a missing Python dependency.
-
-Upon successful local deployment, the requirements evolved:
-1.  **Deployment**: Get the app online via . This involved extensive debugging of Netlify deployment issues, leading to a switch to Vercel for frontend and Render for backend.
-2.  **Live Functionality**: Transition from a demo version to a real version where customers can purchase plots using PayPal. This necessitated setting up MongoDB Atlas, configuring PayPal Live credentials, and integrating the live backend.
-3.  **Feature Enhancements**:
-    *   Add Winterraps crop with specific yield (2.5 t/ha).
-    *   Include Rauch AXIS M fertilizer spreader.
-    *   Implement logic: if biologisch (organic) farming, only show mechanical fertilizers; otherwise, show mineral fertilizers.
-    *   Detailed Pflanzenschutz (plant protection) based on seasons (autumn/spring) and crop types (e.g., specific treatments for Wintergerste, Winterraps, Zuckerrüben, Silomais, Sommer-Erbsen), including costs.
-    *   Integrate a weather widget for Grabow, 39291 with automatic recommendations.
-    *   Change Erntegut option to An Landwirt zu aktuellen Marktpreisen verkaufen.
-    *   Ensure all 5 plots and 15 machine lists are displayed correctly without duplicates.
-    *   Integrate the Lust auf Landwirtschaft logo.
-    *   Adjust shipping costs to align with real-world scenarios (GLS 40kg package, 25€).
-    *   Update crop names to Winterroggen, Winterweizen, Wintergerste, Wintertriticale.
+The primary goal for Lust auf Landwirtschaft is to create a fully functional online virtual farming platform where users can lease plots and manage agricultural activities. Initially, the app was non-functional due to a missing backend dependency. Key requirements evolved to include robust deployment (Vercel/Render), enabling live plot purchases via PayPal, and extensive feature enhancements for realism and user experience. These encompass:
+-   **Crop Management**: Addition of Winterraps and specific Winter prefixes for crops (e.g., Winterroggen, Winterweizen) with accurate yields and market prices. A new Khorasan-Weizen crop with specific yield and high market value.
+-   **Machinery & Operations**: Implement Rauch AXIS M fertilizer spreader, and specific rules for displaying mechanical vs. mineral fertilizers based on biologisch (organic) farming. Detailed, crop-specific plant protection logic for various crops (e.g., Wintergerste, Winterraps), including seasonal treatments (autumn/spring).
+-   **User Interface & Data**: Integrate a weather widget for Grabow (39291), change Erntegut text to An Landwirt zu aktuellen Marktpreisen verkaufen, ensure accurate display of 5 plots and 15 machines without duplicates. Incorporate a specific Lust auf Landwirtschaft logo. Adjust shipping costs (25€).
+-   **Core Functionality**: Ensure plots are selectable, farming workflow functions, and PayPal buttons render for payment processing. Active plots count should reflect confirmed orders.
 </product_requirements>
 
 <key_technical_concepts>
-
--   **React**: Frontend framework for the interactive web application.
--   **FastAPI**: Python backend framework for API endpoints.
--   **MongoDB**: Database for storing application data (plots, orders, etc.).
--   **Tailwind CSS**: Utility-first CSS framework for styling.
--   **PayPal API**: Integration for processing payments (Sandbox and Live environments).
--   **Netlify**: Initial CI/CD and hosting platform attempt for the frontend.
--   **Vercel**: Alternative CI/CD and hosting for the React frontend.
--   **Render**: Hosting platform for the FastAPI backend.
--   **Railway**: Another hosting platform attempt for the backend, abandoned due to free tier limitations.
--   **Git/GitHub**: Version control system, used for synchronizing code and triggering deployments.
--   **DNS Configuration**: Managing domain records (CNAME, TTL) for custom domain mapping.
-
+-   **React**: Frontend development for dynamic user interfaces.
+-   **FastAPI**: Python framework for building the backend API.
+-   **MongoDB**: NoSQL database for data persistence (plots, machines, orders).
+-   **Vercel/Render**: Cloud platforms for frontend and backend deployment.
+-   **PayPal API**: Payment gateway integration.
+-   **Environment Variables**: Secure configuration for URLs and API keys.
+-   **Full-stack Synchronization**: Maintaining consistency between frontend display and backend data.
 </key_technical_concepts>
 
 <code_architecture>
-The application follows a standard full-stack architecture with a React frontend and a FastAPI backend.
+The application uses a standard full-stack setup with a React frontend and a FastAPI backend.
 
 **Directory Structure:**
 
@@ -49,77 +30,59 @@ The application follows a standard full-stack architecture with a React frontend
 **Key Files and Changes:**
 
 -   :
-    -   **Importance**: This is the core of the FastAPI backend, defining API endpoints, data models, and business logic, including PayPal integration.
+    -   **Importance**: Defines the core API logic, data models, and database interactions. It houses all business logic related to crops, machines, plots, and financial calculations.
     -   **Changes Made**:
-        -   Initially, fixes involved ensuring  dependency was installed and the server started correctly.
-        -   Updated  Enum to include Winter prefix for relevant crops (e.g., , , , , ).
-        -   Updated  dictionary to reflect new crop types and their yields.
-        -   Updated  dictionary for new crop types.
-        -   In the last interaction, the AI engineer was in the process of updating 98 further references to these old crop types within the backend code to ensure consistency.
+        -   Updated  Enum to include Winter prefixes (e.g., , ) and added .
+        -   Modified , , and  to reflect new/updated crop data and prices.
+        -   Refined  and  to ensure accurate machine definitions, including , , , and  attributes for proper filtering. This involved significant debugging to eliminate duplicate machine entries and ensure correct initial database setup.
+        -   Added  import to resolve plot creation errors.
+        -   Implemented  API endpoint to track active plots.
+        -   Corrected  Pydantic model to include , , , and  fields.
 
 -   :
-    -   **Importance**: The main React component handling application state, UI rendering, API calls, and user interactions. This file contains most of the frontend logic.
+    -   **Importance**: The main React component that manages the application's state, UI rendering, API calls, and user interactions.
     -   **Changes Made**:
-        -   Fixed an issue where  was not called, leading to empty crop selection. A  hook was added/fixed to trigger data fetching on  change.
-        -   Implemented a Demo Mode with mock data for static deployment on Netlify/Vercel.
-        -   Added static mock data for 5 plots and 15 machines.
-        -   Added  component import and rendering logic within the header.
-        -   Implemented conditional rendering for fertilization machines based on mineralisch or organisch selection.
-        -   Implemented detailed, crop-specific plant protection logic for various crops (Wintergerste, Winterraps, Zuckerrüben, Silomais, Sommer-Erbsen), with dynamic pricing and recommendations.
-        -   Changed Erntegut option text.
-        -   Integrated  into the header.
-        -   Adjusted costs for plant protection (herbicides, insecticides).
-        -   Disabled Demo Mode and updated  to point to the live Render backend.
-        -   Fixed duplicates display by ensuring API calls are conditional to .
+        -   Extensive debugging and modification of  logic to ensure the app fetches real data from the backend consistently.
+        -   Updated machine filtering logic for fertilization () and plant protection (, , ) to match backend data.
+        -   Implemented  for correct display of Winter crops and Khorasan-Weizen.
+        -   Integrated the  and added new visual components for soil quality and a seasonal progress bar.
+        -   Added logic to display active plot count from the backend.
+        -   Modified how machine costs ( vs. ) are displayed to align with backend.
+        -   Adjusted  hooks to prevent duplicate data fetching and ensure  is called appropriately.
+        -   Implemented conditional rendering for organic/mineral fertilizers based on .
+        -   Temporarily added/removed debug console logs for troubleshooting.
 
 -   :
-    -   **Importance**: New component created to display weather information for Grabow (39291).
-    -   **Changes Made**: Initial creation with current temperature, description, humidity, wind speed, pressure, and agricultural recommendations. Includes auto-update and demo data fallback.
+    -   **Importance**: Displays weather information and agricultural recommendations.
+    -   **Changes Made**: Initial creation. (No further significant changes mentioned in trajectory beyond initial creation details from system prompt).
 
 -   :
-    -   **Importance**: Contains static assets and configuration files for frontend deployment.
-    -   **Changes Made**:
-        -   : Created for Netlify/Vercel SPA routing.
-        -   : Added for SEO.
-        -   : Created and added for the application's branding.
-        -   : Moved/copied into  and updated during build processes for various deployment attempts.
+    -   **Importance**: Application branding.
+    -   **Changes Made**: Replaced with a new, modern SVG logo provided by the user.
 
--   :
-    -   **Importance**: Specifies files and directories that Git should ignore.
-    -   **Changes Made**: The  directory was explicitly removed from  to allow Netlify (and later Vercel) to access and deploy the build output. This was a critical fix.
-
--   :
-    -   **Importance**: Configuration file for Netlify deployment.
-    -   **Changes Made**: Multiple iterations trying to configure , , , , and redirects. Frequently modified due to deployment failures, oscillating between pointing to  and the root 
-
--   :
-    -   **Importance**: Configuration file for Vercel deployment.
-    -   **Changes Made**: Created and simplified from initial complex functions setup to basic rewrites, and configured to expect static files in the  directory.
-
--    & :
-    -   **Importance**: Configuration files for cloud hosting platforms like Railway/Render.
-    -   **Changes Made**: Created to specify build and start commands for the FastAPI backend.
+-   , , , , :
+    -   **Importance**: Configuration for Git and deployment platforms.
+    -   **Changes Made**: Modified during initial deployment attempts (Netlify/Vercel/Render) and later adjusted to ensure correct build processes and asset accessibility. These were critical for getting the application online.
 
 </code_architecture>
 
 <pending_tasks>
--   Complete the backend update to accurately reflect all Winter crop names and their related logic throughout the  and other backend files.
--   Verify the live application on Vercel and Render for full functionality after the final backend update.
--   Consider implementing the proposed design improvements (e.g., modern color palette, animations, interactive map, progress bar, tooltips).
--   Address shipping cost implementation within the app, possibly by limiting quantity or offering local pickup.
+-   The immediate task is to repair the harvest machine filtering logic in the frontend to correctly display only suitable machines (e.g., Mähdrescher for cereals, Mais-Häcksler for Silomais, and both for Winterroggen when applicable).
+-   Verify full functionality of the live application on  once the current fixes are deployed.
+-   Consider implementing seasonal logic for planting and harvesting (e.g., Aktuell nicht möglich outside of season).
+-   Integrate real weather forecasting for recommendations.
+-   Implement detailed cost transparency with breakdowns and Bio vs. Konventionell comparisons.
 </pending_tasks>
 
 <current_work>
-The immediate work being carried out is a critical backend update to synchronize crop names between the frontend and backend. The user observed that despite frontend code changes (e.g., Winterroggen instead of Roggen), the live application still displayed old crop names. This was diagnosed as the backend  holding outdated crop type enumerations and related data.
+Immediately before this summary request, the AI engineer was focused on addressing critical issues identified on the preview URL, which mirrored issues expected to hit the live site. The user reported that the application was displaying:
+1.  **Incorrect Harvest Machine Filtering**: For crops like Winterroggen, all four harvest machine options were still shown, rather than the expected two (Mähdrescher and Häcksler for Ganzpflanzensilage). Similarly, other crops might not have been correctly filtered. The backend was updated to support this (Chat Message 764-766), but the frontend filtering was still problematic.
+2.  **Live-Tracking Prematurely Displayed**: The user requested the removal of the Live-Tracking feature, as it was deemed too early. (Chat Message 773-774).
+3.  **Incorrect Seasonal Progress Bar**: The seasonal progress bar was not adapting to new plot purchases, expected to start at 0%. This was addressed by setting  based on the plot's creation or expected start time (Chat Message 775-776).
 
-Specifically, the AI engineer has:
-1.  Updated the  Enum in  (Chat Message 676) to include the Winter prefixes (e.g., , , , , ).
-2.  Modified the  dictionary in  (Chat Message 678) to align with the new  names and their corresponding yield values.
-3.  Updated the  dictionary in  (Chat Message 682) similarly.
-
-The AI engineer identified that there are 98 further references to the old crop types within the backend code (Chat Message 684) that need to be updated to prevent crashes and ensure data consistency. The current state is that the backend is half-repariert (half-repaired), and a Fork Session was requested to allow the AI to complete these remaining updates without pushing a potentially broken backend to GitHub.
+The AI engineer's last actions involved removing the Live-Tracking component and adjusting the seasonal progress. The most pressing unresolved issue, which led to the Fork Session request (Chat Message 780), is the persistent incorrect filtering of harvest machines in the frontend. The AI engineer explicitly stated that the Ernte-Problem ist noch nicht gelöst and confirmed that Winterroggen zeigt immer noch alle 4 Ernte-Maschinen.
 </current_work>
 
 <optional_next_step>
-The next step is to complete the updates to all remaining references to the old crop types in the backend code.
+The next step is to repair the harvest machine filtering logic in the frontend so that crop-specific harvest machines are correctly displayed.
 </optional_next_step>
