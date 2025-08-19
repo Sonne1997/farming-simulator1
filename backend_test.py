@@ -822,6 +822,7 @@ class VirtualFarmingTester:
         print("=" * 80)
         
         key_features = [
+            "Harvest Machine Filtering - Overall",
             "Fertilizer Specs API",
             "Get Machines by Working Step",
             "PayPal Create Order", 
