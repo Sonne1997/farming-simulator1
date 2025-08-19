@@ -996,6 +996,11 @@ class VirtualFarmingTester:
         print("=" * 80)
         
         key_features = [
+            "Winterraps - Overall Functionality",
+            "Winterraps - Mähdrescher Compatibility", 
+            "Winterraps - Herbst Insektizid",
+            "Winterraps - Frühjahr Insektizid",
+            "Winterraps - Harvest Machine Filtering",
             "Harvest Machine Filtering - Overall",
             "Fertilizer Specs API",
             "Get Machines by Working Step",
