@@ -115,6 +115,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [orderToPayFor, setOrderToPayFor] = useState(null);
+  const [activePlotsCount, setActivePlotsCount] = useState(0);
 
   useEffect(() => {
     initializeData();
