@@ -346,6 +346,9 @@ class Machine(BaseModel):
     suitable_for: List[CropType]
     working_step: WorkingStep
     fertilizer_type: Optional[str] = None  # For fertilizer application machines
+    season: Optional[str] = None  # For plant protection: 'herbst', 'fruejahr', 'bio'
+    treatment_type: Optional[str] = None  # For plant protection: 'herbizid', 'insektizid', 'fungizid', 'mechanisch'
+    crop_specific: Optional[str] = None  # For crop-specific treatments: 'wintergerste', 'zuckerrueben', etc.
     image_url: Optional[str] = None
 
 class MachineCreate(BaseModel):
