@@ -671,6 +671,8 @@ const App = () => {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌿 Düngung</h3>
           <div className="space-y-4">
+            {/* Mineralische Düngung - nur bei konventionellem Anbau */}
+            {farmingDecision.cultivation_method === 'konventionell' && (
             <div>
               <h4 className="text-lg font-semibold text-gray-700 mb-3">Mineralische Düngung</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -692,6 +694,7 @@ const App = () => {
                 ))}
               </div>
             </div>
+            )}
 
             <div>
               <h4 className="text-lg font-semibold text-gray-700 mb-3">Organische Düngung</h4>
