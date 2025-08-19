@@ -748,22 +748,22 @@ const App = () => {
         </div>
 
         {/* Crop Selection */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">🌾 Kulturauswahl</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">🌾 Kulturauswahl</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {Object.keys(expectedYields).map(crop => (
-              <label key={crop} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+              <label key={crop} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                 <input
                   type="radio"
                   name="crop_type"
                   value={crop}
                   checked={farmingDecision.crop_type === crop}
                   onChange={(e) => handleFarmingDecisionChange('crop_type', e.target.value)}
-                  className="text-green-600"
+                  className="text-green-600 flex-shrink-0"
                 />
-                <div className="flex-1">
-                  <div className="font-medium">{getGermanCropType(crop)}</div>
-                  <div className="text-sm text-gray-500">{expectedYields[crop]}kg erwartet</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm sm:text-base truncate">{getGermanCropType(crop)}</div>
+                  <div className="text-xs sm:text-sm text-gray-500">{expectedYields[crop]}kg erwartet</div>
                 </div>
               </label>
             ))}
