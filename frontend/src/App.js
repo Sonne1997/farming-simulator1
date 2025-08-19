@@ -668,31 +668,22 @@ const App = () => {
           <div className="space-y-4">
             {/* Current Season Info */}
             <div className="flex items-center justify-between mb-4">
-              <span className="font-medium text-gray-700">Aktuelle Saison:</span>
+              <span className="font-medium text-gray-700">Ihr Anbaujahr:</span>
               <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                {new Date().getMonth() >= 2 && new Date().getMonth() <= 5 ? 'Frühjahr' :
-                 new Date().getMonth() >= 6 && new Date().getMonth() <= 8 ? 'Sommer' :
-                 new Date().getMonth() >= 9 && new Date().getMonth() <= 11 ? 'Herbst' : 'Winter'}
+                2025/2026
               </span>
             </div>
             
-            {/* Progress Timeline */}
+            {/* Progress Timeline - starts at 0% when someone buys */}
             <div className="space-y-3">
               {[
-                { phase: 'Aussaat', month: 'März', icon: '🌱', progress: 25, status: new Date().getMonth() >= 2 ? 'completed' : 'upcoming' },
-                { phase: 'Wachstum', month: 'Mai', icon: '🌾', progress: 50, status: new Date().getMonth() >= 4 ? 'completed' : new Date().getMonth() === 3 ? 'current' : 'upcoming' },
-                { phase: 'Pflege', month: 'Juli', icon: '🚜', progress: 75, status: new Date().getMonth() >= 6 ? 'completed' : new Date().getMonth() === 5 ? 'current' : 'upcoming' },
-                { phase: 'Ernte', month: 'August', icon: '🎯', progress: 100, status: new Date().getMonth() >= 7 ? 'completed' : new Date().getMonth() === 6 ? 'current' : 'upcoming' }
+                { phase: 'Aussaat', month: 'Herbst 2025', icon: '🌱', progress: 25, status: 'upcoming' },
+                { phase: 'Wachstum', month: 'Frühjahr 2026', icon: '🌾', progress: 50, status: 'upcoming' },
+                { phase: 'Pflege', month: 'Sommer 2026', icon: '🚜', progress: 75, status: 'upcoming' },
+                { phase: 'Ernte', month: 'Herbst 2026', icon: '🎯', progress: 100, status: 'upcoming' }
               ].map((stage, index) => (
-                <div key={index} className={`flex items-center space-x-4 p-3 rounded-lg ${
-                  stage.status === 'completed' ? 'bg-green-50 border border-green-200' :
-                  stage.status === 'current' ? 'bg-blue-50 border border-blue-200' :
-                  'bg-gray-50 border border-gray-200'
-                }`}>
-                  <div className={`text-2xl ${
-                    stage.status === 'completed' ? 'grayscale-0' :
-                    stage.status === 'current' ? 'grayscale-0' : 'grayscale'
-                  }`}>
+                <div key={index} className="flex items-center space-x-4 p-3 rounded-lg bg-gray-50 border border-gray-200">
+                  <div className="text-2xl grayscale">
                     {stage.icon}
                   </div>
                   <div className="flex-1">
@@ -702,57 +693,35 @@ const App = () => {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div 
-                        className={`h-2 rounded-full transition-all duration-1000 ${
-                          stage.status === 'completed' ? 'bg-green-500' :
-                          stage.status === 'current' ? 'bg-blue-500' : 'bg-gray-300'
-                        }`}
-                        style={{ 
-                          width: stage.status === 'completed' ? '100%' : 
-                                 stage.status === 'current' ? '50%' : '0%' 
-                        }}
+                        className="bg-gray-300 h-2 rounded-full transition-all duration-1000"
+                        style={{ width: '0%' }}
                       ></div>
                     </div>
                   </div>
-                  {stage.status === 'completed' && (
-                    <div className="text-green-600">
-                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  )}
-                  {stage.status === 'current' && (
-                    <div className="text-blue-600 animate-pulse">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                  )}
+                  <div className="text-gray-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
                 </div>
               ))}
             </div>
             
-            {/* Overall Progress */}
+            {/* Overall Progress - starts at 0% */}
             <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-medium text-gray-800">Gesamt-Fortschritt:</span>
-                <span className="text-lg font-bold text-green-600">
-                  {new Date().getMonth() >= 7 ? '100%' :
-                   new Date().getMonth() >= 6 ? '75%' :
-                   new Date().getMonth() >= 4 ? '50%' :
-                   new Date().getMonth() >= 2 ? '25%' : '0%'}
-                </span>
+                <span className="text-lg font-bold text-gray-600">0%</span>
               </div>
               <div className="w-full bg-white rounded-full h-3 shadow-inner">
                 <div 
-                  className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-2000"
-                  style={{ 
-                    width: new Date().getMonth() >= 7 ? '100%' :
-                           new Date().getMonth() >= 6 ? '75%' :
-                           new Date().getMonth() >= 4 ? '50%' :
-                           new Date().getMonth() >= 2 ? '25%' : '0%'
-                  }}
+                  className="bg-gradient-to-r from-gray-300 to-gray-400 h-3 rounded-full transition-all duration-2000"
+                  style={{ width: '0%' }}
                 ></div>
               </div>
+              <p className="text-sm text-gray-600 mt-2">
+                🎯 Ihr Anbaujahr beginnt nach der Buchung und Zahlung
+              </p>
             </div>
           </div>
         </div>
