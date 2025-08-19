@@ -1,35 +1,52 @@
-<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle (light green) -->
-  <circle cx="40" cy="40" r="38" fill="#E8F5E8" stroke="#4CAF50" stroke-width="2"/>
+<svg width="80" height="80" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#F5F5F5"/>
   
-  <!-- Fields/landscape layers -->
-  <path d="M2 55 Q20 50 40 55 Q60 50 78 55 L78 65 Q60 60 40 65 Q20 60 2 65 Z" fill="#8BC34A"/>
-  <path d="M2 65 Q20 60 40 65 Q60 60 78 65 L78 72 Q60 67 40 72 Q20 67 2 72 Z" fill="#4CAF50"/>
+  <!-- Yellow fields (curved) -->
+  <path d="M20 140 Q50 130 100 140 Q150 130 180 140 L180 170 Q150 160 100 170 Q50 160 20 170 Z" fill="#FFD700"/>
+  <path d="M30 160 Q60 150 100 160 Q140 150 170 160 L170 180 Q140 170 100 180 Q60 170 30 180 Z" fill="#FFC107"/>
   
-  <!-- Modern stylized cow (simplified) -->
-  <ellipse cx="20" cy="30" rx="8" ry="10" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
-  <circle cx="20" cy="22" r="5" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
-  <circle cx="18" cy="20" r="1" fill="#333"/>
-  <circle cx="22" cy="20" r="1" fill="#333"/>
-  <!-- Cow spots -->
-  <ellipse cx="18" cy="28" rx="2" ry="1.5" fill="#333"/>
-  <ellipse cx="23" cy="32" rx="1.5" ry="1" fill="#333"/>
+  <!-- Orange/brown field -->
+  <path d="M40 120 Q70 110 100 120 Q130 110 160 120 L160 140 Q130 130 100 140 Q70 130 40 140 Z" fill="#FF9800"/>
   
-  <!-- Stylized plant/wheat -->
-  <rect x="36" y="45" width="2" height="12" fill="#4CAF50"/>
-  <ellipse cx="37" cy="43" rx="3" ry="1.5" fill="#8BC34A"/>
-  <ellipse cx="37" cy="41" rx="4" ry="2" fill="#8BC34A"/>
-  <ellipse cx="37" cy="39" rx="3" ry="1.5" fill="#8BC34A"/>
+  <!-- Gray cow (simplified) -->
+  <ellipse cx="60" cy="70" rx="25" ry="35" fill="#BDBDBD"/>
+  <ellipse cx="60" cy="45" rx="18" ry="20" fill="#BDBDBD"/>
+  <!-- Cow ears -->
+  <ellipse cx="50" cy="35" rx="8" ry="12" fill="#BDBDBD"/>
+  <ellipse cx="70" cy="35" rx="8" ry="12" fill="#BDBDBD"/>
+  <!-- Cow horns -->
+  <path d="M45 30 Q40 20 35 15" stroke="#9E9E9E" stroke-width="3" fill="none"/>
+  <path d="M75 30 Q80 20 85 15" stroke="#9E9E9E" stroke-width="3" fill="none"/>
+  <!-- Cow eyes -->
+  <circle cx="55" cy="40" r="3" fill="#FFFFFF"/>
+  <circle cx="65" cy="40" r="3" fill="#FFFFFF"/>
+  <circle cx="55" cy="40" r="1.5" fill="#000000"/>
+  <circle cx="65" cy="40" r="1.5" fill="#000000"/>
+  <!-- Cow nose -->
+  <ellipse cx="60" cy="50" rx="4" ry="3" fill="#9E9E9E"/>
   
-  <!-- Modern tractor (simplified geometric) -->
-  <rect x="50" y="35" width="16" height="8" rx="2" fill="#2E7D32"/>
-  <rect x="58" y="28" width="6" height="7" rx="1" fill="#2E7D32"/>
-  <rect x="59" y="29" width="4" height="5" fill="#B8E6B8"/>
-  <!-- Wheels -->
-  <circle cx="62" cy="46" r="4" fill="#1B5E20"/>
-  <circle cx="53" cy="46" r="3" fill="#1B5E20"/>
+  <!-- Green plant -->
+  <rect x="25" y="90" width="3" height="25" fill="#4CAF50"/>
+  <ellipse cx="26" cy="88" rx="6" ry="4" fill="#4CAF50"/>
+  <ellipse cx="24" cy="83" rx="5" ry="3" fill="#4CAF50"/>
+  <ellipse cx="28" cy="85" rx="4" ry="3" fill="#4CAF50"/>
+  <ellipse cx="26" cy="80" rx="3" ry="2" fill="#4CAF50"/>
   
-  <!-- Central leaf/plant symbol -->
-  <path d="M40 20 Q35 25 40 30 Q45 25 40 20" fill="#4CAF50"/>
-  <rect x="39" y="20" width="2" height="8" fill="#2E7D32"/>
+  <!-- Green tractor -->
+  <rect x="120" y="80" width="45" height="25" rx="5" fill="#4CAF50"/>
+  <!-- Tractor cabin -->
+  <rect x="145" y="60" width="18" height="20" rx="3" fill="#4CAF50"/>
+  <rect x="147" y="62" width="14" height="16" fill="#E8F5E8"/>
+  <!-- Front wheel (large) -->
+  <circle cx="155" cy="115" r="12" fill="#2E7D32"/>
+  <circle cx="155" cy="115" r="6" fill="#1B5E20"/>
+  <!-- Back wheel (smaller) -->
+  <circle cx="130" cy="115" r="9" fill="#2E7D32"/>
+  <circle cx="130" cy="115" r="4.5" fill="#1B5E20"/>
+  <!-- Tractor details -->
+  <rect x="125" y="85" width="4" height="4" fill="#FFD700"/>
+  <rect x="135" y="85" width="4" height="4" fill="#FFD700"/>
+  <!-- Exhaust pipe -->
+  <rect x="148" y="50" width="3" height="10" fill="#666"/>
 </svg>
