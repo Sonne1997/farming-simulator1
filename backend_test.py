@@ -769,7 +769,7 @@ class VirtualFarmingTester:
         self.test_market_values_endpoint()
         self.test_seed_costs_endpoint()
         
-        # Test 7: Enhanced Order Management with PayPal Integration
+        # Test 8: Enhanced Order Management with PayPal Integration
         if plots and machines:
             # Create an order with enhanced farming decisions
             machine_ids = [m["id"] for m in machines[:6]]  # Get first 6 machine IDs
