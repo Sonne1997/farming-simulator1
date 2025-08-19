@@ -389,6 +389,18 @@ test_plan:
   test_all: false
   test_priority: "high_first"
 
+  - task: "Harvest Machine Filtering"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "CRITICAL ISSUE IDENTIFIED: Frontend shows all 4 harvest machines for every crop instead of crop-specific filtering. Backend has correct 'suitable_for' data but frontend ignores it. For Winterroggen, should only show: 1) Mähdrescher (grain harvest), 2) Ganzpflanzensilage-Häcksler (whole plant silage). Currently shows all 4 machines including Mais-Häcksler and Gras-Häcksler which are not suitable."
+
 agent_communication:
   - agent: "main"
     message: "Built complete virtual farming platform with plot leasing, farming decisions, and order management. Ready for backend testing to verify all API endpoints and data flow."
@@ -408,3 +420,5 @@ agent_communication:
     message: "🚨 FRONTEND ISSUE IDENTIFIED: Backend is fully functional with WINTER* crop types, but frontend still displays old crop names without Winter prefix. Live website shows 'roggen' instead of 'Winterroggen', 'weizen' instead of 'Winterweizen', etc. Frontend needs comprehensive testing and updating to display correct crop names and ensure full compatibility with updated backend system. Ready to deploy frontend testing agent for complete diagnosis and repair."
   - agent: "testing"
     message: "✅ COMPREHENSIVE FRONTEND TESTING COMPLETE: **CRITICAL CORRECTION - CROP NAMES ARE ACTUALLY CORRECT!** The initial problem statement was incorrect. Testing revealed that crop names ARE displaying properly with Winter prefixes: Winterroggen, Winterweizen, Wintergerste, Wintertriticale, Winterraps all show correctly. Major findings: ✅ WORKING: Plot selection (10 plots), farming workflow, crop selection with correct Winter names, fertilizer selection (6 options), order review, cost calculations (43.13€). ❌ ISSUES FOUND: 1) PayPal buttons not rendering (payment page loads but buttons missing), 2) Machine selection broken in Pflanzenschutz (0 machines) and Düngung (0 machines) sections. Frontend-backend integration is mostly functional, but these 2 critical issues prevent complete user workflow."
+  - agent: "main"
+    message: "🚨 HARVEST MACHINE FILTERING BUG IDENTIFIED: Found the exact problem with harvest machine filtering. Frontend displays all 4 harvest machines regardless of selected crop. Backend has correct 'suitable_for' field data but frontend ignores it. For Winterroggen should only show: 1) Mähdrescher (for grain), 2) Ganzpflanzensilage-Häcksler (for whole plant silage). Currently shows all machines including Mais-Häcksler and Gras-Häcksler. Need to implement crop-specific filtering in frontend harvest machine selection."
