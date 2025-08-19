@@ -607,6 +607,61 @@ const App = () => {
       </div>
 
       <div className="space-y-8">
+        {/* Soil Quality Visualization */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">🌱 Bodenqualität</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-gray-700">Bodenpunkte: {selectedPlot?.soil_points}</span>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                selectedPlot?.soil_points >= 46 ? 'bg-green-100 text-green-800' :
+                selectedPlot?.soil_points >= 31 ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                {selectedPlot?.soil_points >= 46 ? 'Hoch' :
+                 selectedPlot?.soil_points >= 31 ? 'Mittel' : 'Niedrig'}
+              </span>
+            </div>
+            
+            {/* Visual Progress Bar */}
+            <div className="w-full bg-gray-200 rounded-full h-4">
+              <div 
+                className={`h-4 rounded-full transition-all duration-500 ${
+                  selectedPlot?.soil_points >= 46 ? 'bg-green-500' :
+                  selectedPlot?.soil_points >= 31 ? 'bg-yellow-500' :
+                  'bg-red-500'
+                }`}
+                style={{ width: `${Math.min((selectedPlot?.soil_points || 0) / 60 * 100, 100)}%` }}
+              ></div>
+            </div>
+            
+            {/* Soil Quality Explanation */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 bg-red-500 rounded"></div>
+                <span>20-30: Sandboden (niedrige Erträge)</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+                <span>31-45: Lehmiger Sand (mittlere Erträge)</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 bg-green-500 rounded"></div>
+                <span>46-60: Lehm (hohe Erträge)</span>
+              </div>
+            </div>
+            
+            {/* Expected Yield Impact */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="font-medium text-gray-800 mb-2">💰 Auswirkung auf Erträge:</h4>
+              <p className="text-sm text-gray-600">
+                {selectedPlot?.soil_points >= 46 ? '🟢 Optimale Bedingungen - Erträge 15-20% über Durchschnitt' :
+                 selectedPlot?.soil_points >= 31 ? '🟡 Durchschnittliche Bedingungen - normale Erträge' :
+                 '🔴 Herausfordernde Bedingungen - Erträge 10-15% unter Durchschnitt'}
+              </p>
+            </div>
+          </div>
+        </div>
         {/* Cultivation Method */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌱 Anbaumethode</h3>
