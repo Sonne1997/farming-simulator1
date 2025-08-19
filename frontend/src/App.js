@@ -1415,37 +1415,70 @@ const App = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID, currency: "EUR" }}>
-          <PayPalButtons
-            createOrder={async () => {
-              try {
-                const response = await axios.post(`${API}/payments/create-paypal-order`, {
-                  order_id: orderToPayFor.id,
-                  amount: orderToPayFor.total_cost
-                });
-                return response.data.paypal_order_id;
-              } catch (error) {
-                console.error('Error creating PayPal order:', error);
-                throw error;
-              }
-            }}
-            onApprove={async (data) => {
-              try {
-                await axios.post(`${API}/payments/capture-paypal-order`, {
-                  paypal_order_id: data.orderID
-                });
-                handlePaymentSuccess();
-              } catch (error) {
-                console.error('Error capturing PayPal order:', error);
-                alert('Fehler bei der Zahlung. Bitte versuchen Sie es erneut.');
-              }
-            }}
-            onError={(error) => {
-              console.error('PayPal error:', error);
-              alert('Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut.');
-            }}
-          />
-        </PayPalScriptProvider>
+        {!PAYPAL_CLIENT_ID ? (
+          <div className="text-center p-6">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-red-700">PayPal Client ID nicht konfiguriert</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="mb-4 text-sm text-gray-600">
+              PayPal wird geladen... (Client ID: {PAYPAL_CLIENT_ID?.substring(0, 20)}...)
+            </div>
+            <PayPalScriptProvider 
+              options={{ 
+                clientId: PAYPAL_CLIENT_ID, 
+                currency: "EUR",
+                intent: "capture"
+              }}
+            >
+              <PayPalButtons
+                style={{
+                  layout: "vertical",
+                  color: "gold",
+                  shape: "rect",
+                  label: "paypal"
+                }}
+                createOrder={async () => {
+                  try {
+                    console.log('Creating PayPal order...');
+                    const response = await axios.post(`${API}/payments/create-paypal-order`, {
+                      order_id: orderToPayFor.id,
+                      amount: orderToPayFor.total_cost
+                    });
+                    console.log('PayPal order created:', response.data);
+                    return response.data.paypal_order_id;
+                  } catch (error) {
+                    console.error('Error creating PayPal order:', error);
+                    alert('Fehler beim Erstellen der PayPal-Bestellung: ' + error.message);
+                    throw error;
+                  }
+                }}
+                onApprove={async (data) => {
+                  try {
+                    console.log('PayPal payment approved:', data);
+                    await axios.post(`${API}/payments/capture-paypal-order`, {
+                      paypal_order_id: data.orderID
+                    });
+                    handlePaymentSuccess();
+                  } catch (error) {
+                    console.error('Error capturing PayPal order:', error);
+                    alert('Fehler bei der Zahlung. Bitte versuchen Sie es erneut.');
+                  }
+                }}
+                onError={(error) => {
+                  console.error('PayPal error:', error);
+                  alert('PayPal-Fehler: ' + (error.message || 'Unbekannter Fehler'));
+                }}
+                onCancel={(data) => {
+                  console.log('PayPal payment cancelled:', data);
+                  alert('Zahlung abgebrochen');
+                }}
+              />
+            </PayPalScriptProvider>
+          </div>
+        )}
       </div>
     </div>
   );
