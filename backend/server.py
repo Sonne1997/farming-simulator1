@@ -919,6 +919,9 @@ async def initialize_sample_data():
             suitable_for=machine_data["suitable_for"],
             working_step=machine_data["working_step"],
             fertilizer_type=machine_data.get("fertilizer_type"),  # Add fertilizer_type support
+            season=machine_data.get("season"),  # Add plant protection season
+            treatment_type=machine_data.get("treatment_type"),  # Add plant protection treatment type
+            crop_specific=machine_data.get("crop_specific"),  # Add crop-specific treatments
             image_url="https://images.pexels.com/photos/96417/pexels-photo-96417.jpeg"
         )
         await db.machines.insert_one(machine.dict())
