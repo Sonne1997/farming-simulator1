@@ -572,6 +572,125 @@ class VirtualFarmingTester:
             self.log_test("Seed Costs for WINTER* Crops", False, f"Error: {str(e)}")
             return False
 
+    def test_harvest_machine_filtering(self):
+        """Test harvest machine filtering functionality - CRITICAL BUG FIX VERIFICATION"""
+        try:
+            # Get all harvest machines
+            response = self.session.get(f"{self.base_url}/machines/step/ernte")
+            if response.status_code != 200:
+                self.log_test("Harvest Machine Filtering - Get Harvest Machines", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            harvest_machines = response.json()
+            
+            # Verify we have exactly 4 harvest machines
+            if len(harvest_machines) != 4:
+                self.log_test("Harvest Machine Filtering - Machine Count", False, f"Expected 4 harvest machines, got {len(harvest_machines)}")
+                return False
+            
+            self.log_test("Harvest Machine Filtering - Machine Count", True, f"Found {len(harvest_machines)} harvest machines")
+            
+            # Define expected harvest machines with their suitable_for crops
+            expected_machines = {
+                "John Deere T660i Mähdrescher": ["winterweizen", "winterroggen", "wintergerste", "wintertriticale", "khorasan_weizen", "erbsen"],
+                "Mais-Claas Jaguar 940": ["silomais"],
+                "Gras-Claas Jaguar 940": ["gras"],
+                "Ganzpflanzensilage-Claas Jaguar 940": ["winterroggen"]
+            }
+            
+            # Verify each expected machine exists with correct suitable_for fields
+            found_machines = {}
+            for machine in harvest_machines:
+                machine_name = machine.get("name", "")
+                suitable_for = machine.get("suitable_for", [])
+                
+                # Check if this is one of our expected machines
+                for expected_name, expected_crops in expected_machines.items():
+                    if expected_name in machine_name:
+                        found_machines[expected_name] = {
+                            "found": True,
+                            "suitable_for": suitable_for,
+                            "expected_crops": expected_crops,
+                            "correct_crops": set(suitable_for) == set(expected_crops)
+                        }
+                        break
+            
+            # Verify all expected machines were found
+            all_machines_found = True
+            all_crops_correct = True
+            
+            for expected_name, expected_crops in expected_machines.items():
+                if expected_name not in found_machines:
+                    self.log_test(f"Harvest Machine Filtering - {expected_name}", False, f"Machine not found")
+                    all_machines_found = False
+                else:
+                    machine_info = found_machines[expected_name]
+                    if machine_info["correct_crops"]:
+                        self.log_test(f"Harvest Machine Filtering - {expected_name}", True, f"Correct suitable_for: {machine_info['suitable_for']}")
+                    else:
+                        self.log_test(f"Harvest Machine Filtering - {expected_name}", False, f"Incorrect suitable_for. Expected: {expected_crops}, Got: {machine_info['suitable_for']}")
+                        all_crops_correct = False
+            
+            # Test crop-specific filtering scenarios
+            test_scenarios = [
+                {
+                    "crop": "winterroggen",
+                    "expected_machines": ["John Deere T660i Mähdrescher", "Ganzpflanzensilage-Claas Jaguar 940"],
+                    "description": "Winterroggen should show grain harvester and whole plant silage harvester"
+                },
+                {
+                    "crop": "winterweizen", 
+                    "expected_machines": ["John Deere T660i Mähdrescher"],
+                    "description": "Winterweizen should only show grain harvester"
+                },
+                {
+                    "crop": "silomais",
+                    "expected_machines": ["Mais-Claas Jaguar 940"],
+                    "description": "Silomais should only show corn harvester"
+                },
+                {
+                    "crop": "gras",
+                    "expected_machines": ["Gras-Claas Jaguar 940"],
+                    "description": "Gras should only show grass harvester"
+                }
+            ]
+            
+            crop_filtering_success = True
+            for scenario in test_scenarios:
+                crop = scenario["crop"]
+                expected_machine_names = scenario["expected_machines"]
+                description = scenario["description"]
+                
+                # Find machines suitable for this crop
+                suitable_machines = []
+                for machine in harvest_machines:
+                    if crop in machine.get("suitable_for", []):
+                        suitable_machines.append(machine["name"])
+                
+                # Check if the right machines are suitable
+                expected_found = all(any(expected in machine_name for machine_name in suitable_machines) for expected in expected_machine_names)
+                no_extra_machines = len(suitable_machines) == len(expected_machine_names)
+                
+                if expected_found and no_extra_machines:
+                    self.log_test(f"Harvest Machine Filtering - {crop.title()} Crop", True, f"{description}. Found: {suitable_machines}")
+                else:
+                    self.log_test(f"Harvest Machine Filtering - {crop.title()} Crop", False, f"{description}. Expected: {expected_machine_names}, Found: {suitable_machines}")
+                    crop_filtering_success = False
+            
+            # Overall harvest machine filtering test result
+            overall_success = all_machines_found and all_crops_correct and crop_filtering_success
+            
+            if overall_success:
+                self.log_test("Harvest Machine Filtering - Overall", True, "All harvest machines have correct suitable_for fields and crop-specific filtering works correctly")
+                return True
+            else:
+                self.log_test("Harvest Machine Filtering - Overall", False, "Harvest machine filtering has issues with suitable_for fields or crop-specific filtering")
+                return False
+                
+        except Exception as e:
+            self.log_test("Harvest Machine Filtering - Overall", False, f"Error: {str(e)}")
+            return False
+
     def test_working_steps_categorization(self, machines):
         """Test that machines are properly categorized by working steps"""
         working_steps = ["bodenbearbeitung", "aussaat", "pflanzenschutz", "duengung", "pflege", "ernte"]
