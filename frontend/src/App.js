@@ -756,6 +756,109 @@ const App = () => {
             </div>
           </div>
         </div>
+        
+        {/* Live Tracking Dashboard */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">📸 Live-Tracking</h3>
+          <div className="space-y-6">
+            
+            {/* Recent Photos */}
+            <div>
+              <h4 className="font-semibold text-gray-700 mb-3 flex items-center">
+                📷 Wöchentliche Fotos
+                <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Neu</span>
+              </h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { week: 'KW 28', date: '15.07.2025', image: 'https://images.pexels.com/photos/247502/pexels-photo-247502.jpeg', status: 'Aussaat abgeschlossen' },
+                  { week: 'KW 29', date: '22.07.2025', image: 'https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg', status: 'Keimung sichtbar' },
+                  { week: 'KW 30', date: '29.07.2025', image: 'https://images.pexels.com/photos/2132180/pexels-photo-2132180.jpeg', status: 'Wachstum gut' },
+                  { week: 'KW 31', date: 'Heute', image: 'https://images.pexels.com/photos/388415/pexels-photo-388415.jpeg', status: 'Aktueller Stand' }
+                ].map((photo, index) => (
+                  <div key={index} className="relative group cursor-pointer">
+                    <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200 hover:border-green-400 transition-all">
+                      <img 
+                        src={photo.image} 
+                        alt={photo.week}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all"></div>
+                    <div className="mt-2 text-center">
+                      <div className="font-medium text-sm">{photo.week}</div>
+                      <div className="text-xs text-gray-500">{photo.date}</div>
+                      <div className="text-xs text-green-600 mt-1">{photo.status}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Push Notifications */}
+            <div>
+              <h4 className="font-semibold text-gray-700 mb-3 flex items-center">
+                🔔 Benachrichtigungen
+                <button className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full hover:bg-blue-200 transition-colors">
+                  Aktivieren
+                </button>
+              </h4>
+              <div className="space-y-3">
+                {[
+                  { time: 'Heute, 14:30', message: '🌱 Ihre Parzelle B2 ist bereit für die Düngung!', type: 'action', new: true },
+                  { time: 'Gestern, 09:15', message: '📸 Neues Foto von Ihrer Parzelle verfügbar', type: 'info', new: false },
+                  { time: '3 Tage', message: '🌧️ Regen erwartet - perfekt für das Wachstum', type: 'weather', new: false },
+                  { time: '1 Woche', message: '✅ Aussaat erfolgreich abgeschlossen', type: 'success', new: false }
+                ].map((notification, index) => (
+                  <div key={index} className={`flex items-start space-x-3 p-3 rounded-lg ${
+                    notification.new ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50 border border-gray-200'
+                  } hover:shadow-md transition-all cursor-pointer`}>
+                    <div className={`w-2 h-2 rounded-full mt-2 ${
+                      notification.new ? 'bg-blue-500' : 'bg-gray-400'
+                    }`}></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-800">{notification.message}</p>
+                      <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
+                    </div>
+                    {notification.type === 'action' && (
+                      <button className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                        Aktion
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Weather Integration */}
+            <div>
+              <h4 className="font-semibold text-gray-700 mb-3">🌤️ Wetter & Empfehlungen</h4>
+              <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-2xl">☀️</span>
+                    <div>
+                      <div className="font-medium">Heute: 24°C, sonnig</div>
+                      <div className="text-sm text-gray-600">Ideale Bedingungen für Pflanzenschutz</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-gray-600">Morgen</div>
+                    <div className="text-lg">🌧️ 19°C</div>
+                  </div>
+                </div>
+                <div className="bg-white rounded-lg p-3">
+                  <h5 className="font-medium text-green-800 mb-2">💡 Empfehlung:</h5>
+                  <p className="text-sm text-gray-700">
+                    Nutzen Sie das sonnige Wetter heute für Spritzarbeiten. Ab morgen wird Regen erwartet, 
+                    der perfekt für das Pflanzenwachstum ist.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌱 Anbaumethode</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
