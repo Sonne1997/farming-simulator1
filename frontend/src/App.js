@@ -600,13 +600,13 @@ const App = () => {
   );
 
   const renderFarmingDecisions = () => (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">Planen Sie Ihre Landwirtschaft</h2>
-        <p className="text-lg text-gray-600">Entscheidungen für Ihre Parzelle: <strong>{selectedPlot?.name}</strong></p>
+    <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+      <div className="text-center mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 sm:mb-4">Planen Sie Ihre Landwirtschaft</h2>
+        <p className="text-base sm:text-lg text-gray-600">Entscheidungen für Ihre Parzelle: <strong>{selectedPlot?.name}</strong></p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-4 sm:space-y-8">
         {/* Soil Quality Visualization */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌱 Bodenqualität</h3>
