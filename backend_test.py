@@ -752,7 +752,14 @@ class VirtualFarmingTester:
         # Test 5: Fertilizer Specs API (NEW FEATURE)
         fertilizer_specs = self.test_fertilizer_specs_api()
         
-        # Test 6: WINTER* Crop Type System Tests (CRITICAL NEW TESTS)
+        # Test 6: HARVEST MACHINE FILTERING (CRITICAL BUG FIX TEST)
+        print("\n" + "=" * 60)
+        print("TESTING HARVEST MACHINE FILTERING - CRITICAL BUG FIX")
+        print("=" * 60)
+        
+        self.test_harvest_machine_filtering()
+        
+        # Test 7: WINTER* Crop Type System Tests (CRITICAL NEW TESTS)
         print("\n" + "=" * 60)
         print("TESTING WINTER* CROP TYPE SYSTEM")
         print("=" * 60)
