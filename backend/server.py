@@ -891,7 +891,7 @@ async def initialize_sample_data():
         {"id": "john_deere_t660i", "name": "John Deere T660i Mähdrescher", "type": MachineType.MAEHDRESCHER, "description": "Getreidemähdrescher (für Körnergewinnung)", "price_per_use": 4.10, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.WINTERWEIZEN, CropType.WINTERROGGEN, CropType.WINTERGERSTE, CropType.WINTERTRITICALE, CropType.KHORASAN_WEIZEN, CropType.ERBSEN]},
         {"id": "mais_claas_jaguar_940", "name": "Mais-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Spezialhäcksler für Silomais", "price_per_use": 4.20, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.SILOMAIS]},
         {"id": "gras_claas_jaguar_940", "name": "Gras-Claas Jaguar 940", "type": MachineType.GRAS_HAECKSLER, "description": "Häcksler für Gras", "price_per_use": 3.80, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.GRAS]},
-        {"id": "ganzpflanzensilage_claas_jaguar_940", "name": "Ganzpflanzensilage-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Häcksler für Roggen-Ganzpflanzensilage (nur bei Silage-Ernte)", "price_per_use": 4.00, "working_step": WorkingStep.ERNTE, "suitable_for": []}  # Entfernt aus normaler Auswahl
+        {"id": "ganzpflanzensilage_claas_jaguar_940", "name": "Ganzpflanzensilage-Claas Jaguar 940", "type": MachineType.MAIS_HAECKSLER, "description": "Häcksler für Roggen-Ganzpflanzensilage (für Futterzwecke)", "price_per_use": 4.00, "working_step": WorkingStep.ERNTE, "suitable_for": [CropType.WINTERROGGEN]}
     ]
     
     # Initialize database with sample data
