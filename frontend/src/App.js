@@ -528,8 +528,25 @@ const App = () => {
         <p className="text-lg text-gray-600">Alle Parzellen befinden sich in 39291 Grabow</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {plots.map(plot => (
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="inline-flex items-center px-6 py-4 bg-white rounded-lg shadow-lg">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mr-4"></div>
+            <div>
+              <p className="text-lg font-medium text-gray-800">{loadingMessage}</p>
+              <p className="text-sm text-gray-500">Bitte warten...</p>
+            </div>
+          </div>
+        </div>
+      ) : plots.length === 0 ? (
+        <div className="text-center py-12">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 inline-block">
+            <p className="text-yellow-700">Keine Parzellen verfügbar. Backend-Verbindung prüfen.</p>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {plots.map(plot => (
           <div key={plot.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
             <div className="h-48 bg-gray-200 overflow-hidden">
               <img 
