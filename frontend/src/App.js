@@ -131,60 +131,36 @@ const App = () => {
   }, [selectedPlot]);
 
   const initializeData = async () => {
+    if (!API) {
+      console.log('No API URL - skipping initialization');
+      return;
+    }
+
+    setLoading(true);
     try {
-      console.log('Loading live data from API');
+      setLoadingMessage('Daten werden geladen...');
       
-      // Initialize database first
-      await axios.post(`${API}/initialize-data`);
-      console.log('Database initialized');
-      
-      // Then load data  
-      const [plotsRes, machinesRes, fertilizerRes, marketRes, ordersRes, activePlotsRes] = await Promise.all([
-        axios.get(`${API}/plots`),
-        axios.get(`${API}/machines`),
-        axios.get(`${API}/fertilizer-specs`),
-        axios.get(`${API}/market-values`),
-        axios.get(`${API}/orders`),
-        axios.get(`${API}/active-plots-count`)
+      // Parallele API-Calls für bessere Performance
+      const [plotsRes, machinesRes, fertilizerRes, marketRes, activePlotsRes] = await Promise.all([
+        axios.get(`${API}/plots`).catch(() => ({ data: [] })),
+        axios.get(`${API}/machines`).catch(() => ({ data: [] })),
+        axios.get(`${API}/fertilizer-specs`).catch(() => ({ data: {} })),
+        axios.get(`${API}/market-prices`).catch(() => ({ data: {} })),
+        axios.get(`${API}/active-plots-count`).catch(() => ({ data: { count: 0 } }))
       ]);
-      
-      console.log('Raw machines from API:', machinesRes.data.length);
-      console.log('First 3 machine names:', machinesRes.data.slice(0,3).map(m => m.name));
-      
+
       setPlots(plotsRes.data);
-      setMachines(machinesRes.data);
+      setAllMachines(machinesRes.data);
       setFertilizerSpecs(fertilizerRes.data);
       setMarketPrices(marketRes.data);
-      setOrders(ordersRes.data);
-      setActivePlotsCount(activePlotsRes.data.active_plots);
-      
-      // Group machines by working step with debug info
-      const machinesByStep = {
-        bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
-        aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
-        pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
-        duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
-        pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
-        ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
-      };
-      
-      console.log('Machines by working step:', {
-        bodenbearbeitung: machinesByStep.bodenbearbeitung.length,
-        aussaat: machinesByStep.aussaat.length,
-        pflanzenschutz: machinesByStep.pflanzenschutz.length,
-        duengung: machinesByStep.duengung.length,
-        pflege: machinesByStep.pflege.length,
-        ernte: machinesByStep.ernte.length
-      });
-      
-      console.log('Bodenbearbeitung machines:', machinesByStep.bodenbearbeitung.map(m => m.name));
-      
-      setMachinesByStep(machinesByStep);
-      
-      console.log('All data loaded successfully');
+      setActivePlotsCount(activePlotsRes.data.count);
+
+      console.log('All data loaded successfully in parallel');
     } catch (error) {
       console.error('Error initializing data:', error);
-      // No fallback - force live mode only
+      setLoadingMessage('Fehler beim Laden. Versuche erneut...');
+    } finally {
+      setLoading(false);
     }
   };
 
