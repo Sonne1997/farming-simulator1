@@ -1082,11 +1082,21 @@ const App = () => {
                         <div>
                           <h5 className="font-medium text-gray-700 mb-2">🐛 Zusätzliche Insektizidbehandlung (bei Bedarf)</h5>
                           <div className="grid grid-cols-1 gap-4">
-                            {machines.filter(m => 
-                              m.treatment_type === 'insektizid' && 
-                              m.season === 'fruejahr' && 
-                              !m.crop_specific  // Nur allgemeine Insektizide, nicht die crop-spezifischen
-                            ).map(machine => (
+                            {(() => {
+                              // Finde bereits angezeigte Insektizide aus den seasonalen Behandlungen
+                              const seasonalInsecticides = machines.filter(m => 
+                                m.treatment_type === 'insektizid' && 
+                                (m.season === 'herbst' || m.season === 'fruejahr') &&
+                                m.suitable_for && m.suitable_for.includes(farmingDecision.crop_type)
+                              ).map(m => m.id);
+                              
+                              // Zeige nur Insektizide, die noch nicht seasonal angezeigt wurden
+                              return machines.filter(m => 
+                                m.treatment_type === 'insektizid' && 
+                                !seasonalInsecticides.includes(m.id) &&
+                                m.suitable_for && m.suitable_for.includes(farmingDecision.crop_type)
+                              );
+                            })().map(machine => (
                               <label key={`additional-${machine.id}`} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
                                 <input
                                   type="checkbox"
@@ -1096,7 +1106,7 @@ const App = () => {
                                 />
                                 <div className="flex-1">
                                   <div className="font-medium">{machine.name}</div>
-                                  <div className="text-sm text-gray-500">Gegen verschiedene Schädlinge (zusätzlich)</div>
+                                  <div className="text-sm text-gray-500">Zusätzlicher Schutz gegen spezifische Schädlinge</div>
                                   <div className="text-sm text-gray-500">{(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha</div>
                                 </div>
                               </label>
