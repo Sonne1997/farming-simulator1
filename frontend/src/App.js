@@ -1082,8 +1082,12 @@ const App = () => {
                         <div>
                           <h5 className="font-medium text-gray-700 mb-2">🐛 Zusätzliche Insektizidbehandlung (bei Bedarf)</h5>
                           <div className="grid grid-cols-1 gap-4">
-                            {machines.filter(m => m.treatment_type === 'insektizid').map(machine => (
-                              <label key={`spring-${machine.id}`} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
+                            {machines.filter(m => 
+                              m.treatment_type === 'insektizid' && 
+                              m.season === 'fruejahr' && 
+                              !m.crop_specific  // Nur allgemeine Insektizide, nicht die crop-spezifischen
+                            ).map(machine => (
+                              <label key={`additional-${machine.id}`} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
                                 <input
                                   type="checkbox"
                                   checked={farmingDecision.machines[step].includes(machine.id)}
@@ -1092,7 +1096,7 @@ const App = () => {
                                 />
                                 <div className="flex-1">
                                   <div className="font-medium">{machine.name}</div>
-                                  <div className="text-sm text-gray-500">Gegen verschiedene Schädlinge</div>
+                                  <div className="text-sm text-gray-500">Gegen verschiedene Schädlinge (zusätzlich)</div>
                                   <div className="text-sm text-gray-500">{(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha</div>
                                 </div>
                               </label>
