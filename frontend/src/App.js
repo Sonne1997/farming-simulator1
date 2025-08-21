@@ -150,7 +150,7 @@ const App = () => {
       ]);
 
       setPlots(plotsRes.data);
-      setAllMachines(machinesRes.data);
+      setMachines(machinesRes.data);
       setFertilizerSpecs(fertilizerRes.data);
       setMarketPrices(marketRes.data);
       setActivePlotsCount(activePlotsRes.data.count);
