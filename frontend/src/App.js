@@ -590,8 +590,9 @@ const App = () => {
           </div>
         ))}
       </div>
-    </div>
-  );
+    )}
+  </div>
+);
 
   const renderFarmingDecisions = () => (
     <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
