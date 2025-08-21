@@ -113,6 +113,7 @@ const App = () => {
   });
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('Parzellen werden geladen...');
   const [showPayment, setShowPayment] = useState(false);
   const [orderToPayFor, setOrderToPayFor] = useState(null);
   const [activePlotsCount, setActivePlotsCount] = useState(0);
