@@ -705,11 +705,15 @@ async def create_order(order_data: OrderCreate):
     
     total_cost = plot_cost + machine_cost + fertilizer_cost + shipping_cost
     
+    # Calculate profit/loss
+    profit_loss = expected_market_value - total_cost
+    
     order = Order(
         **order_data.dict(),
         total_cost=total_cost,
         expected_yield_kg=expected_yield,
-        expected_market_value=expected_market_value
+        expected_market_value=expected_market_value,
+        profit_loss=profit_loss
     )
     await db.orders.insert_one(order.dict())
     
