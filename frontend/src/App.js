@@ -155,7 +155,24 @@ const App = () => {
       setMarketPrices(marketRes.data);
       setActivePlotsCount(activePlotsRes.data.count);
 
+      // KRITISCH: Maschinen-Gruppierung für die Anzeige
+      const machinesByStep = {
+        bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
+        aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
+        pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
+        duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
+        pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
+        ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
+      };
+      
+      setMachinesByStep(machinesByStep);
+
       console.log('All data loaded successfully in parallel');
+      console.log('Machines grouped by step:', {
+        bodenbearbeitung: machinesByStep.bodenbearbeitung.length,
+        pflanzenschutz: machinesByStep.pflanzenschutz.length,
+        ernte: machinesByStep.ernte.length
+      });
     } catch (error) {
       console.error('Error initializing data:', error);
       setLoadingMessage('Fehler beim Laden. Versuche erneut...');
