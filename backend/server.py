@@ -703,14 +703,23 @@ async def create_order(order_data: OrderCreate):
     if order_data.farming_decision.harvest_option == HarvestOption.SHIP_HOME:
         shipping_cost = 25.0  # Fixed shipping cost
     
+    # Calculate total costs
     total_cost = plot_cost + machine_cost + fertilizer_cost + shipping_cost
     
     # Calculate profit/loss
     profit_loss = expected_market_value - total_cost
     
+    # Calculate actual payment amount based on harvest option
+    if order_data.farming_decision.harvest_option == HarvestOption.SELL_TO_FARMER:
+        # Customer pays only the net loss (if any), farmer buys the harvest
+        actual_payment = max(0, total_cost - expected_market_value)
+    else:
+        # Customer pays all costs and keeps the harvest
+        actual_payment = total_cost
+    
     order = Order(
         **order_data.dict(),
-        total_cost=total_cost,
+        total_cost=actual_payment,  # This is what customer actually pays
         expected_yield_kg=expected_yield,
         expected_market_value=expected_market_value,
         profit_loss=profit_loss
