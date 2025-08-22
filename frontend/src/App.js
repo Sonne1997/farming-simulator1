@@ -1139,7 +1139,11 @@ const App = () => {
                         {/* Show machines based on fertilizer type */}
                         {Object.entries(fertilizerSpecs).map(([fertType, spec]) => {
                           if (farmingDecision.fertilizer_choice.fertilizer_type === fertType) {
-                            const relevantMachines = machines.filter(m => {
+                            // Get machines for this working step
+                            const stepMachines = machinesByStep.duengung || [];
+                            console.log('Available duengung machines:', stepMachines.map(m => ({name: m.name, fertilizer_type: m.fertilizer_type})));
+                            
+                            const relevantMachines = stepMachines.filter(m => {
                               if (spec.category === 'mineral') {
                                 return m.fertilizer_type === 'mineral';
                               } else if (spec.category === 'organic') {
@@ -1153,6 +1157,8 @@ const App = () => {
                               }
                               return false;
                             });
+                            
+                            console.log(`Relevant machines for ${fertType}:`, relevantMachines.map(m => m.name));
                             
                             return (
                               <div key={fertType}>
