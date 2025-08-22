@@ -1402,12 +1402,28 @@ const App = () => {
               <span>{expectedYields[farmingDecision.crop_type] || 0}kg</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="font-medium">Erwarteter Marktwert:</span>
-              <span>{getExpectedMarketValue().toFixed(2)}€</span>
-            </div>
-            <div className="flex justify-between py-2 border-b">
               <span className="font-medium">Gesamtkosten:</span>
-              <span className="text-xl font-bold text-green-600">{calculateTotalCost().toFixed(2)}€</span>
+              <span className="text-lg font-bold text-red-600">{calculateTotalCost().toFixed(2)}€</span>
+            </div>
+            <div className="flex justify-between py-2 border-b bg-green-50">
+              <span className="font-medium">Erwarteter Marktwert:</span>
+              <span className="text-lg font-bold text-green-600">+{getExpectedMarketValue().toFixed(2)}€</span>
+            </div>
+            <div className="flex justify-between py-3 border-t-2 border-gray-300 bg-gray-50">
+              <span className="text-lg font-bold text-gray-800">Netto-Ergebnis:</span>
+              <span className={`text-xl font-bold ${
+                (getExpectedMarketValue() - calculateTotalCost()) >= 0 ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {(getExpectedMarketValue() - calculateTotalCost()) >= 0 ? '+' : ''}
+                {(getExpectedMarketValue() - calculateTotalCost()).toFixed(2)}€
+              </span>
+            </div>
+            <div className="mt-2 p-3 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-700">
+                <strong>💡 Hinweis:</strong> {(getExpectedMarketValue() - calculateTotalCost()) >= 0 
+                  ? 'Profitable Investition! Der Marktwert der Ernte übersteigt die Kosten.' 
+                  : 'Verlustgeschäft - die Kosten sind höher als der erwartete Marktwert. Dies ist typisch für nachhaltige Landwirtschaft mit hohen Qualitätsstandards.'}
+              </p>
             </div>
           </div>
         </div>
