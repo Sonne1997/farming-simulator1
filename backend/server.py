@@ -413,6 +413,7 @@ class Order(BaseModel):
     total_cost: float
     expected_yield_kg: float
     expected_market_value: float
+    profit_loss: float  # Gewinn/Verlust = expected_market_value - total_cost
     payment_data: Optional[PaymentData] = None
     status: OrderStatus = OrderStatus.PENDING
     notes: Optional[str] = None
