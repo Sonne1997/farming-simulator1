@@ -1124,9 +1124,9 @@ const App = () => {
                                 </label>
                               ))}
                               
-                              {/* Insektizid für Wintergerste und Winterraps */}
+                              {/* Insektizid für Wintergerste und Winterraps - NUR HERBST */}
                               {(farmingDecision.crop_type === 'wintergerste' || farmingDecision.crop_type === 'winterraps') && 
-                                machines.filter(m => m.treatment_type === 'insektizid').map(machine => (
+                                machines.filter(m => m.treatment_type === 'insektizid' && m.season === 'herbst').map(machine => (
                                 <label key={`herbst-${machine.id}`} className="flex items-center space-x-3 p-3 border border-red-200 rounded-lg cursor-pointer hover:bg-red-50">
                                   <input
                                     type="checkbox"
