@@ -1,1 +1,1 @@
-Thu Aug 21 05:24:01 UTC 2025: Production build deployed with all fixes
+Sun Aug 24 15:04:25 UTC 2025: CRITICAL PRODUCTION DEPLOYMENT - All fixes implemented: Miststreuer, prices, harvest filtering, mobile optimization, soil quality, season progress, weather info
