@@ -1144,6 +1144,8 @@ const App = () => {
                             console.log('Available duengung machines:', stepMachines.map(m => ({name: m.name, fertilizer_type: m.fertilizer_type})));
                             
                             const relevantMachines = stepMachines.filter(m => {
+                              console.log(`Checking machine ${m.name}: category=${spec.category}, fertilizer_type=${m.fertilizer_type}, fertType=${fertType}`);
+                              
                               if (spec.category === 'mineral') {
                                 return m.fertilizer_type === 'mineral';
                               } else if (spec.category === 'organic') {
@@ -1159,6 +1161,10 @@ const App = () => {
                             });
                             
                             console.log(`Relevant machines for ${fertType}:`, relevantMachines.map(m => m.name));
+                            
+                            if (relevantMachines.length === 0) {
+                              console.warn(`No machines found for fertilizer type ${fertType} with category ${spec.category}`);
+                            }
                             
                             return (
                               <div key={fertType}>
