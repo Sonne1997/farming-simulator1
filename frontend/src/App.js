@@ -1204,27 +1204,33 @@ const App = () => {
                             }
                             
                             return (
-                              <div key={fertType}>
-                                <p className="text-sm text-gray-600 mb-3">
+                              <div key={fertType} className="mb-6">
+                                <p className="text-sm text-gray-600 mb-3 font-medium">
                                   Maschinen für {spec.name}:
                                 </p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  {relevantMachines.map(machine => (
-                                    <label key={machine.id} className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                                      <input
-                                        type="checkbox"
-                                        checked={farmingDecision.machines[step].includes(machine.id)}
-                                        onChange={() => handleMachineSelection(step, machine.id)}
-                                        className="text-green-600"
-                                      />
-                                      <div className="flex-1">
-                                        <div className="font-medium">{machine.name}</div>
-                                        <div className="text-sm text-gray-500">{machine.description || machine.specifications}</div>
-                                        <div className="text-sm text-gray-500 font-semibold">{(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha</div>
-                                      </div>
-                                    </label>
-                                  ))}
-                                </div>
+                                {relevantMachines.length > 0 ? (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {relevantMachines.map(machine => (
+                                      <label key={machine.id} className="flex items-center space-x-3 p-4 border-2 border-green-200 rounded-lg cursor-pointer hover:bg-green-50 bg-white">
+                                        <input
+                                          type="checkbox"
+                                          checked={farmingDecision.machines[step].includes(machine.id)}
+                                          onChange={() => handleMachineSelection(step, machine.id)}
+                                          className="text-green-600 w-4 h-4"
+                                        />
+                                        <div className="flex-1">
+                                          <div className="font-medium text-gray-800">{machine.name}</div>
+                                          <div className="text-sm text-gray-500 mt-1">{machine.description || machine.specifications}</div>
+                                          <div className="text-sm text-green-600 font-bold mt-1">{(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha</div>
+                                        </div>
+                                      </label>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <p className="text-yellow-700">Keine Maschinen für {spec.name} verfügbar.</p>
+                                  </div>
+                                )}
                               </div>
                             );
                           }
