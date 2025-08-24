@@ -162,6 +162,18 @@ const App = () => {
         
         const activePlotsRes = await axios.get(`${API}/active-plots-count`).catch(() => ({ data: { count: 0 } }));
         setActivePlotsCount(activePlotsRes.data.count);
+
+        // KRITISCH: Maschinen-Gruppierung für die Anzeige
+        const machinesByStep = {
+          bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
+          aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
+          pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
+          duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
+          pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
+          ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
+        };
+        
+        setMachinesByStep(machinesByStep);
       } else {
         // Desktop: Parallele API-Calls für bessere Performance
         const [plotsRes, machinesRes, fertilizerRes, marketRes, activePlotsRes] = await Promise.all([
@@ -177,20 +189,19 @@ const App = () => {
         setFertilizerSpecs(fertilizerRes.data);
         setMarketPrices(marketRes.data);
         setActivePlotsCount(activePlotsRes.data.count);
-      }
 
-      // KRITISCH: Maschinen-Gruppierung für die Anzeige
-      const allMachines = machinesRes?.data || machines || [];
-      const machinesByStep = {
-        bodenbearbeitung: allMachines.filter(m => m.working_step === 'bodenbearbeitung'),
-        aussaat: allMachines.filter(m => m.working_step === 'aussaat'),
-        pflanzenschutz: allMachines.filter(m => m.working_step === 'pflanzenschutz'),
-        duengung: allMachines.filter(m => m.working_step === 'duengung'),
-        pflege: allMachines.filter(m => m.working_step === 'pflege'),
-        ernte: allMachines.filter(m => m.working_step === 'ernte')
-      };
-      
-      setMachinesByStep(machinesByStep);
+        // KRITISCH: Maschinen-Gruppierung für die Anzeige
+        const machinesByStep = {
+          bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
+          aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
+          pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
+          duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
+          pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
+          ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
+        };
+        
+        setMachinesByStep(machinesByStep);
+      }
 
       console.log('All data loaded successfully with mobile optimization');
       console.log('Machines grouped by step:', {
