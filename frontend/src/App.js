@@ -534,6 +534,38 @@ const App = () => {
         <div className="max-w-sm">
           <WeatherWidget />
         </div>
+        
+        {/* Weather Information */}
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">🌤️ Aktuelle Bedingungen - Grabow</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl mb-1">🌤️</div>
+              <div className="text-lg font-semibold text-gray-800">18°C</div>
+              <div className="text-sm text-gray-500">Leicht bewölkt</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-1">💨</div>
+              <div className="text-lg font-semibold text-gray-800">12 km/h</div>
+              <div className="text-sm text-gray-500">SW Wind</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-1">💧</div>
+              <div className="text-lg font-semibold text-gray-800">65%</div>
+              <div className="text-sm text-gray-500">Luftfeuchtigkeit</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-1">🌱</div>
+              <div className="text-lg font-semibold text-green-600">Optimal</div>
+              <div className="text-sm text-gray-500">Feldarbeit</div>
+            </div>
+          </div>
+          <div className="mt-4 p-3 bg-green-50 rounded-lg">
+            <p className="text-sm text-green-700">
+              <strong>💡 Landwirtschaftlicher Hinweis:</strong> Gute Bedingungen für Aussaat und Bodenbearbeitung. Niedrige Windgeschwindigkeit ideal für Spritzarbeiten.
+            </p>
+          </div>
+        </div>
       </div>
       
       {/* Demo Mode Notification */}
