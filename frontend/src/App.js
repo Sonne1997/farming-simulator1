@@ -180,13 +180,14 @@ const App = () => {
       }
 
       // KRITISCH: Maschinen-Gruppierung für die Anzeige
+      const allMachines = machinesRes?.data || machines || [];
       const machinesByStep = {
-        bodenbearbeitung: (machines || []).filter(m => m.working_step === 'bodenbearbeitung'),
-        aussaat: (machines || []).filter(m => m.working_step === 'aussaat'),
-        pflanzenschutz: (machines || []).filter(m => m.working_step === 'pflanzenschutz'),
-        duengung: (machines || []).filter(m => m.working_step === 'duengung'),
-        pflege: (machines || []).filter(m => m.working_step === 'pflege'),
-        ernte: (machines || []).filter(m => m.working_step === 'ernte')
+        bodenbearbeitung: allMachines.filter(m => m.working_step === 'bodenbearbeitung'),
+        aussaat: allMachines.filter(m => m.working_step === 'aussaat'),
+        pflanzenschutz: allMachines.filter(m => m.working_step === 'pflanzenschutz'),
+        duengung: allMachines.filter(m => m.working_step === 'duengung'),
+        pflege: allMachines.filter(m => m.working_step === 'pflege'),
+        ernte: allMachines.filter(m => m.working_step === 'ernte')
       };
       
       setMachinesByStep(machinesByStep);
