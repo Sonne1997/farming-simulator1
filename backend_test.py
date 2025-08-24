@@ -1201,30 +1201,28 @@ class VirtualFarmingTester:
         self.test_market_values_endpoint()
         self.test_seed_costs_endpoint()
         
-        # Test 8: Enhanced Order Management with PayPal Integration
+        # Test 8: 🚨 URGENT COMPREHENSIVE PAYPAL INTEGRATION TESTING
+        print("\n" + "=" * 80)
+        print("🚨 PRIORITY: COMPREHENSIVE PAYPAL INTEGRATION TESTING")
+        print("User reported 'Zahlung fehlgeschlagen' (payment failed) on mobile")
+        print("=" * 80)
+        
+        # Run comprehensive PayPal testing
+        paypal_success = self.test_paypal_integration_comprehensive()
+        
+        # Test 9: Enhanced Order Management (if PayPal testing didn't cover it)
         if plots and machines:
-            # Create an order with enhanced farming decisions
-            machine_ids = [m["id"] for m in machines[:6]]  # Get first 6 machine IDs
-            order = self.test_create_order(plots[0]["id"], machine_ids)
+            # Test getting all orders
+            self.test_get_orders()
             
-            if order:
-                # Test PayPal payment integration (NEW FEATURE)
-                paypal_order_id = self.test_paypal_create_order(order["id"], order["total_cost"])
-                
-                # Note: We won't test PayPal capture in automated testing as it requires actual PayPal approval
-                # but we can test the endpoint structure
-                if paypal_order_id:
-                    print(f"  PayPal order created successfully: {paypal_order_id}")
-                    print("  Note: PayPal capture testing skipped (requires manual approval)")
-                
-                # Test getting all orders
-                self.test_get_orders()
-                
+            # Test order management endpoints
+            orders = self.test_get_orders()
+            if orders:
                 # Test getting specific order
-                self.test_get_order_by_id(order["id"])
+                self.test_get_order_by_id(orders[0]["id"])
                 
                 # Test updating order
-                self.test_update_order(order["id"])
+                self.test_update_order(orders[0]["id"])
         
         # Test Summary
         print("\n" + "=" * 80)
