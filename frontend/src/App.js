@@ -656,6 +656,104 @@ const App = () => {
       </div>
 
       <div className="space-y-4 sm:space-y-8">
+        {/* Soil Quality and Season Progress Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {/* Soil Quality Visualization */}
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">🌱 Bodenqualität</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-gray-700">Bodenpunkte: {selectedPlot?.soil_points}</span>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  selectedPlot?.soil_points >= 45 ? 'bg-green-100 text-green-800' :
+                  selectedPlot?.soil_points >= 35 ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {selectedPlot?.soil_points >= 45 ? 'Hoch' :
+                   selectedPlot?.soil_points >= 35 ? 'Mittel' : 'Niedrig'}
+                </span>
+              </div>
+              
+              {/* Soil Quality Bar */}
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div 
+                  className={`h-3 rounded-full transition-all duration-500 ${
+                    selectedPlot?.soil_points >= 45 ? 'bg-green-500' : 
+                    selectedPlot?.soil_points >= 35 ? 'bg-yellow-500' : 'bg-red-500'
+                  }`}
+                  style={{width: `${Math.min(((selectedPlot?.soil_points || 0) / 56) * 100, 100)}%`}}
+                ></div>
+              </div>
+              
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>25</span>
+                <span>35</span>
+                <span>45</span>
+                <span>56</span>
+              </div>
+              
+              <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  <strong>💡 Auswirkung auf Ertrag:</strong> {
+                    selectedPlot?.soil_points >= 45 ? 'Optimaler Boden - Erträge 10-15% über Durchschnitt' :
+                    selectedPlot?.soil_points >= 35 ? 'Guter Boden - Durchschnittliche Erträge erwartet' :
+                    'Herausfordernde Bedingungen - Erträge 10-15% unter Durchschnitt'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Season Progress */}
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">📅 Saison-Fortschritt</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-gray-700">Anbaujahr:</span>
+                <span className="text-blue-600 font-semibold">2025/2026</span>
+              </div>
+              
+              {/* Season Timeline */}
+              <div className="space-y-2">
+                {[
+                  { phase: 'Aussaat', month: 'Herbst 2025', completed: false },
+                  { phase: 'Wachstum', month: 'Frühjahr 2026', completed: false },
+                  { phase: 'Pflege', month: 'Sommer 2026', completed: false },
+                  { phase: 'Ernte', month: 'Herbst 2026', completed: false }
+                ].map((phase, index) => (
+                  <div key={phase.phase} className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      phase.completed ? 'bg-green-500' : index === 0 ? 'bg-blue-500' : 'bg-gray-300'
+                    }`}></div>
+                    <div className="flex-1">
+                      <span className={`text-sm font-medium ${
+                        phase.completed ? 'text-green-600' : index === 0 ? 'text-blue-600' : 'text-gray-500'
+                      }`}>
+                        {phase.phase}
+                      </span>
+                      <span className="text-xs text-gray-500 ml-2">({phase.month})</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="mt-4">
+                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                  <span>Gesamt-Fortschritt</span>
+                  <span>0%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-500 h-2 rounded-full transition-all duration-500"
+                    style={{ width: '0%' }}
+                  ></div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Fortschritt beginnt nach Buchungsbestätigung</p>
+              </div>
+            </div>
+          </div>
+        </div>
         {/* Soil Quality Visualization */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-800 mb-4">🌱 Bodenqualität</h3>
