@@ -1267,14 +1267,22 @@ const App = () => {
                                 m.treatment_type === 'insektizid' && 
                                 (m.season === 'herbst' || m.season === 'fruejahr') &&
                                 m.suitable_for && m.suitable_for.includes(farmingDecision.crop_type)
-                              ).map(m => m.id);
+                              );
+                              
+                              console.log('Seasonal insecticides for', farmingDecision.crop_type, ':', seasonalInsecticides.map(m => `${m.name} (${m.season})`));
+                              
+                              const seasonalInsecticideIds = seasonalInsecticides.map(m => m.id);
                               
                               // Zeige nur Insektizide, die noch nicht seasonal angezeigt wurden
-                              return machines.filter(m => 
+                              const additionalInsecticides = machines.filter(m => 
                                 m.treatment_type === 'insektizid' && 
-                                !seasonalInsecticides.includes(m.id) &&
+                                !seasonalInsecticideIds.includes(m.id) &&
                                 m.suitable_for && m.suitable_for.includes(farmingDecision.crop_type)
                               );
+                              
+                              console.log('Additional insecticides:', additionalInsecticides.map(m => m.name));
+                              
+                              return additionalInsecticides;
                             })().map(machine => (
                               <label key={`additional-${machine.id}`} className="flex items-center space-x-3 p-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-50">
                                 <input
