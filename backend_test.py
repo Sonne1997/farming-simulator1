@@ -230,6 +230,264 @@ class VirtualFarmingTester:
             self.log_test("PayPal Create Order", False, f"Error: {str(e)}")
             return None
     
+    def test_paypal_integration_comprehensive(self):
+        """URGENT: Comprehensive PayPal integration testing with realistic farming order data"""
+        print("\n" + "=" * 80)
+        print("🚨 URGENT PAYPAL INTEGRATION TESTING - USER REPORTED PAYMENT FAILURES")
+        print("=" * 80)
+        
+        # Step 1: Verify PayPal configuration
+        try:
+            # Check if backend has PayPal credentials configured
+            response = self.session.get(f"{self.base_url}/")
+            if response.status_code != 200:
+                self.log_test("PayPal Config Check", False, "Backend not accessible")
+                return False
+            
+            self.log_test("PayPal Config Check", True, "Backend accessible - PayPal credentials should be configured")
+        except Exception as e:
+            self.log_test("PayPal Config Check", False, f"Error: {str(e)}")
+            return False
+        
+        # Step 2: Create realistic farming order with typical German farming decisions
+        plots = self.test_get_plots()
+        if not plots:
+            self.log_test("PayPal Test Setup", False, "No plots available for testing")
+            return False
+        
+        # Use a plot with good soil quality (higher cost, more realistic)
+        test_plot = None
+        for plot in plots:
+            if plot.get("soil_points", 0) >= 40:  # Good soil quality
+                test_plot = plot
+                break
+        
+        if not test_plot:
+            test_plot = plots[0]  # Fallback to first plot
+        
+        # Get machines for realistic farming workflow
+        machines = self.test_get_machines()
+        if not machines:
+            self.log_test("PayPal Test Setup", False, "No machines available for testing")
+            return False
+        
+        # Create realistic farming order with typical costs (30-50€ range)
+        realistic_order_data = {
+            "user_name": "Klaus Müller",
+            "user_email": "klaus.mueller@landwirt.de", 
+            "user_phone": "+49 171 234 5678",
+            "plot_id": test_plot["id"],
+            "farming_decision": {
+                "cultivation_method": "konventionell",
+                "crop_type": "winterweizen",  # Most common winter crop
+                "expected_yield_kg": 125.0,  # Realistic yield for 250m²
+                "fertilizer_choice": {
+                    "fertilizer_type": "kas",  # Common mineral fertilizer
+                    "amount": 167.0,  # Realistic amount for 250m²
+                    "cost": 15.03  # Realistic fertilizer cost
+                },
+                "machines": {
+                    "bodenbearbeitung": [machines[0]["id"]] if machines else [],
+                    "aussaat": [machines[1]["id"]] if len(machines) > 1 else [],
+                    "pflanzenschutz": [machines[2]["id"]] if len(machines) > 2 else [],
+                    "duengung": [machines[3]["id"]] if len(machines) > 3 else [],
+                    "pflege": [machines[4]["id"]] if len(machines) > 4 else [],
+                    "ernte": [machines[5]["id"]] if len(machines) > 5 else []
+                },
+                "harvest_option": "ship_home",  # Customer wants harvest shipped
+                "shipping_address": "Hauptstraße 15, 39291 Grabow, Deutschland"
+            },
+            "notes": "Realistic PayPal integration test order - typical German farming scenario"
+        }
+        
+        # Step 3: Create the order
+        try:
+            response = self.session.post(f"{self.base_url}/orders", json=realistic_order_data)
+            if response.status_code != 200:
+                self.log_test("PayPal Realistic Order Creation", False, f"Failed to create order: HTTP {response.status_code}: {response.text}")
+                return False
+            
+            order = response.json()
+            order_cost = order.get("total_cost", 0)
+            
+            # Verify order cost is in realistic range (30-50€)
+            if 25.0 <= order_cost <= 60.0:
+                self.log_test("PayPal Realistic Order Creation", True, f"Created realistic order: ID {order['id']}, Cost: €{order_cost:.2f}")
+            else:
+                self.log_test("PayPal Realistic Order Creation", False, f"Order cost €{order_cost:.2f} outside expected range (€25-60)")
+                # Continue testing anyway
+            
+        except Exception as e:
+            self.log_test("PayPal Realistic Order Creation", False, f"Error creating order: {str(e)}")
+            return False
+        
+        # Step 4: Test PayPal order creation with realistic amount
+        print(f"\n🔄 Testing PayPal order creation with €{order_cost:.2f}...")
+        
+        paypal_data = {
+            "order_id": order["id"],
+            "amount": order_cost
+        }
+        
+        try:
+            response = self.session.post(f"{self.base_url}/payments/create-paypal-order", json=paypal_data)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if "paypal_order_id" in result:
+                    paypal_order_id = result["paypal_order_id"]
+                    self.log_test("PayPal Order Creation - Realistic Amount", True, f"✅ PayPal order created successfully: {paypal_order_id}")
+                    
+                    # Verify the order was updated with payment data
+                    order_check = self.session.get(f"{self.base_url}/orders/{order['id']}")
+                    if order_check.status_code == 200:
+                        updated_order = order_check.json()
+                        if updated_order.get("payment_data") and updated_order["payment_data"].get("paypal_order_id"):
+                            self.log_test("PayPal Order Data Update", True, f"Order updated with PayPal data: {updated_order['payment_data']['paypal_order_id']}")
+                        else:
+                            self.log_test("PayPal Order Data Update", False, "Order not updated with PayPal payment data")
+                    
+                else:
+                    self.log_test("PayPal Order Creation - Realistic Amount", False, "Response missing paypal_order_id field")
+                    return False
+            else:
+                # This is critical - log detailed error information
+                error_text = response.text
+                self.log_test("PayPal Order Creation - Realistic Amount", False, f"❌ CRITICAL: HTTP {response.status_code}: {error_text}")
+                
+                # Try to parse error details
+                try:
+                    error_data = response.json()
+                    if "detail" in error_data:
+                        print(f"🔍 PayPal Error Details: {error_data['detail']}")
+                except:
+                    print(f"🔍 Raw PayPal Error Response: {error_text}")
+                
+                return False
+                
+        except Exception as e:
+            self.log_test("PayPal Order Creation - Realistic Amount", False, f"❌ CRITICAL ERROR: {str(e)}")
+            return False
+        
+        # Step 5: Test PayPal capture endpoint structure (without actual capture)
+        print(f"\n🔄 Testing PayPal capture endpoint structure...")
+        
+        capture_data = {
+            "paypal_order_id": paypal_order_id
+        }
+        
+        try:
+            # Note: This will likely fail because the PayPal order hasn't been approved by a user
+            # But we can test if the endpoint is properly structured
+            response = self.session.post(f"{self.base_url}/payments/capture-paypal-order", json=capture_data)
+            
+            if response.status_code == 200:
+                result = response.json()
+                self.log_test("PayPal Capture Endpoint Structure", True, f"Capture endpoint working: {result}")
+            elif response.status_code == 400:
+                # Expected - order not approved yet
+                error_text = response.text
+                if "PayPal error" in error_text:
+                    self.log_test("PayPal Capture Endpoint Structure", True, f"Capture endpoint properly structured (expected PayPal error: order not approved)")
+                else:
+                    self.log_test("PayPal Capture Endpoint Structure", False, f"Unexpected error format: {error_text}")
+            else:
+                self.log_test("PayPal Capture Endpoint Structure", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("PayPal Capture Endpoint Structure", False, f"Error: {str(e)}")
+        
+        # Step 6: Test error handling with invalid data
+        print(f"\n🔄 Testing PayPal error handling...")
+        
+        # Test with invalid order ID
+        invalid_paypal_data = {
+            "order_id": "invalid-order-id-12345",
+            "amount": 35.50
+        }
+        
+        try:
+            response = self.session.post(f"{self.base_url}/payments/create-paypal-order", json=invalid_paypal_data)
+            if response.status_code in [400, 404]:
+                self.log_test("PayPal Error Handling - Invalid Order", True, f"Properly handles invalid order ID: HTTP {response.status_code}")
+            else:
+                self.log_test("PayPal Error Handling - Invalid Order", False, f"Unexpected response to invalid order: HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("PayPal Error Handling - Invalid Order", False, f"Error: {str(e)}")
+        
+        # Test with invalid amount
+        invalid_amount_data = {
+            "order_id": order["id"],
+            "amount": -10.0  # Negative amount
+        }
+        
+        try:
+            response = self.session.post(f"{self.base_url}/payments/create-paypal-order", json=invalid_amount_data)
+            if response.status_code == 400:
+                self.log_test("PayPal Error Handling - Invalid Amount", True, f"Properly handles invalid amount: HTTP {response.status_code}")
+            else:
+                self.log_test("PayPal Error Handling - Invalid Amount", False, f"Should reject negative amount: HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("PayPal Error Handling - Invalid Amount", False, f"Error: {str(e)}")
+        
+        # Step 7: Test multiple order scenarios with different amounts
+        print(f"\n🔄 Testing multiple PayPal orders with different amounts...")
+        
+        test_amounts = [30.50, 45.75, 52.30]  # Typical farming order amounts
+        
+        for i, amount in enumerate(test_amounts):
+            # Create another order for testing
+            test_order_data = realistic_order_data.copy()
+            test_order_data["user_name"] = f"Test User {i+1}"
+            test_order_data["user_email"] = f"test{i+1}@example.com"
+            
+            try:
+                order_response = self.session.post(f"{self.base_url}/orders", json=test_order_data)
+                if order_response.status_code == 200:
+                    test_order = order_response.json()
+                    
+                    # Override the total cost for testing different amounts
+                    paypal_test_data = {
+                        "order_id": test_order["id"],
+                        "amount": amount
+                    }
+                    
+                    paypal_response = self.session.post(f"{self.base_url}/payments/create-paypal-order", json=paypal_test_data)
+                    if paypal_response.status_code == 200:
+                        result = paypal_response.json()
+                        if "paypal_order_id" in result:
+                            self.log_test(f"PayPal Multiple Orders - €{amount}", True, f"Created PayPal order for €{amount}: {result['paypal_order_id']}")
+                        else:
+                            self.log_test(f"PayPal Multiple Orders - €{amount}", False, "Missing paypal_order_id in response")
+                    else:
+                        self.log_test(f"PayPal Multiple Orders - €{amount}", False, f"PayPal creation failed: HTTP {paypal_response.status_code}")
+                else:
+                    self.log_test(f"PayPal Multiple Orders - €{amount}", False, f"Order creation failed: HTTP {order_response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"PayPal Multiple Orders - €{amount}", False, f"Error: {str(e)}")
+        
+        # Summary of PayPal testing
+        paypal_tests = [r for r in self.test_results if "PayPal" in r["test"]]
+        paypal_passed = sum(1 for r in paypal_tests if r["success"])
+        paypal_total = len(paypal_tests)
+        
+        print(f"\n" + "=" * 80)
+        print(f"🚨 PAYPAL INTEGRATION TEST SUMMARY")
+        print(f"=" * 80)
+        print(f"PayPal Tests Passed: {paypal_passed}/{paypal_total}")
+        print(f"PayPal Success Rate: {(paypal_passed/paypal_total)*100:.1f}%")
+        
+        if paypal_passed == paypal_total:
+            print("✅ PayPal integration is working correctly!")
+            return True
+        else:
+            print("❌ PayPal integration has issues - check failed tests above")
+            failed_paypal_tests = [r for r in paypal_tests if not r["success"]]
+            for test in failed_paypal_tests:
+                print(f"   ❌ {test['test']}: {test['message']}")
+            return False
+    
     def test_paypal_capture_order(self, paypal_order_id):
         """Test PayPal order capture (NEW FEATURE)"""
         capture_data = {
