@@ -138,39 +138,64 @@ const App = () => {
 
     setLoading(true);
     try {
-      setLoadingMessage('Daten werden geladen...');
+      setLoadingMessage('Lade Parzellen...');
       
-      // Parallele API-Calls für bessere Performance
-      const [plotsRes, machinesRes, fertilizerRes, marketRes, activePlotsRes] = await Promise.all([
-        axios.get(`${API}/plots`).catch(() => ({ data: [] })),
-        axios.get(`${API}/machines`).catch(() => ({ data: [] })),
-        axios.get(`${API}/fertilizer-specs`).catch(() => ({ data: {} })),
-        axios.get(`${API}/market-prices`).catch(() => ({ data: {} })),
-        axios.get(`${API}/active-plots-count`).catch(() => ({ data: { count: 0 } }))
-      ]);
+      // MOBILE OPTIMIERUNG: Sequenzielle Ladung für bessere Mobile Performance
+      const isMobile = window.innerWidth <= 768;
+      
+      if (isMobile) {
+        // Mobile: Zuerst nur Parzellen laden
+        const plotsRes = await axios.get(`${API}/plots`).catch(() => ({ data: [] }));
+        setPlots(plotsRes.data);
+        setLoadingMessage('Lade Maschinen...');
+        
+        // Dann Rest sequenziell
+        const machinesRes = await axios.get(`${API}/machines`).catch(() => ({ data: [] }));
+        setMachines(machinesRes.data);
+        
+        setLoadingMessage('Lade Dünger-Spezifikationen...');
+        const fertilizerRes = await axios.get(`${API}/fertilizer-specs`).catch(() => ({ data: {} }));
+        setFertilizerSpecs(fertilizerRes.data);
+        
+        const marketRes = await axios.get(`${API}/market-prices`).catch(() => ({ data: {} }));
+        setMarketPrices(marketRes.data);
+        
+        const activePlotsRes = await axios.get(`${API}/active-plots-count`).catch(() => ({ data: { count: 0 } }));
+        setActivePlotsCount(activePlotsRes.data.count);
+      } else {
+        // Desktop: Parallele API-Calls für bessere Performance
+        const [plotsRes, machinesRes, fertilizerRes, marketRes, activePlotsRes] = await Promise.all([
+          axios.get(`${API}/plots`).catch(() => ({ data: [] })),
+          axios.get(`${API}/machines`).catch(() => ({ data: [] })),
+          axios.get(`${API}/fertilizer-specs`).catch(() => ({ data: {} })),
+          axios.get(`${API}/market-prices`).catch(() => ({ data: {} })),
+          axios.get(`${API}/active-plots-count`).catch(() => ({ data: { count: 0 } }))
+        ]);
 
-      setPlots(plotsRes.data);
-      setMachines(machinesRes.data);
-      setFertilizerSpecs(fertilizerRes.data);
-      setMarketPrices(marketRes.data);
-      setActivePlotsCount(activePlotsRes.data.count);
+        setPlots(plotsRes.data);
+        setMachines(machinesRes.data);
+        setFertilizerSpecs(fertilizerRes.data);
+        setMarketPrices(marketRes.data);
+        setActivePlotsCount(activePlotsRes.data.count);
+      }
 
       // KRITISCH: Maschinen-Gruppierung für die Anzeige
       const machinesByStep = {
-        bodenbearbeitung: machinesRes.data.filter(m => m.working_step === 'bodenbearbeitung'),
-        aussaat: machinesRes.data.filter(m => m.working_step === 'aussaat'),
-        pflanzenschutz: machinesRes.data.filter(m => m.working_step === 'pflanzenschutz'),
-        duengung: machinesRes.data.filter(m => m.working_step === 'duengung'),
-        pflege: machinesRes.data.filter(m => m.working_step === 'pflege'),
-        ernte: machinesRes.data.filter(m => m.working_step === 'ernte')
+        bodenbearbeitung: (machines || []).filter(m => m.working_step === 'bodenbearbeitung'),
+        aussaat: (machines || []).filter(m => m.working_step === 'aussaat'),
+        pflanzenschutz: (machines || []).filter(m => m.working_step === 'pflanzenschutz'),
+        duengung: (machines || []).filter(m => m.working_step === 'duengung'),
+        pflege: (machines || []).filter(m => m.working_step === 'pflege'),
+        ernte: (machines || []).filter(m => m.working_step === 'ernte')
       };
       
       setMachinesByStep(machinesByStep);
 
-      console.log('All data loaded successfully in parallel');
+      console.log('All data loaded successfully with mobile optimization');
       console.log('Machines grouped by step:', {
         bodenbearbeitung: machinesByStep.bodenbearbeitung.length,
         pflanzenschutz: machinesByStep.pflanzenschutz.length,
+        duengung: machinesByStep.duengung.length,
         ernte: machinesByStep.ernte.length
       });
     } catch (error) {
