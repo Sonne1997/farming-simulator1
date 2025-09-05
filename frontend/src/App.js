@@ -1400,9 +1400,11 @@ const App = () => {
                               className="text-green-600"
                             />
                             <div className="flex-1">
-                              <div className="font-medium">{machine.name}</div>
-                              <div className="text-sm text-gray-500">{machine.description}</div>
-                              <div className="text-sm text-gray-500">{(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha</div>
+                              <div className="font-medium text-gray-800">{machine.name}</div>
+                              <div className="text-sm text-gray-500 mt-1">{machine.description}</div>
+                              <div className="text-sm font-bold text-green-600 mt-1">
+                                {(machine.price_per_use || machine.cost_per_hectare || 0).toFixed(1)}€/ha
+                              </div>
                             </div>
                           </label>
                         ))}
