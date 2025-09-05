@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://spiel.lustauflandwirtschaft.de/sitemap.xml
